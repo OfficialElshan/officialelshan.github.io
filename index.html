@@ -1839,8 +1839,8 @@ function startGame(){
   if(rafId)cancelAnimationFrame(rafId);
   lastTime=performance.now();
   rafId=requestAnimationFrame(loop);
-  // Start background music
-  setTimeout(startBGM, 100);
+  // Musiqi artıq ana menuda çalınır — davam etsin (yenidən başlatmaya ehtiyac yoxdur)
+  if(!_bgmRunning) setTimeout(startBGM, 100);
 }
 
 // ── UPDATE LIVES ──
@@ -3046,6 +3046,8 @@ function gameOver(){
   if(dead)return;dead=true;state='over';
   if(rafId){cancelAnimationFrame(rafId);rafId=null;}
   stopBGM();
+  // Ana menu musiqisini yenidən başlat — oyun bitti, menüyə qayıdır
+  if(_bgmEnabled) setTimeout(startBGM, 1200);
   if(navigator.vibrate)navigator.vibrate([120,60,120]);
   const isNew=score>bestScore;if(isNew)bestScore=score;
   const coinEarned=Math.floor(score/10);
@@ -3316,15 +3318,11 @@ function loop(ts){
     const newForm=getPlayerForm(level);
     const oldForm=getPlayerForm(level-1);
     if(newForm.emoji!==oldForm.emoji||newForm.name!==oldForm.name){
-      float2(180,260,newForm.emoji+' '+newForm.name.toUpperCase()+' AÇILDI!',newForm.glow,16);
-      showPlayerTransformPopup(newForm);
+      // Yalnız particle burst + səs — yazı yoxdur, arxa plan görünsün
       shake=18;shakeT=40;
       spawnTransformBurst(newForm);
-      // YENİ SKİN SƏSİ — sakitləşdirici triumf
       playSkinUnlockSound();
       if(level===10||level===15||level===17){_pendingAdOnNextDeath=true;}
-    } else {
-      float2(130,280,'⬆️ LVL '+level,nc.ac,18);
     }
     lastFormLevel=level;
   }
@@ -3826,9 +3824,14 @@ function isDark(hex){
 applyLang();rui();
 randomizeButtonTheme();
 initPlayer();lastTime=performance.now();rafId=requestAnimationFrame(loop);
-// Wake up AudioContext on first user interaction (iOS)
-document.addEventListener('touchstart',()=>getAudioCtx(),{once:true});
-document.addEventListener('click',()=>getAudioCtx(),{once:true});
+// Ana menuda musiqi — ilk toxuşda başla (iOS AudioContext tələbi)
+function _startMenuMusic(){
+  if(_bgmEnabled&&state!=='playing'){
+    startBGM();
+  }
+}
+document.addEventListener('touchstart', _startMenuMusic, {once:true});
+document.addEventListener('click', _startMenuMusic, {once:true});
 // Init music button states
 _updateMusicBtns();
 // Check daily login bonus on app open
