@@ -5,276 +5,582 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Dodge & Survive</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&display=swap');
-*{margin:0;padding:0;box-sizing:border-box;}
-html,body{width:100%;height:100%;overflow:hidden;background:#000;touch-action:none;}
-body{display:flex;flex-direction:column;justify-content:flex-start;align-items:center;font-family:'Rajdhani',sans-serif;}
-/* AdSense banner slot — fixed at bottom, always visible */
-#adWrapper{
-  width:100%;max-width:480px;
-  min-height:50px;
-  background:#0a0a0a;
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-  border-top:1px solid rgba(255,255,255,0.06);
-  position:relative;z-index:100;
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Bebas+Neue&display=swap');
+
+/* ══ 2025 TREND: Dark Glass + Chromatic Neon ══ */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{
+  --neon:#00f5d4;        /* electric teal — dominant */
+  --hot:#ff2d78;         /* hot pink — accent */
+  --elec:#5c6bff;        /* electric blue — secondary */
+  --gold:#ffd060;
+  --bg:#04040a;
+  --glass:rgba(255,255,255,0.028);
+  --glass-border:rgba(255,255,255,0.06);
+  --glass-border-lit:rgba(255,255,255,0.12);
 }
-#gw{position:relative;overflow:hidden;background:#000;flex:1;width:100%;max-width:480px;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);touch-action:none;}
+body{display:flex;flex-direction:column;justify-content:flex-start;align-items:center;
+  font-family:'Space Grotesk',sans-serif;}
+
+/* ── AD ── */
+#adWrapper{width:100%;max-width:480px;min-height:50px;background:rgba(0,0,0,0.5);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  border-top:1px solid rgba(255,255,255,0.04);position:relative;z-index:100;}
+
+/* ── GAME WRAPPER ── */
+#gw{position:relative;overflow:hidden;background:var(--bg);flex:1;width:100%;max-width:480px;}
 canvas{display:block;width:100%;height:100%;}
 
-/* HUD */
+/* ══ HUD ══ */
 #hud{position:absolute;top:0;left:0;right:0;pointer-events:none;z-index:10;}
-#hudTop{display:flex;align-items:flex-start;justify-content:space-between;padding:10px 12px 0;}
-#levelBadge{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:12px;padding:4px 11px;font-size:13px;color:rgba(255,255,255,0.7);letter-spacing:2px;white-space:nowrap;}
-#scoreWrap{text-align:left;margin:0 0 0 0;flex:none;}
-#score{font-family:'Bebas Neue',sans-serif;font-size:clamp(42px,9vw,58px);color:#fff;line-height:1;text-shadow:0 0 16px rgba(255,255,255,0.4);transition:transform 0.08s;}
-#bestTxt{font-size:12px;color:rgba(255,255,255,0.28);letter-spacing:2px;}
-#coinBadge{background:rgba(255,204,0,0.12);border:1px solid rgba(255,204,0,0.35);border-radius:12px;padding:4px 11px;font-size:14px;color:#ffcc00;cursor:pointer;pointer-events:all;white-space:nowrap;}
-#comboDisp{text-align:left;padding-left:12px;font-family:'Bebas Neue',sans-serif;font-size:20px;color:#ffcc00;opacity:0;transition:opacity 0.25s;text-shadow:0 0 10px #ffcc00;letter-spacing:2px;padding-top:2px;}
+#hudTop{display:flex;align-items:flex-start;justify-content:space-between;padding:14px 14px 0;}
 
-/* BOTTOM HUD */
-#hudBot{position:absolute;bottom:0;left:0;right:0;pointer-events:all;padding:0 12px 10px;z-index:10;}
-#livesRow{display:flex;justify-content:center;gap:7px;margin-bottom:5px;}
-.heart{font-size:24px;}
-.heart.lost{filter:grayscale(1) opacity(0.2);}
+/* Glass pill — level */
+#levelBadge{
+  background:rgba(0,245,212,0.06);
+  border:1px solid rgba(0,245,212,0.22);
+  border-radius:20px;padding:5px 13px;
+  font-size:10px;font-weight:700;
+  color:rgba(0,245,212,0.75);
+  letter-spacing:3px;white-space:nowrap;
+  text-shadow:0 0 10px rgba(0,245,212,0.5);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+
+/* Score */
+#scoreWrap{text-align:left;flex:none;}
+#score{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(44px,9vw,60px);
+  color:#fff;line-height:1;letter-spacing:2px;
+  text-shadow:0 0 30px rgba(0,245,212,0.25),0 0 60px rgba(92,107,255,0.15);
+  transition:transform 0.07s;
+}
+#bestTxt{font-size:10px;color:rgba(255,255,255,0.18);letter-spacing:3px;margin-top:1px;font-weight:600;}
+
+/* Coin badge */
+#coinBadge{
+  background:rgba(255,208,96,0.07);
+  border:1px solid rgba(255,208,96,0.2);
+  border-radius:20px;padding:5px 13px;
+  font-size:13px;color:var(--gold);
+  cursor:pointer;pointer-events:all;white-space:nowrap;
+  backdrop-filter:blur(8px);transition:all 0.15s;
+  text-shadow:0 0 8px rgba(255,208,96,0.35);
+}
+#coinBadge:active{background:rgba(255,208,96,0.15);}
+
+/* Combo */
+#comboDisp{
+  padding-left:14px;
+  font-family:'Bebas Neue',sans-serif;font-size:22px;
+  color:var(--neon);opacity:0;
+  transition:opacity 0.2s;
+  text-shadow:0 0 18px var(--neon),0 0 36px rgba(0,245,212,0.3);
+  letter-spacing:3px;padding-top:3px;
+}
+
+/* ── BOTTOM HUD ── */
+#hudBot{position:absolute;bottom:0;left:0;right:0;pointer-events:all;padding:0 14px 12px;z-index:10;}
+
+/* Lives */
+#livesRow{display:flex;justify-content:center;gap:8px;margin-bottom:6px;}
+.heart{font-size:20px;transition:filter 0.2s,transform 0.2s;}
+.heart.lost{filter:grayscale(1) brightness(0.2);}
 .heart.pop{animation:hpop 0.35s;}
-@keyframes hpop{0%,100%{transform:scale(1)}50%{transform:scale(1.8)}}
-#streakRow{display:flex;align-items:center;gap:7px;margin-bottom:5px;}
-#streakLbl{font-size:11px;color:rgba(255,160,0,0.6);letter-spacing:2px;white-space:nowrap;}
-#streakBar{flex:1;height:4px;background:rgba(255,255,255,0.07);border-radius:3px;}
-#streakFill{height:100%;width:0%;border-radius:3px;background:linear-gradient(90deg,#ff6600,#ffcc00);transition:width 0.25s;}
-#weaponRow{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;}
-.wbtn{background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.15);border-radius:9px;padding:4px 8px;font-size:20px;cursor:pointer;display:flex;flex-direction:column;align-items:center;min-width:44px;}
-.wbtn.active{border-color:#ffcc00;background:rgba(255,204,0,0.18);}
-.wcount{font-size:11px;color:#ffcc00;font-weight:700;line-height:1.1;}
+@keyframes hpop{0%,100%{transform:scale(1)}50%{transform:scale(2)}}
+
+/* Streak bar */
+#streakRow{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+#streakLbl{font-size:9px;color:rgba(255,160,0,0.4);letter-spacing:3px;white-space:nowrap;font-weight:700;}
+#streakBar{flex:1;height:3px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;}
+#streakFill{height:100%;width:0%;border-radius:2px;
+  background:linear-gradient(90deg,var(--hot),var(--gold));
+  transition:width 0.25s;box-shadow:0 0 8px rgba(255,45,120,0.6);}
+
+/* Weapon buttons */
+#weaponRow{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;}
+.wbtn{
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--glass-border-lit);
+  border-radius:12px;padding:5px 9px;
+  font-size:19px;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;min-width:46px;
+  transition:all 0.12s;backdrop-filter:blur(6px);
+}
+.wbtn.active{
+  border-color:rgba(0,245,212,0.45);
+  background:rgba(0,245,212,0.08);
+  box-shadow:0 0 16px rgba(0,245,212,0.2),inset 0 0 10px rgba(0,245,212,0.04);
+}
+.wcount{font-size:10px;color:var(--neon);font-weight:700;line-height:1.1;}
 .wsvg{display:flex;align-items:center;justify-content:center;width:26px;height:26px;}
 
-#powerFlash{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 0.12s;z-index:5;}
-#vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,0.55) 100%);z-index:4;}
+/* Flash & vignette */
+#powerFlash{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 0.1s;z-index:5;}
+#vignette{position:absolute;inset:0;pointer-events:none;z-index:4;
+  background:radial-gradient(ellipse at center,transparent 42%,rgba(0,0,0,0.75) 100%);}
+#weapTip{position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);
+  font-family:'Bebas Neue',sans-serif;font-size:14px;color:#fff;
+  pointer-events:none;opacity:0;transition:opacity 0.2s;
+  text-align:center;width:200px;line-height:1.3;z-index:15;letter-spacing:1px;}
 
-/* SCREENS */
-.screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:all;z-index:20;overflow-y:auto;}
-#startScreen{background:linear-gradient(170deg,#060618 0%,#14000e 100%);}
-#gameOverScreen{background:rgba(3,0,8,0.97);display:none;backdrop-filter:blur(8px);}
-#shopScreen{background:rgba(3,0,8,0.98);display:none;backdrop-filter:blur(8px);}
-#livesScreen{background:rgba(3,0,8,0.98);display:none;backdrop-filter:blur(8px);}
-#langScreen{background:rgba(3,0,8,0.99);display:none;backdrop-filter:blur(8px);}
-#coinShopScreen{background:rgba(3,0,8,0.98);display:none;backdrop-filter:blur(8px);}
-#cdScreen{position:absolute;inset:0;display:none;align-items:center;justify-content:center;pointer-events:none;background:rgba(0,0,0,0.75);z-index:25;}
-#cdNum{font-family:'Bebas Neue',sans-serif;font-size:clamp(90px,22vw,130px);color:#fff;text-shadow:0 0 60px rgba(120,120,255,0.9);animation:cdPop 0.75s ease-out;}
-@keyframes cdPop{0%{transform:scale(2.8);opacity:0}100%{transform:scale(1);opacity:1}}
+/* ══ SCREENS ══ */
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;pointer-events:all;z-index:20;overflow-y:auto;}
 
-/* LANG BUTTON */
-.langBtn{position:absolute;top:12px;right:12px;font-size:12px;color:rgba(255,255,255,0.3);letter-spacing:1px;cursor:pointer;pointer-events:all;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:5px 11px;z-index:30;}
+/* START */
+#startScreen{
+  background:
+    radial-gradient(ellipse at 20% 15%,rgba(0,245,212,0.07) 0%,transparent 50%),
+    radial-gradient(ellipse at 80% 85%,rgba(255,45,120,0.07) 0%,transparent 50%),
+    radial-gradient(ellipse at 60% 40%,rgba(92,107,255,0.05) 0%,transparent 45%),
+    var(--bg);
+}
 
-/* START SCREEN */
-.gtitle{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,12vw,62px);color:#fff;line-height:0.88;text-align:center;text-shadow:0 0 36px rgba(100,120,255,0.9);animation:gtp 2s ease-in-out infinite;margin-top:8px;}
-.gsubt{font-size:10px;letter-spacing:4px;color:rgba(140,140,255,0.55);margin-top:7px;text-transform:uppercase;text-align:center;padding:0 16px;}
-@keyframes gtp{0%,100%{text-shadow:0 0 36px rgba(100,120,255,0.8)}50%{text-shadow:0 0 70px rgba(100,120,255,1)}}
-.statsRow{display:flex;gap:8px;margin:12px 0;}
-.sbox{background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:8px 12px;text-align:center;}
+/* Shared overlay screens */
+#gameOverScreen{background:rgba(2,2,8,0.97);display:none;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
+#shopScreen,#livesScreen,#langScreen,#coinShopScreen,
+#weapGuideScreen,#prizeScreen,#lbScreen,#achieveScreen,#referScreen,
+#missScreen,#inviteScreen{
+  background:rgba(3,3,10,0.98);display:none;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
+
+/* COUNTDOWN */
+#cdScreen{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+  pointer-events:none;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);z-index:25;}
+#cdNum{font-family:'Bebas Neue',sans-serif;font-size:clamp(90px,22vw,130px);color:#fff;
+  text-shadow:0 0 60px rgba(0,245,212,0.9),0 0 120px rgba(0,245,212,0.4);
+  animation:cdPop 0.75s ease-out;}
+@keyframes cdPop{0%{transform:scale(3.5);opacity:0}100%{transform:scale(1);opacity:1}}
+
+/* LANG BTN */
+.langBtn{position:absolute;top:12px;right:12px;font-size:10px;font-weight:700;
+  color:rgba(255,255,255,0.22);letter-spacing:2px;cursor:pointer;pointer-events:all;
+  background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);
+  border-radius:20px;padding:5px 12px;z-index:30;transition:all 0.15s;}
+.langBtn:active{background:rgba(255,255,255,0.09);}
+
+/* ══ START SCREEN ══ */
+.gtitle{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(46px,12vw,66px);
+  color:#fff;line-height:0.88;text-align:center;letter-spacing:3px;
+  animation:gtp 3.5s ease-in-out infinite;margin-top:6px;
+}
+@keyframes gtp{
+  0%,100%{text-shadow:0 0 30px rgba(0,245,212,0.6),0 0 60px rgba(92,107,255,0.2)}
+  50%{text-shadow:0 0 50px rgba(0,245,212,1),0 0 100px rgba(0,245,212,0.4),0 0 180px rgba(92,107,255,0.2)}
+}
+.gsubt{font-size:9px;letter-spacing:6px;color:rgba(0,245,212,0.35);
+  margin-top:9px;text-transform:uppercase;text-align:center;padding:0 16px;font-weight:700;}
+
+/* Motiv panel */
+#motivPanel{background:rgba(255,255,255,0.025);border:1px solid var(--glass-border);
+  border-radius:14px;padding:10px 18px;margin:8px 0 6px;text-align:center;min-width:240px;}
+#motivLine{font-family:'Bebas Neue',sans-serif;font-size:17px;color:#fff;letter-spacing:2px;line-height:1.2;}
+#motivSub{font-size:10px;color:rgba(255,255,255,0.25);letter-spacing:1px;margin-top:3px;font-weight:600;}
+
+/* Stats */
+.statsRow{display:flex;gap:8px;margin:8px 0;}
+.sbox{background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:9px 16px;text-align:center;
+  backdrop-filter:blur(6px);}
 .sval{font-family:'Bebas Neue',sans-serif;font-size:28px;color:#fff;}
-.slbl{font-size:11px;letter-spacing:2px;color:rgba(255,255,255,0.3);text-transform:uppercase;}
-.bigBtn{color:#fff;font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;border:none;padding:14px 56px;border-radius:50px;cursor:pointer;animation:bbp 1.5s ease-in-out infinite;}
-.bigBtn.play{background:linear-gradient(135deg,#4455ff,#9900ee);box-shadow:0 7px 28px rgba(80,0,220,0.55);}
-@keyframes bbp{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
-.bigBtn.retry{background:linear-gradient(135deg,#ff2244,#ee0066);box-shadow:0 7px 28px rgba(220,0,80,0.55);}
-.smBtn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.13);color:rgba(255,255,255,0.6);font-family:'Rajdhani',sans-serif;font-size:15px;letter-spacing:2px;border-radius:26px;padding:9px 22px;cursor:pointer;margin-top:6px;}
-.hint{font-size:12px;color:rgba(255,255,255,0.18);letter-spacing:1px;margin-top:9px;text-align:center;padding:0 20px;}
+.slbl{font-size:9px;letter-spacing:3px;color:rgba(255,255,255,0.22);text-transform:uppercase;margin-top:2px;font-weight:700;}
 
-/* GAME OVER */
-.goTitle{font-family:'Bebas Neue',sans-serif;font-size:clamp(50px,14vw,70px);color:#ff2244;text-shadow:0 0 36px rgba(255,34,68,0.85);animation:goshk 0.5s ease;}
-@keyframes goshk{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
-.scoreCard{background:rgba(255,255,255,0.045);border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:12px 32px;margin:8px 0;text-align:center;min-width:200px;}
-.scLbl{font-size:12px;letter-spacing:4px;color:rgba(255,255,255,0.28);text-transform:uppercase;}
-.scVal{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,12vw,60px);color:#fff;line-height:1.1;}
-.scBest{font-size:13px;color:#ffcc00;letter-spacing:2px;}
-.motTxt{font-size:13px;color:rgba(255,255,255,0.38);margin-bottom:8px;text-align:center;padding:0 16px;font-style:italic;line-height:1.4;}
+/* Play button */
+.bigBtn{color:#fff;font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:5px;
+  border:none;padding:15px 58px;border-radius:60px;cursor:pointer;
+  animation:bbp 2s ease-in-out infinite;position:relative;overflow:hidden;}
+.bigBtn::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.14) 0%,transparent 55%);border-radius:inherit;}
+.bigBtn.play{
+  background:linear-gradient(135deg,#00c9a7,#00f5d4 40%,#00c4ff);
+  box-shadow:0 8px 32px rgba(0,245,212,0.45),0 0 0 1px rgba(0,245,212,0.15);
+  color:#001a14;
+}
+@keyframes bbp{
+  0%,100%{transform:scale(1);box-shadow:0 8px 32px rgba(0,245,212,0.45)}
+  50%{transform:scale(1.035);box-shadow:0 12px 52px rgba(0,245,212,0.7),0 0 80px rgba(0,245,212,0.15)}
+}
+.bigBtn.retry{
+  background:linear-gradient(135deg,#ff1a44,var(--hot));
+  box-shadow:0 8px 32px rgba(255,45,120,0.5);color:#fff;
+}
+
+/* Small buttons */
+.smBtn{background:var(--glass);border:1px solid var(--glass-border-lit);
+  color:rgba(255,255,255,0.5);font-family:'Space Grotesk',sans-serif;
+  font-size:13px;font-weight:600;letter-spacing:2px;
+  border-radius:30px;padding:9px 22px;cursor:pointer;margin-top:6px;
+  transition:all 0.15s;backdrop-filter:blur(6px);}
+.smBtn:active{background:rgba(255,255,255,0.09);}
+.hint{font-size:10px;color:rgba(255,255,255,0.12);letter-spacing:1px;margin-top:8px;
+  text-align:center;padding:0 20px;line-height:1.7;font-weight:600;}
+
+/* ══ GAME OVER ══ */
+.goTitle{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,14vw,72px);
+  color:var(--hot);letter-spacing:3px;
+  text-shadow:0 0 40px rgba(255,45,120,0.9),0 0 80px rgba(255,45,120,0.3);
+  animation:goshk 0.5s ease;}
+@keyframes goshk{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+
+.scoreCard{background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:18px;padding:14px 36px;margin:8px 0;text-align:center;min-width:210px;
+  backdrop-filter:blur(8px);}
+.scLbl{font-size:9px;letter-spacing:5px;color:rgba(255,255,255,0.2);text-transform:uppercase;font-weight:700;}
+.scVal{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,12vw,64px);color:#fff;line-height:1.05;}
+.scBest{font-size:12px;color:var(--gold);letter-spacing:3px;font-weight:700;}
+.scBest.newRec{font-size:20px;color:var(--neon);
+  animation:recPop 0.6s cubic-bezier(0.175,0.885,0.32,1.275);
+  text-shadow:0 0 24px var(--neon);}
+@keyframes recPop{0%{transform:scale(0.2);opacity:0}60%{transform:scale(1.35)}100%{transform:scale(1);opacity:1}}
+.motTxt{font-size:12px;color:rgba(255,255,255,0.28);margin-bottom:8px;text-align:center;
+  padding:0 18px;font-style:italic;line-height:1.6;}
 .btnRow{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-top:5px;}
 
-/* SHOP */
-.shopTitle{font-family:'Bebas Neue',sans-serif;font-size:38px;color:#ffcc00;text-shadow:0 0 22px rgba(255,204,0,0.6);margin-bottom:2px;}
-.shopCoinLbl{font-size:12px;color:rgba(255,204,0,0.65);margin-bottom:7px;display:flex;align-items:center;gap:7px;}
-.addCoinBtn{background:rgba(255,204,0,0.15);border:1px solid rgba(255,204,0,0.4);color:#ffcc00;font-size:10px;font-family:'Rajdhani',sans-serif;border-radius:18px;padding:3px 9px;cursor:pointer;}
-.shopGrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:0 10px;width:100%;max-width:330px;max-height:50vh;overflow-y:auto;}
+/* Confetti */
+.confetti-piece{position:absolute;width:6px;height:6px;border-radius:2px;
+  pointer-events:none;animation:confettiFall linear forwards;z-index:999;}
+@keyframes confettiFall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}
+  100%{transform:translateY(700px) rotate(760deg);opacity:0}}
+
+/* ══ SHOP ══ */
+.shopTitle{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--gold);
+  text-shadow:0 0 22px rgba(255,208,96,0.55);margin-bottom:2px;}
+.shopCoinLbl{font-size:11px;color:rgba(255,208,96,0.55);margin-bottom:8px;display:flex;align-items:center;gap:8px;font-weight:700;}
+.addCoinBtn{background:rgba(255,208,96,0.08);border:1px solid rgba(255,208,96,0.28);
+  color:var(--gold);font-size:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;
+  border-radius:18px;padding:3px 10px;cursor:pointer;}
+.shopGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 10px;
+  width:100%;max-width:330px;max-height:50vh;overflow-y:auto;}
 .shopGrid::-webkit-scrollbar{width:2px;}
-.shopGrid::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:2px;}
-.sItem{background:rgba(255,255,255,0.045);border:1px solid rgba(255,255,255,0.09);border-radius:11px;padding:9px 6px;text-align:center;cursor:pointer;transition:background 0.12s;}
-.sItem:active{background:rgba(255,255,255,0.13);}
-.sItem .ie{font-size:26px;display:block;margin-bottom:2px;}
-.sItem .inm{font-family:'Bebas Neue',sans-serif;font-size:15px;color:#fff;letter-spacing:1px;}
-.sItem .idc{font-size:10px;color:rgba(255,255,255,0.32);margin:1px 0;}
-.sItem .ipr{font-family:'Bebas Neue',sans-serif;font-size:16px;color:#ffcc00;}
-.sItem .ist{font-size:10px;color:rgba(255,204,0,0.45);}
-/* Big coin CTA banner in shop */
-.shopCoinCTA{
-  display:flex;align-items:center;justify-content:space-between;
-  width:calc(100% - 20px);max-width:310px;
-  background:linear-gradient(135deg,#ffcc00 0%,#ff8800 100%);
-  border-radius:14px;padding:13px 18px;margin:0 10px 8px;
-  cursor:pointer;transition:transform 0.15s;
-  box-shadow:0 5px 22px rgba(255,160,0,0.55);
-  position:relative;overflow:hidden;
-}
-.shopCoinCTA::after{content:'';position:absolute;top:-20px;right:-15px;width:70px;height:70px;background:rgba(255,255,255,0.12);border-radius:50%;}
+.shopGrid::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px;}
+.sItem{background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;
+  padding:10px 6px;text-align:center;cursor:pointer;transition:all 0.12s;}
+.sItem:active{background:rgba(255,255,255,0.08);transform:scale(0.97);}
+.sItem .ie{font-size:26px;display:block;margin-bottom:3px;}
+.sItem .inm{font-family:'Bebas Neue',sans-serif;font-size:14px;color:#fff;letter-spacing:1px;}
+.sItem .idc{font-size:10px;color:rgba(255,255,255,0.25);margin:2px 0;font-weight:600;}
+.sItem .ipr{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);}
+.sItem .ist{font-size:10px;color:rgba(255,208,96,0.4);font-weight:700;}
+
+.shopCoinCTA{position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--gold) 0%,#ff8800 100%);
+  border:none;border-radius:16px;padding:13px 18px;margin:0 0 8px;
+  cursor:pointer;display:flex;align-items:center;gap:14px;width:290px;
+  transition:transform 0.15s;box-shadow:0 6px 28px rgba(255,160,0,0.4);}
+.shopCoinCTA::after{content:'';position:absolute;top:-30px;right:-20px;width:80px;height:80px;
+  background:rgba(255,255,255,0.09);border-radius:50%;}
 .shopCoinCTA:active{transform:scale(0.97);}
 .shopCoinCTA .sccLeft{display:flex;flex-direction:column;}
-.shopCoinCTA .sccTitle{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#3a1a00;letter-spacing:2px;line-height:1;}
-.shopCoinCTA .sccSub{font-size:11px;color:rgba(0,0,0,0.55);font-weight:600;margin-top:1px;}
-.shopCoinCTA .sccRight{font-size:36px;line-height:1;}
-.closeBtn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.11);color:rgba(255,255,255,0.5);font-family:'Rajdhani',sans-serif;font-size:14px;letter-spacing:2px;border-radius:26px;padding:8px 20px;cursor:pointer;margin-top:8px;flex-shrink:0;}
+.shopCoinCTA .sccTitle{font-family:'Bebas Neue',sans-serif;font-size:21px;color:#2a1000;letter-spacing:2px;line-height:1;}
+.shopCoinCTA .sccSub{font-size:11px;color:rgba(0,0,0,0.5);font-weight:700;margin-top:2px;}
+.shopCoinCTA .sccRight{font-size:34px;line-height:1;}
+.closeBtn{background:var(--glass);border:1px solid var(--glass-border-lit);
+  color:rgba(255,255,255,0.35);font-family:'Space Grotesk',sans-serif;font-size:13px;
+  font-weight:600;letter-spacing:2px;border-radius:30px;padding:9px 22px;cursor:pointer;margin-top:8px;
+  flex-shrink:0;transition:all 0.15s;backdrop-filter:blur(6px);}
+.closeBtn:active{background:rgba(255,255,255,0.09);}
 
-/* LIVES */
-.lvTitle{font-family:'Bebas Neue',sans-serif;font-size:36px;color:#ff4466;text-shadow:0 0 18px rgba(255,68,102,0.7);margin-bottom:4px;}
-.lvOpt{background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:11px 14px;margin:4px 0;cursor:pointer;display:flex;align-items:center;gap:10px;width:250px;transition:background 0.12s;}
-.lvOpt:active{background:rgba(255,255,255,0.13);}
+/* ══ LIVES ══ */
+.lvTitle{font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--hot);
+  text-shadow:0 0 20px rgba(255,45,120,0.6);margin-bottom:4px;}
+.lvOpt{background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:14px;padding:12px 14px;margin:4px 0;
+  cursor:pointer;display:flex;align-items:center;gap:10px;width:255px;transition:all 0.12s;}
+.lvOpt:active{background:rgba(255,255,255,0.09);}
 .lvOpt .le{font-size:26px;}
-.lvOpt .ln{font-family:'Bebas Neue',sans-serif;font-size:17px;color:#fff;letter-spacing:1px;}
-.lvOpt .ld{font-size:11px;color:rgba(255,255,255,0.32);}
-.lvOpt .lp{font-family:'Bebas Neue',sans-serif;font-size:17px;color:#ffcc00;margin-left:auto;}
+.lvOpt .ln{font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fff;letter-spacing:1px;}
+.lvOpt .ld{font-size:10px;color:rgba(255,255,255,0.25);font-weight:600;}
+.lvOpt .lp{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);margin-left:auto;}
 
-/* LANG */
-.langTitle{font-family:'Bebas Neue',sans-serif;font-size:38px;color:#fff;text-shadow:0 0 24px rgba(100,120,255,0.7);margin-bottom:4px;}
-.langSubt{font-size:10px;color:rgba(255,255,255,0.28);letter-spacing:3px;margin-bottom:14px;}
-.langOpt{background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:10px 18px;margin:4px 0;cursor:pointer;display:flex;align-items:center;gap:12px;width:238px;transition:background 0.12s;}
-.langOpt:active,.langOpt.sel{background:rgba(100,120,255,0.2);border-color:rgba(100,120,255,0.6);}
+/* ══ LANG ══ */
+.langTitle{font-family:'Bebas Neue',sans-serif;font-size:36px;color:#fff;
+  text-shadow:0 0 28px rgba(0,245,212,0.5);margin-bottom:4px;}
+.langSubt{font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:4px;margin-bottom:14px;font-weight:700;}
+.langOpt{background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:14px;padding:10px 18px;margin:4px 0;
+  cursor:pointer;display:flex;align-items:center;gap:12px;width:240px;transition:all 0.12s;}
+.langOpt.sel,.langOpt:active{background:rgba(0,245,212,0.08);border-color:rgba(0,245,212,0.3);}
 .langOpt .lf{font-size:24px;}
-.langOpt .ltxt .lname{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;letter-spacing:1px;}
-.langOpt .ltxt .lnat{font-size:11px;color:rgba(255,255,255,0.35);}
+.langOpt .ltxt .lname{font-family:'Bebas Neue',sans-serif;font-size:19px;color:#fff;letter-spacing:1px;}
+.langOpt .ltxt .lnat{font-size:10px;color:rgba(255,255,255,0.28);font-weight:600;}
 
-/* COIN SHOP */
-#coinShopScreen{background:linear-gradient(170deg,#08050f 0%,#0f0800 70%,#060010 100%);display:none;backdrop-filter:blur(8px);padding-top:8px;}
-.coinShopTitle{font-family:'Bebas Neue',sans-serif;font-size:46px;color:#ffcc00;text-shadow:0 0 35px rgba(255,204,0,1),0 0 70px rgba(255,130,0,0.5);margin-bottom:0px;letter-spacing:4px;}
-.coinShopSubt{font-size:11px;color:rgba(255,200,100,0.5);margin-bottom:10px;letter-spacing:2px;text-transform:uppercase;}
-
-/* FREE AD - very prominent banner */
-.coinOptFree{
-  position:relative;overflow:hidden;
-  background:linear-gradient(135deg,#ffcc00 0%,#ff8800 100%);
-  border:none;border-radius:16px;padding:14px 18px;margin:0 0 8px;
+/* ══ COIN SHOP ══ */
+#coinShopScreen{background:linear-gradient(
+  radial-gradient(ellipse at 30% 20%,rgba(0,245,212,0.06) 0%,transparent 50%),
+  radial-gradient(ellipse at 70% 80%,rgba(255,208,96,0.05) 0%,transparent 50%),
+  var(--bg));padding-top:8px;}
+.coinShopTitle{font-family:'Bebas Neue',sans-serif;font-size:44px;color:var(--gold);
+  text-shadow:0 0 36px rgba(255,208,96,1),0 0 72px rgba(255,130,0,0.4);margin-bottom:0;letter-spacing:4px;}
+.coinShopSubt{font-size:9px;color:rgba(255,200,100,0.4);margin-bottom:10px;letter-spacing:3px;font-weight:700;}
+.coinOptFree{position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--gold) 0%,#ff8800 100%);
+  border:none;border-radius:18px;padding:14px 18px;margin:0 0 9px;
   cursor:pointer;display:flex;align-items:center;gap:14px;width:290px;
-  transition:all 0.15s;box-shadow:0 6px 28px rgba(255,180,0,0.5);
-}
+  transition:transform 0.15s;box-shadow:0 6px 28px rgba(255,180,0,0.4);}
 .coinOptFree:active{transform:scale(0.96);}
-.coinOptFree::after{content:'';position:absolute;top:-30px;right:-20px;width:80px;height:80px;background:rgba(255,255,255,0.1);border-radius:50%;}
+.coinOptFree::after{content:'';position:absolute;top:-30px;right:-20px;width:80px;height:80px;background:rgba(255,255,255,0.08);border-radius:50%;}
 .coinOptFree .co{font-size:28px;flex-shrink:0;}
-.coinOptFree .cn{font-family:'Bebas Neue',sans-serif;font-size:18px;color:#3a1a00;letter-spacing:1px;}
-.coinOptFree .cd{font-size:11px;color:rgba(0,0,0,0.55);font-weight:600;}
-.coinOptFree .cp{font-family:'Bebas Neue',sans-serif;font-size:16px;color:#3a1a00;margin-left:auto;background:rgba(255,255,255,0.35);border-radius:20px;padding:3px 10px;}
-.coinOptFree .camt{font-family:'Bebas Neue',sans-serif;font-size:28px;color:#3a1a00;line-height:1;letter-spacing:1px;}
-
-/* PACK GRID */
-.packGrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;width:290px;}
-.packCard{
-  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);
-  border-radius:14px;padding:12px 10px;cursor:pointer;
+.coinOptFree .cn{font-family:'Bebas Neue',sans-serif;font-size:17px;color:#2a1000;letter-spacing:1px;}
+.coinOptFree .cd{font-size:11px;color:rgba(0,0,0,0.5);font-weight:700;}
+.coinOptFree .cp{font-family:'Bebas Neue',sans-serif;font-size:15px;color:#2a1000;margin-left:auto;
+  background:rgba(255,255,255,0.3);border-radius:20px;padding:3px 10px;}
+.coinOptFree .camt{font-family:'Bebas Neue',sans-serif;font-size:26px;color:#2a1000;line-height:1;letter-spacing:1px;}
+.packGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:290px;}
+.packCard{background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:16px;padding:12px 10px;cursor:pointer;
   display:flex;flex-direction:column;align-items:center;text-align:center;
-  transition:all 0.15s;position:relative;overflow:hidden;
-}
+  transition:all 0.15s;position:relative;overflow:hidden;}
 .packCard:active{transform:scale(0.95);}
-.packCard.featured{
-  background:linear-gradient(145deg,rgba(100,70,255,0.25),rgba(180,0,255,0.15));
-  border-color:rgba(160,100,255,0.6);
-  box-shadow:0 4px 20px rgba(120,60,255,0.3);
-}
-.packCard.best{
-  background:linear-gradient(145deg,rgba(255,180,0,0.2),rgba(255,80,0,0.15));
-  border-color:rgba(255,160,0,0.5);
-  box-shadow:0 4px 20px rgba(255,150,0,0.25);
-}
+.packCard.featured{background:rgba(92,107,255,0.1);border-color:rgba(92,107,255,0.4);
+  box-shadow:0 4px 20px rgba(92,107,255,0.2);}
+.packCard.best{background:rgba(255,208,96,0.08);border-color:rgba(255,208,96,0.3);
+  box-shadow:0 4px 20px rgba(255,208,96,0.15);}
 .packCard .pico{font-size:22px;margin-bottom:3px;}
-.packCard .pcoins{font-family:'Bebas Neue',sans-serif;font-size:30px;color:#ffcc00;line-height:1;text-shadow:0 0 12px rgba(255,204,0,0.6);}
-.packCard .pcoins span{font-size:13px;color:rgba(255,204,0,0.6);}
-.packCard .pname{font-family:'Bebas Neue',sans-serif;font-size:13px;color:rgba(255,255,255,0.7);letter-spacing:1px;margin-top:1px;}
-.packCard .pprice{font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;margin-top:4px;background:rgba(255,255,255,0.1);border-radius:20px;padding:2px 12px;width:100%;}
-.packCard.featured .pprice{background:rgba(160,100,255,0.3);color:#cc99ff;}
-.packCard.best .pprice{background:rgba(255,150,0,0.25);color:#ffcc00;}
-.packBonusTag{position:absolute;top:6px;right:6px;font-size:9px;background:rgba(255,60,0,0.85);color:#fff;border-radius:6px;padding:2px 5px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;}
-.packCard.featured .packBonusTag{background:rgba(140,60,255,0.9);}
+.packCard .pcoins{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);line-height:1;
+  text-shadow:0 0 12px rgba(255,208,96,0.5);}
+.packCard .pcoins span{font-size:13px;color:rgba(255,208,96,0.55);}
+.packCard .pname{font-family:'Bebas Neue',sans-serif;font-size:12px;color:rgba(255,255,255,0.55);letter-spacing:1px;margin-top:2px;}
+.packCard .pprice{font-family:'Bebas Neue',sans-serif;font-size:17px;color:#fff;margin-top:4px;
+  background:rgba(255,255,255,0.07);border-radius:20px;padding:2px 12px;width:100%;}
+.packCard.featured .pprice{background:rgba(92,107,255,0.22);color:#aabbff;}
+.packCard.best .pprice{background:rgba(255,208,96,0.18);color:var(--gold);}
+.packBonusTag{position:absolute;top:6px;right:6px;font-size:9px;
+  background:rgba(255,60,0,0.82);color:#fff;border-radius:6px;padding:2px 5px;
+  font-family:'Bebas Neue',sans-serif;letter-spacing:1px;}
+.packCard.featured .packBonusTag{background:rgba(92,107,255,0.9);}
 .coinDivider{width:290px;display:flex;align-items:center;gap:8px;margin:5px 0 7px;}
-.coinDivider span{font-size:10px;color:rgba(255,255,255,0.2);letter-spacing:2px;white-space:nowrap;}
-.coinDivider::before,.coinDivider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08);}
-/* legacy - keep for compatibility */
-.coinOpt{display:none;}
-.coinBadgeAmt{display:none;}
-.bonusTag{display:none;}
+.coinDivider span{font-size:9px;color:rgba(255,255,255,0.15);letter-spacing:3px;white-space:nowrap;font-weight:700;}
+.coinDivider::before,.coinDivider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.05);}
+.coinOpt,.coinBadgeAmt,.bonusTag{display:none;}
 
-/* FLOAT */
-.ft{position:absolute;font-family:'Bebas Neue',sans-serif;font-size:16px;pointer-events:none;animation:ftup 0.85s ease-out forwards;z-index:99;white-space:nowrap;}
-@keyframes ftup{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-50px) scale(0.9);opacity:0}}
-#weapTip{position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);font-family:'Bebas Neue',sans-serif;font-size:15px;color:#fff;pointer-events:none;opacity:0;transition:opacity 0.2s;text-align:center;text-shadow:0 0 14px rgba(255,255,255,0.5);width:200px;line-height:1.3;z-index:15;}
+/* ── FLOAT TEXT ── */
+.ft{position:absolute;font-family:'Bebas Neue',sans-serif;font-size:16px;
+  pointer-events:none;animation:ftup 0.85s ease-out forwards;z-index:99;white-space:nowrap;}
+@keyframes ftup{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-54px) scale(0.9);opacity:0}}
 
-/* WEAPONS GUIDE */
-#weapGuideScreen{background:rgba(3,0,8,0.99);display:none;backdrop-filter:blur(8px);}
-.wgTitle{font-family:'Bebas Neue',sans-serif;font-size:36px;color:#00ffee;text-shadow:0 0 20px rgba(0,255,238,0.6);margin-bottom:3px;}
-.wgSubt{font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:3px;margin-bottom:12px;}
+/* ══ WEAPONS GUIDE ══ */
+.wgTitle{font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--neon);
+  text-shadow:0 0 22px rgba(0,245,212,0.55);margin-bottom:3px;}
+.wgSubt{font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:4px;margin-bottom:12px;font-weight:700;}
 .wgList{width:100%;max-width:320px;padding:0 12px;max-height:58vh;overflow-y:auto;}
 .wgList::-webkit-scrollbar{width:2px;}
-.wgList::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:2px;}
-.wgCard{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:10px 14px;margin-bottom:7px;display:flex;align-items:flex-start;gap:12px;}
-.wgCard.unlocked{border-color:rgba(255,255,255,0.14);}
-.wgCard.locked{opacity:0.45;}
+.wgList::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px;}
+.wgCard{background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;
+  padding:10px 14px;margin-bottom:7px;display:flex;align-items:flex-start;gap:12px;}
+.wgCard.unlocked{border-color:rgba(0,245,212,0.2);}
+.wgCard.locked{opacity:0.35;}
 .wgEmoji{font-size:26px;flex-shrink:0;line-height:1;}
 .wgInfo{flex:1;}
-.wgName{font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;letter-spacing:1px;line-height:1;}
-.wgDesc{font-size:12px;color:rgba(220,230,255,0.75);margin-top:2px;line-height:1.35;}
-.wgHow{font-size:11px;color:rgba(255,200,0,0.6);margin-top:3px;font-style:italic;}
-.wgStock{font-family:'Bebas Neue',sans-serif;font-size:15px;flex-shrink:0;margin-left:auto;padding-left:8px;}
-.wgStock.has{color:#44ff88;}
-.wgStock.none{color:rgba(255,255,255,0.18);}
+.wgName{font-family:'Bebas Neue',sans-serif;font-size:17px;color:#fff;letter-spacing:1px;line-height:1;}
+.wgDesc{font-size:12px;color:rgba(200,210,255,0.65);margin-top:2px;line-height:1.35;}
+.wgHow{font-size:11px;color:rgba(255,208,96,0.5);margin-top:3px;font-style:italic;}
+.wgStock{font-family:'Bebas Neue',sans-serif;font-size:14px;flex-shrink:0;margin-left:auto;padding-left:8px;}
+.wgStock.has{color:var(--neon);}
+.wgStock.none{color:rgba(255,255,255,0.14);}
 
-/* PRIZE SCREEN */
-#prizeScreen{background:rgba(3,0,8,0.99);display:none;backdrop-filter:blur(8px);}
+/* ══ PRIZE ══ */
 .prizeHeader{text-align:center;padding:0 16px;}
-.prizeCrown{font-size:50px;margin-bottom:4px;animation:crownBob 2s ease-in-out infinite;}
-@keyframes crownBob{0%,100%{transform:scale(1) rotate(-3deg)}50%{transform:scale(1.08) rotate(3deg)}}
-.prizeMainTitle{font-family:'Bebas Neue',sans-serif;font-size:44px;color:#ffcc00;text-shadow:0 0 28px rgba(255,204,0,0.9);line-height:1;}
-.prizeSubt{font-size:13px;color:rgba(255,255,255,0.5);letter-spacing:2px;margin-bottom:10px;text-transform:uppercase;}
-.prizeCard{background:linear-gradient(135deg,rgba(255,204,0,0.14),rgba(255,100,0,0.1));border:1.5px solid rgba(255,204,0,0.45);border-radius:14px;padding:14px 18px;margin:4px 0;width:285px;text-align:center;}
-.prizeCardTitle{font-family:'Bebas Neue',sans-serif;font-size:15px;color:rgba(255,204,0,0.7);letter-spacing:3px;margin-bottom:4px;}
-.prizeAmt{font-family:'Bebas Neue',sans-serif;font-size:52px;color:#ffcc00;line-height:1;text-shadow:0 0 22px rgba(255,204,0,0.8);}
-.prizeAmt span{font-size:22px;color:rgba(255,204,0,0.7);}
-.prizeNote{font-size:12px;color:rgba(255,255,255,0.5);margin-top:5px;line-height:1.5;}
-.prizeNote a,.prizeNote b{color:#ffcc00;}
+.prizeCrown{font-size:48px;margin-bottom:4px;animation:crownBob 2.5s ease-in-out infinite;}
+@keyframes crownBob{0%,100%{transform:scale(1) rotate(-3deg)}50%{transform:scale(1.1) rotate(3deg)}}
+.prizeMainTitle{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--gold);
+  text-shadow:0 0 28px rgba(255,208,96,0.85);line-height:1;}
+.prizeSubt{font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:3px;margin-bottom:10px;font-weight:700;}
+.prizeCard{background:rgba(255,208,96,0.06);border:1px solid rgba(255,208,96,0.25);
+  border-radius:16px;padding:14px 18px;margin:4px 0;width:285px;text-align:center;}
+.prizeCardTitle{font-family:'Bebas Neue',sans-serif;font-size:13px;color:rgba(255,208,96,0.55);letter-spacing:4px;margin-bottom:4px;}
+.prizeAmt{font-family:'Bebas Neue',sans-serif;font-size:50px;color:var(--gold);line-height:1;
+  text-shadow:0 0 22px rgba(255,208,96,0.7);}
+.prizeAmt span{font-size:20px;color:rgba(255,208,96,0.55);}
+.prizeNote{font-size:12px;color:rgba(255,255,255,0.4);margin-top:5px;line-height:1.5;}
+.prizeNote a,.prizeNote b{color:var(--gold);}
 .prizeRules{width:285px;margin:8px 0;}
-.prizeRule{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;background:rgba(255,255,255,0.04);border-radius:10px;margin-bottom:5px;}
-.pruleNum{font-family:'Bebas Neue',sans-serif;font-size:22px;color:rgba(255,204,0,0.6);flex-shrink:0;line-height:1;}
-.pruleTxt{font-size:12px;color:rgba(255,255,255,0.55);line-height:1.5;}
-.pruleTxt b{color:rgba(255,230,100,0.9);}
+.prizeRule{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;
+  background:var(--glass);border-radius:12px;margin-bottom:5px;}
+.pruleNum{font-family:'Bebas Neue',sans-serif;font-size:20px;color:rgba(255,208,96,0.5);flex-shrink:0;line-height:1;}
+.pruleTxt{font-size:12px;color:rgba(255,255,255,0.45);line-height:1.5;}
+.pruleTxt b{color:rgba(255,225,100,0.8);}
 .pruleTxt .warn{color:#ff6644;font-weight:700;}
-.prizeTimer{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:9px 16px;text-align:center;margin-top:6px;width:285px;}
-.ptLabel{font-size:10px;color:rgba(255,255,255,0.32);letter-spacing:3px;margin-bottom:3px;}
+.prizeTimer{background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;
+  padding:9px 16px;text-align:center;margin-top:6px;width:285px;}
+.ptLabel{font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:4px;margin-bottom:3px;font-weight:700;}
 .ptTime{font-family:'Bebas Neue',sans-serif;font-size:26px;color:#fff;letter-spacing:4px;}
-.prizeMyScore{background:rgba(255,204,0,0.09);border:1px solid rgba(255,204,0,0.22);border-radius:10px;padding:8px 16px;text-align:center;margin-top:6px;width:285px;}
-.pmsLabel{font-size:10px;color:rgba(255,204,0,0.6);letter-spacing:2px;}
-.pmsVal{font-family:'Bebas Neue',sans-serif;font-size:32px;color:#ffcc00;}
+.prizeMyScore{background:rgba(255,208,96,0.05);border:1px solid rgba(255,208,96,0.15);
+  border-radius:12px;padding:8px 16px;text-align:center;margin-top:6px;width:285px;}
+.pmsLabel{font-size:9px;color:rgba(255,208,96,0.5);letter-spacing:3px;font-weight:700;}
+.pmsVal{font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--gold);}
 
-/* LEADERBOARD */
-#lbScreen{background:rgba(3,0,8,0.99);display:none;backdrop-filter:blur(8px);}
-.lbTitle{font-family:'Bebas Neue',sans-serif;font-size:34px;color:#ffcc00;text-shadow:0 0 20px rgba(255,204,0,0.7);margin-bottom:4px;}
+/* ══ LEADERBOARD ══ */
+.lbTitle{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--gold);
+  text-shadow:0 0 22px rgba(255,208,96,0.55);margin-bottom:4px;}
 .lbTabs{display:flex;gap:5px;margin-bottom:8px;}
-.lbTab{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.45);font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:1px;border-radius:18px;padding:5px 11px;cursor:pointer;transition:all 0.15s;}
-.lbTab.active{background:rgba(255,204,0,0.18);border-color:rgba(255,204,0,0.5);color:#ffcc00;}
-.lbMyRow{background:rgba(255,204,0,0.08);border:1px solid rgba(255,204,0,0.25);border-radius:10px;padding:7px 12px;margin-bottom:7px;display:flex;align-items:center;gap:9px;width:280px;}
-.lbMyRank{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#ffcc00;min-width:32px;}
-.lbMyName{font-size:13px;color:#fff;flex:1;font-family:'Rajdhani',sans-serif;}
-.lbMyScore{font-family:'Bebas Neue',sans-serif;font-size:17px;color:#ffcc00;}
+.lbTab{background:var(--glass);border:1px solid var(--glass-border);
+  color:rgba(255,255,255,0.3);font-family:'Bebas Neue',sans-serif;
+  font-size:12px;letter-spacing:2px;border-radius:20px;padding:5px 12px;cursor:pointer;transition:all 0.15s;}
+.lbTab.active{background:rgba(255,208,96,0.1);border-color:rgba(255,208,96,0.35);color:var(--gold);}
+.lbMyRow{background:rgba(255,208,96,0.05);border:1px solid rgba(255,208,96,0.18);
+  border-radius:12px;padding:7px 12px;margin-bottom:7px;
+  display:flex;align-items:center;gap:9px;width:280px;}
+.lbMyRank{font-family:'Bebas Neue',sans-serif;font-size:19px;color:var(--gold);min-width:32px;}
+.lbMyName{font-size:13px;color:#fff;flex:1;font-family:'Space Grotesk',sans-serif;font-weight:600;}
+.lbMyScore{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);}
 .lbList{width:100%;max-width:300px;max-height:44vh;overflow-y:auto;padding:0 8px;}
 .lbList::-webkit-scrollbar{width:2px;}
-.lbList::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:2px;}
-.lbRow{display:flex;align-items:center;gap:8px;padding:6px 9px;border-radius:8px;margin-bottom:3px;background:rgba(255,255,255,0.03);}
-.lbRow.top1{background:linear-gradient(90deg,rgba(255,204,0,0.15),rgba(255,100,0,0.08));border:1px solid rgba(255,204,0,0.3);}
-.lbRow.top2{background:rgba(192,192,192,0.07);border:1px solid rgba(192,192,192,0.18);}
-.lbRow.top3{background:rgba(205,127,50,0.07);border:1px solid rgba(205,127,50,0.18);}
-.lbRow.me{background:rgba(255,204,0,0.06);border:1px solid rgba(255,204,0,0.15);}
-.lbRank{font-family:'Bebas Neue',sans-serif;font-size:15px;min-width:26px;text-align:center;}
-.lbName{font-size:12px;color:rgba(255,255,255,0.72);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:'Rajdhani',sans-serif;}
-.lbScore{font-family:'Bebas Neue',sans-serif;font-size:15px;color:#ffcc00;}
-.lbLoading{text-align:center;color:rgba(255,255,255,0.28);font-size:11px;letter-spacing:2px;padding:18px;}
+.lbList::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px;}
+.lbRow{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:10px;margin-bottom:3px;
+  background:rgba(255,255,255,0.02);transition:background 0.15s;}
+.lbRow.top1{background:rgba(255,208,96,0.08);border:1px solid rgba(255,208,96,0.18);}
+.lbRow.top2{background:rgba(192,192,192,0.05);border:1px solid rgba(192,192,192,0.1);}
+.lbRow.top3{background:rgba(205,127,50,0.05);border:1px solid rgba(205,127,50,0.1);}
+.lbRow.me{background:rgba(0,245,212,0.04);border:1px solid rgba(0,245,212,0.12);}
+.lbRank{font-family:'Bebas Neue',sans-serif;font-size:14px;min-width:26px;text-align:center;}
+.lbName{font-size:12px;color:rgba(255,255,255,0.6);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:'Space Grotesk',sans-serif;font-weight:600;}
+.lbScore{font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--gold);}
+.lbLoading{text-align:center;color:rgba(255,255,255,0.2);font-size:11px;letter-spacing:3px;padding:18px;font-weight:700;}
 .lbNameWrap{display:flex;flex-direction:column;align-items:center;margin-bottom:6px;}
-.lbNameInput{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.18);border-radius:10px;padding:8px 14px;font-family:'Rajdhani',sans-serif;font-size:15px;color:#fff;width:210px;text-align:center;outline:none;margin-bottom:6px;}
-.lbNameInput::placeholder{color:rgba(255,255,255,0.25);}
-.lbSaveBtn{background:linear-gradient(135deg,#4455ff,#9900ee);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;border:none;padding:8px 22px;border-radius:22px;cursor:pointer;}
+.lbNameInput{background:rgba(255,255,255,0.05);border:1px solid var(--glass-border-lit);
+  border-radius:12px;padding:9px 14px;font-family:'Space Grotesk',sans-serif;font-weight:600;
+  font-size:15px;color:#fff;width:215px;text-align:center;outline:none;margin-bottom:6px;}
+.lbNameInput::placeholder{color:rgba(255,255,255,0.18);}
+.lbSaveBtn{background:linear-gradient(135deg,var(--neon),#00c4ff);color:#001a14;
+  font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;
+  border:none;padding:9px 24px;border-radius:24px;cursor:pointer;}
+
+/* ══ ACHIEVEMENTS ══ */
+.achTitle{font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--gold);
+  text-shadow:0 0 22px rgba(255,208,96,0.55);margin-bottom:2px;}
+.achSubt{font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:4px;margin-bottom:10px;font-weight:700;}
+.achGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px;
+  width:100%;max-width:340px;max-height:55vh;overflow-y:auto;}
+.achGrid::-webkit-scrollbar{width:2px;}
+.achGrid::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);}
+.achCard{background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:12px 10px;text-align:center;transition:all 0.2s;}
+.achCard.done{background:rgba(0,245,212,0.05);border-color:rgba(0,245,212,0.22);}
+.achCard .ace{font-size:28px;margin-bottom:4px;display:block;}
+.achCard .acn{font-family:'Bebas Neue',sans-serif;font-size:14px;color:#fff;letter-spacing:1px;line-height:1.1;}
+.achCard .acd{font-size:10px;color:rgba(255,255,255,0.25);margin-top:2px;font-weight:600;}
+.achCard.done .acn{color:var(--neon);}
+.achCard.locked{opacity:0.25;filter:grayscale(0.8);}
+.achCard .acp{font-size:9px;color:rgba(0,245,212,0.4);margin-top:3px;font-weight:700;}
+
+/* Achievement toast */
+#achieveToast{position:absolute;top:70px;left:50%;transform:translateX(-50%);
+  background:rgba(4,20,16,0.97);
+  border:1px solid rgba(0,245,212,0.3);
+  border-radius:16px;padding:10px 16px;display:none;
+  flex-direction:row;align-items:center;gap:10px;
+  z-index:50;min-width:220px;max-width:300px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.6),0 0 24px rgba(0,245,212,0.08);
+  animation:achievePop 0.5s cubic-bezier(0.175,0.885,0.32,1.275);}
+@keyframes achievePop{0%{transform:translateX(-50%) translateY(-30px) scale(0.7);opacity:0}100%{transform:translateX(-50%) translateY(0) scale(1);opacity:1}}
+#achieveToast .at-icon{font-size:28px;flex-shrink:0;}
+#achieveToast .at-txt .at-title{font-family:'Bebas Neue',sans-serif;font-size:10px;color:rgba(0,245,212,0.6);letter-spacing:4px;}
+#achieveToast .at-txt .at-name{font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fff;letter-spacing:1px;line-height:1;}
+#achieveToast .at-txt .at-sub{font-size:10px;color:rgba(255,255,255,0.28);font-weight:600;}
+
+/* REFERRAL */
+.refTitle{font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--neon);
+  text-shadow:0 0 22px rgba(0,245,212,0.5);margin-bottom:2px;}
+.refCard{background:rgba(0,245,212,0.04);border:1px solid rgba(0,245,212,0.18);
+  border-radius:18px;padding:14px 18px;margin:6px 0;width:290px;text-align:center;}
+.refCode{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--neon);letter-spacing:6px;
+  text-shadow:0 0 16px rgba(0,245,212,0.6);}
+.refCodeSub{font-size:9px;color:rgba(0,245,212,0.4);letter-spacing:3px;font-weight:700;}
+.refBonusRow{display:flex;gap:8px;width:290px;margin-top:6px;}
+.refBonus{flex:1;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:8px;text-align:center;}
+.refBonus .rb-e{font-size:22px;}
+.refBonus .rb-n{font-family:'Bebas Neue',sans-serif;font-size:14px;color:#fff;letter-spacing:1px;}
+.refBonus .rb-d{font-size:10px;color:rgba(255,255,255,0.24);font-weight:600;}
+.refShareBtn{background:linear-gradient(135deg,var(--neon),#00c4ff);border:none;
+  color:#001a14;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;
+  padding:12px 36px;border-radius:50px;cursor:pointer;
+  box-shadow:0 6px 22px rgba(0,245,212,0.35);margin-top:8px;}
+
+/* ══ COMBO BURST ══ */
+#comboBurst{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  pointer-events:none;z-index:60;display:none;flex-direction:column;align-items:center;
+  animation:burstAnim 0.85s ease-out forwards;}
+@keyframes burstAnim{
+  0%{transform:translate(-50%,-50%) scale(0.1);opacity:0}
+  38%{transform:translate(-50%,-50%) scale(1.2);opacity:1}
+  100%{transform:translate(-50%,-50%) scale(0.85);opacity:0}}
+#comboBurst .cb-num{font-family:'Bebas Neue',sans-serif;font-size:70px;color:var(--neon);
+  text-shadow:0 0 40px var(--neon),0 0 80px rgba(0,245,212,0.4);line-height:1;}
+#comboBurst .cb-lbl{font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;letter-spacing:6px;}
+
+/* LOW LIFE */
+@keyframes lowLifePulse{0%,100%{background:rgba(255,45,120,0)}50%{background:rgba(255,45,120,0.05)}}
+#gw.lowlife{animation:lowLifePulse 1s ease-in-out infinite;}
+
+/* MEGA BURST */
+#megaBurst{position:absolute;inset:0;pointer-events:none;z-index:55;display:none;overflow:hidden;}
+
+/* ══ SHARE CARD ══ */
+#shareCardOverlay{position:fixed;inset:0;background:rgba(0,0,0,0.95);
+  z-index:9999;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;}
+#shareCard{width:315px;
+  background:linear-gradient(145deg,#04040e,#080414,#040a08);
+  border:1px solid rgba(0,245,212,0.1);border-radius:22px;overflow:hidden;position:relative;
+  box-shadow:0 20px 60px rgba(0,0,0,0.7),0 0 40px rgba(0,245,212,0.04);}
+#shareCard .sc-bg{position:absolute;inset:0;
+  background:radial-gradient(ellipse at 25% 20%,rgba(0,245,212,0.08) 0%,transparent 50%),
+             radial-gradient(ellipse at 75% 80%,rgba(255,45,120,0.07) 0%,transparent 50%);pointer-events:none;}
+#shareCard .sc-inner{padding:22px 20px 18px;position:relative;}
+#shareCard .sc-logo{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:6px;
+  color:rgba(255,255,255,0.18);text-align:center;margin-bottom:14px;}
+#shareCard .sc-score-lbl{font-size:9px;letter-spacing:5px;color:rgba(255,255,255,0.2);text-align:center;font-weight:700;}
+#shareCard .sc-score{font-family:'Bebas Neue',sans-serif;font-size:74px;color:#fff;line-height:1;
+  text-align:center;text-shadow:0 0 40px rgba(0,245,212,0.5);}
+#shareCard .sc-row{display:flex;justify-content:center;gap:12px;margin-top:12px;}
+#shareCard .sc-stat{text-align:center;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:7px 12px;}
+#shareCard .sc-sl{font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:3px;font-weight:700;}
+#shareCard .sc-sv{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;}
+#shareCard .sc-rank{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;
+  text-align:center;margin-top:10px;padding:5px 0;
+  background:linear-gradient(90deg,transparent,rgba(0,245,212,0.08),transparent);color:var(--neon);}
+#shareCard .sc-cta{font-size:9px;color:rgba(255,255,255,0.15);text-align:center;margin-top:7px;letter-spacing:2px;font-weight:700;}
+.shareBtn2{background:linear-gradient(135deg,#1da1f2,#0d8ecf);border:none;color:#fff;
+  font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;
+  padding:12px 30px;border-radius:50px;cursor:pointer;min-width:200px;transition:opacity 0.15s;}
+.shareBtn2.copy{background:linear-gradient(135deg,var(--neon),#00c4ff);color:#001a14;}
+.shareBtn2.wa{background:linear-gradient(135deg,#25d366,#128c7e);}
+#closeShareBtn{background:none;border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.25);
+  font-size:11px;letter-spacing:3px;padding:7px 18px;border-radius:20px;cursor:pointer;margin-top:2px;font-weight:700;}
+
+/* SOCIAL TICKER */
+#socialTicker{position:absolute;bottom:52px;left:0;right:0;pointer-events:none;z-index:9;overflow:hidden;height:22px;}
+#tickerInner{display:flex;align-items:center;padding:2px 8px;white-space:nowrap;animation:tickerScroll 20s linear infinite;}
+@keyframes tickerScroll{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+.tickItem{font-size:9px;color:rgba(255,255,255,0.14);margin-right:30px;letter-spacing:2px;font-weight:700;}
+.tickItem span{color:rgba(0,245,212,0.4);font-family:'Bebas Neue',sans-serif;}
+
+/* XP ROW */
+#xpRow{display:flex;align-items:center;gap:7px;padding:0 14px 4px;}
+#xpBar{flex:1;height:2px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;}
+#xpFill{height:100%;width:0%;border-radius:2px;
+  background:linear-gradient(90deg,var(--neon),var(--elec));transition:width 0.5s;}
+#xpLbl{font-size:9px;color:rgba(255,255,255,0.15);letter-spacing:3px;white-space:nowrap;font-weight:700;}
+
+/* CHALLENGE BAR */
+#challengeBar{position:absolute;left:0;right:0;top:0;pointer-events:none;z-index:11;}
+#challengeStrip{display:none;align-items:center;gap:8px;padding:3px 14px;
+  background:linear-gradient(90deg,rgba(0,245,212,0.06),rgba(0,196,255,0.04));
+  border-bottom:1px solid rgba(0,245,212,0.08);}
+#challengeIcon{font-size:13px;}
+#challengeTxt{font-family:'Bebas Neue',sans-serif;font-size:12px;color:var(--neon);letter-spacing:2px;flex:1;}
+#challengeProg{font-size:10px;color:rgba(0,245,212,0.4);font-weight:700;}
+
+/* NAME OVERLAY */
+#nameOverlay{position:absolute;inset:0;background:rgba(0,0,0,0.95);z-index:50;
+  display:none;flex-direction:column;align-items:center;justify-content:center;}
+
+/* BEST PROGRESS */
+#bestProgressWrap{margin-top:8px;width:180px;background:rgba(255,255,255,0.05);border-radius:3px;height:3px;overflow:hidden;}
+#bestProgressBar{height:100%;width:0%;background:linear-gradient(90deg,var(--neon),var(--elec));border-radius:3px;transition:width 0.8s ease-out;}
 </style>
 </head>
 <body>
@@ -324,10 +630,26 @@ canvas{display:block;width:100%;height:100%;}
   <div id="startScreen" class="screen">
     <div class="gtitle">DODGE<br>&amp;<br>SURVIVE</div>
     <div class="gsubt" id="startSubt">-</div>
+
+    <!-- Motivasiya paneli — dinamik məzmun -->
+    <div id="motivPanel" style="width:88%;max-width:300px;margin:6px 0 10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:10px 14px;text-align:center;">
+      <div id="motivLine" style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#ffcc00;letter-spacing:1px;line-height:1.3;"></div>
+      <div id="motivSub" style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:3px;letter-spacing:1px;"></div>
+    </div>
+
     <div class="statsRow">
-      <div class="sbox"><div class="sval" id="stBest">0</div><div class="slbl" id="stBestLbl">REKORD</div></div>
-      <div class="sbox"><div class="sval" id="stGames">0</div><div class="slbl" id="stGamesLbl">OYUN</div></div>
-      <div class="sbox"><div class="sval" id="stCoins">0</div><div class="slbl">💰 COIN</div></div>
+      <div class="sbox" id="sboxBest">
+        <div class="sval" id="stBest">0</div>
+        <div class="slbl" id="stBestLbl">REKORD</div>
+      </div>
+      <div class="sbox" id="sboxGames">
+        <div class="sval" id="stGames">0</div>
+        <div class="slbl" id="stGamesLbl">OYUN</div>
+      </div>
+      <div class="sbox" id="sboxCoins" onclick="openCoinShop()" style="cursor:pointer;">
+        <div class="sval" id="stCoins">0</div>
+        <div class="slbl">💰 COIN</div>
+      </div>
     </div>
     <button class="bigBtn play" id="startBtn">OYNA</button>
     <button class="smBtn" id="shopBtnS">🛒 Mağaza</button>
@@ -335,6 +657,11 @@ canvas{display:block;width:100%;height:100%;}
       <button class="smBtn" style="margin-top:0;font-size:11px;padding:6px 12px;" id="wgBtnS">⚔️ Silahlar</button>
       <button class="smBtn" style="margin-top:0;font-size:11px;padding:6px 12px;color:#ffcc00;border-color:rgba(255,204,0,0.3);" id="prizeBtnS">🏆 Mükafat</button>
       <button class="smBtn" style="margin-top:0;font-size:11px;padding:6px 12px;color:#44ffaa;border-color:rgba(68,255,170,0.3);" id="lbBtnS">🏅 Top 100</button>
+    </div>
+    <div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;justify-content:center;">
+      <button class="smBtn" style="margin-top:0;font-size:11px;padding:6px 14px;color:var(--neon);border-color:rgba(0,245,212,0.3);" onclick="openMiss()">🎯 Missiyalar</button>
+      <button class="smBtn" style="margin-top:0;font-size:11px;padding:6px 14px;color:var(--hot);border-color:rgba(255,45,120,0.3);" onclick="openInvite()">🤝 Dost Dəvət Et</button>
+      <button class="smBtn" style="margin-top:0;font-size:11px;padding:6px 14px;color:#aabbff;border-color:rgba(170,187,255,0.25);" onclick="openSocialShare()">📤 Paylaş</button>
     </div>
     <div class="hint" id="startHint">Barmağını sürüşdür · Silah seç · Tap et</div>
   </div>
@@ -350,8 +677,16 @@ canvas{display:block;width:100%;height:100%;}
       <div class="scLbl" id="scLblTxt">BU OYUN</div>
       <div class="scVal" id="finalScore">0</div>
       <div class="scBest" id="newBestTag" style="display:none">🏆 YENİ REKORD!</div>
+      <!-- Rekorddan məsafə göstəricisi -->
+      <div id="gapToRecord" style="display:none;margin-top:6px;font-size:11px;color:rgba(255,200,0,0.6);letter-spacing:1px;font-family:'Rajdhani',sans-serif;"></div>
+      <!-- Şəxsi ən yaxşı progress bar -->
+      <div id="bestProgressWrap" style="margin-top:8px;width:180px;background:rgba(255,255,255,0.07);border-radius:4px;height:4px;overflow:hidden;">
+        <div id="bestProgressBar" style="height:100%;width:0%;background:linear-gradient(90deg,#ff6600,#ffcc00);border-radius:4px;transition:width 0.8s ease-out;"></div>
+      </div>
+      <div id="bestProgressLbl" style="font-size:9px;color:rgba(255,255,255,0.25);margin-top:3px;letter-spacing:1px;"></div>
     </div>
     <button class="bigBtn retry" id="retryBtn">🔄 YENİDƏN</button>
+    <button onclick="openSocialShare()" style="background:linear-gradient(135deg,var(--neon),#00c4ff);border:none;color:#001a14;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;padding:11px 40px;border-radius:50px;cursor:pointer;margin-top:6px;box-shadow:0 6px 20px rgba(0,245,212,0.3);">📤 PAYLAŞ & MÜQAYISƏ ET</button>
     <div class="btnRow">
       <button class="smBtn" id="shopBtnG">🛒 Mağaza</button>
       <button class="smBtn" id="livesBtnG">❤️ Can Al</button>
@@ -513,6 +848,117 @@ canvas{display:block;width:100%;height:100%;}
     <div style="font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:2px;margin-bottom:14px;" id="nameOverlaySubt">Liderboarda görünmək üçün</div>
     <input class="lbNameInput" id="playerNameInput" maxlength="16" placeholder="Adın...">
     <button class="lbSaveBtn" id="saveNameBtn">✅ TƏSDİQLƏ</button>
+  </div>
+
+  <!-- ═══ MİSSİYALAR SCREEN ═══ -->
+  <div id="missScreen" class="screen" style="display:none;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--neon);text-shadow:0 0 22px rgba(0,245,212,0.6);margin-bottom:2px;">🎯 MİSSİYALAR</div>
+    <div style="font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:4px;margin-bottom:10px;font-weight:700;">TAMAMLA · QAZAН · BÖYÜ</div>
+    <div id="missList" style="width:100%;max-width:340px;padding:0 12px;max-height:62vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px;"></div>
+    <button class="closeBtn" style="margin-top:10px;" onclick="closeMiss()">← Geri</button>
+  </div>
+
+  <!-- ═══ DOSTLARA DƏVƏT SCREEN ═══ -->
+  <div id="inviteScreen" class="screen" style="display:none;">
+    <div style="font-size:52px;margin-bottom:4px;animation:crownBob 2s ease-in-out infinite;">🤝</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--neon);text-shadow:0 0 22px rgba(0,245,212,0.6);margin-bottom:4px;">DOST DƏVƏT ET</div>
+    <div style="font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:2px;margin-bottom:12px;font-weight:700;">HƏRƏ İKİNİZƏ BONUS</div>
+
+    <!-- Referral code -->
+    <div style="background:rgba(0,245,212,0.05);border:1px solid rgba(0,245,212,0.2);border-radius:18px;padding:14px 22px;margin-bottom:10px;text-align:center;min-width:260px;">
+      <div style="font-size:9px;color:rgba(0,245,212,0.45);letter-spacing:4px;font-weight:700;margin-bottom:4px;">SƏNİN KODUN</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:38px;color:var(--neon);letter-spacing:6px;text-shadow:0 0 16px rgba(0,245,212,0.6);" id="inviteCodeDisp">DS-0000</div>
+      <button onclick="copyInviteCode()" style="margin-top:6px;background:rgba(0,245,212,0.1);border:1px solid rgba(0,245,212,0.25);color:var(--neon);font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;border-radius:20px;padding:5px 16px;cursor:pointer;">📋 KODU KOPYALA</button>
+    </div>
+
+    <!-- Bonus cards -->
+    <div style="display:flex;gap:8px;width:280px;margin-bottom:12px;">
+      <div style="flex:1;background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:10px;text-align:center;">
+        <div style="font-size:24px;">👤</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#fff;letter-spacing:1px;">SƏN ALDIRSAN</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);">+200💰</div>
+        <div style="font-size:9px;color:rgba(255,255,255,0.28);font-weight:700;">hər dəvət üçün</div>
+      </div>
+      <div style="flex:1;background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:10px;text-align:center;">
+        <div style="font-size:24px;">🆕</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#fff;letter-spacing:1px;">DOST ALIR</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);">+100💰</div>
+        <div style="font-size:9px;color:rgba(255,255,255,0.28);font-weight:700;">qoşulduqda</div>
+      </div>
+    </div>
+
+    <!-- Share buttons -->
+    <div style="display:flex;flex-direction:column;gap:8px;width:280px;">
+      <button onclick="inviteWA()" style="background:linear-gradient(135deg,#25d366,#128c7e);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;padding:13px;border-radius:50px;cursor:pointer;box-shadow:0 6px 20px rgba(37,211,102,0.35);">📲 WHATSAPP İLƏ PAYLAŞ</button>
+      <button onclick="inviteCopyLink()" style="background:var(--glass);border:1px solid var(--glass-border-lit);color:rgba(255,255,255,0.6);font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;padding:12px;border-radius:50px;cursor:pointer;">🔗 LİNKİ KOPYALA</button>
+      <button onclick="inviteNative()" style="background:var(--glass);border:1px solid var(--glass-border-lit);color:rgba(255,255,255,0.6);font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;padding:12px;border-radius:50px;cursor:pointer;">📤 DİGƏR TƏTBIQ</button>
+    </div>
+
+    <!-- Invited count -->
+    <div style="margin-top:10px;font-size:11px;color:rgba(255,255,255,0.2);font-weight:700;letter-spacing:2px;">👥 DƏVƏT ETDİKLƏRİN: <span id="inviteCount" style="color:var(--neon);">0</span></div>
+    <button class="closeBtn" style="margin-top:8px;" onclick="closeInvite()">← Geri</button>
+  </div>
+
+  <!-- ═══ SOCIAL SHARE OVERLAY ═══ -->
+  <div id="socialShareOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:9998;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;">
+    <!-- Score card preview -->
+    <div id="socialCard" style="width:300px;background:linear-gradient(145deg,#03030d,#080415,#030a07);border:1px solid rgba(0,245,212,0.15);border-radius:20px;overflow:hidden;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.7);">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 25% 20%,rgba(0,245,212,0.1) 0%,transparent 50%),radial-gradient(ellipse at 75% 80%,rgba(255,45,120,0.08) 0%,transparent 50%);pointer-events:none;"></div>
+      <div style="padding:20px 18px 16px;position:relative;text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:6px;color:rgba(255,255,255,0.2);margin-bottom:12px;">DODGE & SURVIVE</div>
+        <div style="font-size:9px;letter-spacing:5px;color:rgba(255,255,255,0.18);font-weight:700;">XAL</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:76px;color:#fff;line-height:1;text-shadow:0 0 40px rgba(0,245,212,0.5);" id="socialCardScore">0</div>
+        <div style="display:flex;justify-content:center;gap:10px;margin-top:10px;">
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:6px 12px;text-align:center;">
+            <div style="font-size:8px;color:rgba(255,255,255,0.2);letter-spacing:3px;font-weight:700;">LEVEL</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;" id="socialCardLevel">1</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:6px 12px;text-align:center;">
+            <div style="font-size:8px;color:rgba(255,255,255,0.2);letter-spacing:3px;font-weight:700;">COMBO</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;" id="socialCardCombo">0</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:6px 12px;text-align:center;">
+            <div style="font-size:8px;color:rgba(255,255,255,0.2);letter-spacing:3px;font-weight:700;">REKORD</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;" id="socialCardBest">0</div>
+          </div>
+        </div>
+        <div style="margin-top:10px;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:rgba(0,245,212,0.6);padding:4px 0;background:linear-gradient(90deg,transparent,rgba(0,245,212,0.06),transparent);" id="socialCardRank">OYUNÇu</div>
+        <div style="font-size:9px;color:rgba(255,255,255,0.12);margin-top:5px;letter-spacing:2px;font-weight:700;">bit.ly/dodge-survive · Üstünlüyünü sübut et</div>
+      </div>
+    </div>
+    <!-- Share buttons grid -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:300px;">
+      <button onclick="doSocialShare('wa')" style="background:linear-gradient(135deg,#25d366,#128c7e);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;padding:12px 8px;border-radius:16px;cursor:pointer;box-shadow:0 4px 16px rgba(37,211,102,0.3);">📲 WHATSAPP</button>
+      <button onclick="doSocialShare('ig')" style="background:linear-gradient(135deg,#e1306c,#833ab4,#fd1d1d);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;padding:12px 8px;border-radius:16px;cursor:pointer;box-shadow:0 4px 16px rgba(225,48,108,0.3);">📸 INSTAGRAM</button>
+      <button onclick="doSocialShare('fb')" style="background:linear-gradient(135deg,#1877f2,#0d5bba);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;padding:12px 8px;border-radius:16px;cursor:pointer;box-shadow:0 4px 16px rgba(24,119,242,0.3);">👍 FACEBOOK</button>
+      <button onclick="doSocialShare('tt')" style="background:linear-gradient(135deg,#010101,#69c9d0);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;padding:12px 8px;border-radius:16px;cursor:pointer;box-shadow:0 4px 16px rgba(105,201,208,0.3);">🎵 TIKTOK</button>
+    </div>
+    <div style="display:flex;gap:8px;width:300px;">
+      <button onclick="doSocialShare('copy')" style="flex:1;background:linear-gradient(135deg,var(--neon),#00c4ff);border:none;color:#001a14;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;padding:11px;border-radius:16px;cursor:pointer;">📋 KOPYALA</button>
+      <button onclick="doSocialShare('native')" style="flex:1;background:var(--glass);border:1px solid var(--glass-border-lit);color:rgba(255,255,255,0.55);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;padding:11px;border-radius:16px;cursor:pointer;">📤 DİGƏR</button>
+    </div>
+    <button onclick="closeSocialShare()" style="background:none;border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.22);font-size:11px;letter-spacing:3px;padding:7px 18px;border-radius:20px;cursor:pointer;font-weight:700;">BAĞLA</button>
+  </div>
+
+  <!-- ═══ LIVE SOCIAL TICKER ═══ -->
+  <div id="liveTicker" style="position:absolute;bottom:0;left:0;right:0;height:26px;pointer-events:none;z-index:15;overflow:hidden;background:linear-gradient(90deg,transparent,rgba(0,0,0,0.5),transparent);">
+    <div id="liveTickerTrack" style="display:flex;align-items:center;height:100%;white-space:nowrap;"></div>
+  </div>
+
+  <!-- ═══ ACHIEVE TOAST ═══ -->
+  <div id="achieveToast" style="position:absolute;top:72px;left:50%;transform:translateX(-50%);display:none;flex-direction:row;align-items:center;gap:10px;z-index:55;min-width:230px;max-width:310px;">
+    <span class="at-icon" id="atIcon">🏆</span>
+    <div class="at-txt">
+      <div class="at-title">UĞUR QAZANILDI</div>
+      <div class="at-name" id="atName">-</div>
+      <div class="at-sub" id="atSub">+100💰</div>
+    </div>
+  </div>
+
+  <!-- ═══ COMBO BURST ═══ -->
+  <div id="comboBurst" style="display:none;flex-direction:column;align-items:center;">
+    <div class="cb-num" id="cbNum">x10</div>
+    <div class="cb-lbl">COMBO!</div>
   </div>
 
 </div><!-- end #gw -->
@@ -1103,6 +1549,8 @@ function rui(){
   setText('stBest',bestScore);setText('stGames',totalGames);setText('stCoins',coins);
   setText('coinVal',coins);setText('shopCoinVal',coins);
   setText('bestTxt',L('record')+': '+bestScore);
+  // Motivasiya panelini yenilə (start ekranı üçün)
+  updateMotivPanel();
 }
 
 function buildShop(){
@@ -1129,6 +1577,7 @@ function buy(sk){
   if(sk.g.bomb)ammo.bomb+=sk.g.bomb;if(sk.g.shield)ammo.shield+=sk.g.shield;
   if(sk.g.life&&lives!==undefined)lives=Math.min(5,lives+1);
   saveAll();rui();buildShop();floatC(L('bought'),'#44ff88');
+  totalWeaponsBought++;saveMissions();checkMissions();
   if(state==='playing')updateLives();
 }
 
@@ -1371,31 +1820,69 @@ function spawnBall(){
 
   // Level 7+ zigzag (əvvəl 6 idi — biraz gecikdirdik)
   if(level>=7&&Math.random()<0.16){
-    balls.push({x:180,y:-22,r:20,spd:baseSpd*0.72,c:'#ff00ff',pts:4,zz:true,zzd:1,zzs:3.5+level*0.22,age:0,done:false});return;
+    balls.push({x:180,y:-22,r:20,spd:baseSpd*0.72,c:'#ff00ff',pts:4,zz:true,zzd:1,zzs:3.5+level*0.22,age:0,done:false,shape:'diamond'});return;
   }
   // Level 7+ split
   if(level>=7&&Math.random()<0.13){
-    balls.push({x:Math.random()*280+40,y:-18,r:16,spd:baseSpd*0.82,c:'#ff9900',pts:2,split:true,age:0,done:false,wb:0,wa:0});return;
+    balls.push({x:Math.random()*280+40,y:-18,r:16,spd:baseSpd*0.82,c:'#ff9900',pts:2,split:true,age:0,done:false,wb:0,wa:0,shape:'square'});return;
   }
   // Level 10+ giant
   if(level>=10&&Math.random()<0.08){
-    balls.push({x:Math.random()*260+50,y:-38,r:32,spd:baseSpd*0.42,c:'#ff0000',pts:6,giant:true,age:0,done:false,wb:0,wa:0});return;
+    balls.push({x:Math.random()*260+50,y:-38,r:32,spd:baseSpd*0.42,c:'#ff0000',pts:6,giant:true,age:0,done:false,wb:0,wa:0,shape:'circle'});return;
   }
-  // Level 9+ homing — çox gəlməsin (0.11 → 0.09)
+  // Level 9+ homing
   if(level>=9&&Math.random()<0.09){
-    balls.push({x:Math.random()*300+30,y:-16,r:12,spd:baseSpd*0.62,c:'#ff44ff',pts:3,homing:true,vx:0,age:0,done:false,wb:0,wa:0});return;
+    balls.push({x:Math.random()*300+30,y:-16,r:12,spd:baseSpd*0.62,c:'#ff44ff',pts:3,homing:true,vx:0,age:0,done:false,wb:0,wa:0,shape:'triangle'});return;
   }
-  // Level 4+ aimed (oyunçuya doğru) — Flappy pipe-ı kimi hiss verir
+
+  // ── LEVEL 8+ DÜŞMƏN SİLAH TOPLARI ── (silah işlədirlər!)
+  if(level>=8&&Math.random()<0.12){
+    // Laser-shooter: yavaş hərəkət edir, oyunçuya doğru lazer atır
+    balls.push({x:Math.random()*280+40,y:-18,r:14,spd:baseSpd*0.4,c:'#ff2222',pts:4,
+      enemyWeapon:'laser',ewTimer:60+Math.random()*40,ewCooldown:0,
+      age:0,done:false,wb:0,wa:0,shape:'hexagon'});return;
+  }
+  if(level>=10&&Math.random()<0.10){
+    // Bullet-shooter: oyunçuya doğru güllə atır
+    balls.push({x:Math.random()*280+40,y:-18,r:13,spd:baseSpd*0.35,c:'#ffaa00',pts:5,
+      enemyWeapon:'bullet',ewTimer:80,ewCooldown:0,
+      age:0,done:false,wb:0,wa:0,shape:'star'});return;
+  }
+  if(level>=11&&Math.random()<0.08){
+    // Rocket: yavaş irəliləyir, yaxın gəldikdə sprays bullets
+    balls.push({x:Math.random()*260+50,y:-20,r:16,spd:baseSpd*0.3,c:'#ff6600',pts:6,
+      enemyWeapon:'rocket',ewTimer:100,ewCooldown:0,
+      age:0,done:false,wb:Math.random()*0.6-0.3,wa:1.5,shape:'hexagon'});return;
+  }
+
+  // Level 4+ aimed
   if(level>=4&&Math.random()<0.18){
-    balls.push({x:player.x+(Math.random()-0.5)*110,y:-16,r:13,spd:baseSpd*0.92,c:cfg.ac,pts:2,age:0,done:false,wb:0,wa:0});return;
+    balls.push({x:player.x+(Math.random()-0.5)*110,y:-16,r:13,spd:baseSpd*0.92,c:cfg.ac,pts:2,age:0,done:false,wb:0,wa:0,shape:'circle'});return;
   }
-  // Level 5+ wave groups (eyni anda bir neçə)
+  // Level 5+ wave groups
   if(level>=5&&Math.random()<0.15){
     const cnt=2+Math.floor(Math.random()*2);const gap=360/(cnt+1);
-    for(let i=0;i<cnt;i++)balls.push({x:gap*(i+1),y:-12-Math.random()*25,r:11,spd:baseSpd,c:cfg.ac,pts:2,age:0,done:false,wb:0,wa:0});
+    for(let i=0;i<cnt;i++)balls.push({x:gap*(i+1),y:-12-Math.random()*25,r:11,spd:baseSpd,c:cfg.ac,pts:2,age:0,done:false,wb:0,wa:0,shape:'circle'});
     return;
   }
   // Normal toplar — çeşidli ölçü+sürət
+  // Level 3+ STICKER TOPLAR: emoji-sticker görünüşlü maneələr (~20% şans)
+  const STICKER_BALLS=[
+    {emoji:'😡',c:'#ff3300',r:16,s:baseSpd*0.95,p:2,label:'Əsəbi!'},
+    {emoji:'💀',c:'#cc00ff',r:18,s:baseSpd*0.78,p:3,label:'Ölüm!'},
+    {emoji:'🔴',c:'#ff0000',r:12,s:baseSpd*1.3,p:2,label:'Təhlükə!'},
+    {emoji:'😈',c:'#8800ff',r:17,s:baseSpd*0.88,p:2,label:'Şeytan!'},
+    {emoji:'💢',c:'#ff2200',r:14,s:baseSpd*1.1,p:2,label:'Güclü!'},
+    {emoji:'🤬',c:'#ff4400',r:19,s:baseSpd*0.72,p:3,label:'Çılğın!'},
+    {emoji:'☠️',c:'#9900cc',r:20,s:baseSpd*0.65,p:4,label:'Ölüm Topu!'},
+    {emoji:'🧨',c:'#ff6600',r:13,s:baseSpd*1.25,p:2,label:'Partlayış!'},
+  ];
+  if(level>=3&&Math.random()<0.22){
+    const st=STICKER_BALLS[Math.floor(Math.random()*STICKER_BALLS.length)];
+    balls.push({x:Math.random()*280+40,y:-st.r,r:st.r,spd:st.s,c:st.c,pts:st.p,emoji:st.emoji,label:st.label,wb:Math.random()*1.2-0.6,wa:Math.random()*1.8,age:0,done:false});
+    return;
+  }
+
   const TP=[
     {c:'#ff2244',r:14,s:baseSpd,p:1},
     {c:'#ff8800',r:10,s:baseSpd*1.22,p:2},
@@ -1423,24 +1910,24 @@ function getSpawnRate(){
 const DROP_EMOJIS={laser:'⚡',bullet:'🔫',rocket:'🚀',freeze:'❄️',bomb:'💣',shield:'🛡️'};
 function spawnDrop(){
   const DT=[
-    {e:'💊',c:'#ff4488',tp:'health'},
-    {e:'💰',c:'#ffcc00',tp:'coins'},
-    {e:'⚡',c:'#00ffee',tp:'laser'},
-    {e:'🔫',c:'#ffaa00',tp:'bullet'},
-    {e:'🚀',c:'#ff5500',tp:'rocket'},
-    {e:'❄️',c:'#88ddff',tp:'freeze'},
-    {e:'💣',c:'#ff7700',tp:'bomb'},
-    {e:'🛡️',c:'#4499ff',tp:'shield'}
+    {e:'💊',c:'#ff4488',tp:'health',lbl:'+CAN'},
+    {e:'💰',c:'#ffcc00',tp:'coins',lbl:'+60💰'},
+    {e:'⚡',c:'#00ffee',tp:'laser',lbl:'LAZER'},
+    {e:'🔫',c:'#ffaa00',tp:'bullet',lbl:'GÜLLƏ'},
+    {e:'🚀',c:'#ff5500',tp:'rocket',lbl:'RAKET'},
+    {e:'❄️',c:'#88ddff',tp:'freeze',lbl:'DONDU'},
+    {e:'💣',c:'#ff7700',tp:'bomb',lbl:'BOMBA'},
+    {e:'🛡️',c:'#4499ff',tp:'shield',lbl:'QALXAN'},
   ];
   const dt=DT[Math.floor(Math.random()*DT.length)];
-  drops.push({x:Math.random()*280+40,y:-20,r:14,spd:1.1,...dt,age:0,bob:Math.random()*Math.PI*2});
+  drops.push({x:Math.random()*280+40,y:-24,r:15,spd:1.1,...dt,age:0,bob:Math.random()*Math.PI*2});
 }
 
 function collectDrop(d){
   flash(d.c+'44');
   spawnParts(d.x,d.y,d.c,18);
   if(d.tp==='health'){lives=Math.min(5,lives+1);updateLives();float2(d.x,d.y,'❤️ +1','#ff4488',22);}
-  else if(d.tp==='coins'){coins+=30;saveAll();rui();float2(d.x,d.y,'💰 +30','#ffcc00',20);}
+  else if(d.tp==='coins'){coins+=60;saveAll();document.getElementById('coinVal').textContent=coins;float2(d.x,d.y,'💰 +60','#ffcc00',20);}
   else if(ammo[d.tp]!==undefined){ammo[d.tp]++;saveAll();buildWBar();float2(d.x,d.y,(DROP_EMOJIS[d.tp]||'')+ ' +1',WPNS[d.tp].c,20);}
 }
 
@@ -1453,6 +1940,7 @@ function addExp(x,y,c,r){exps.push({x,y,c,mr:r,life:1});}
 function fire(tx,ty){
   if(!selWeapon||!ammo[selWeapon])return;
   const w=WPNS[selWeapon];ammo[selWeapon]--;saveAll();flash(w.c+'44');hideTip();
+  totalWeaponsUsed++;saveMissions();checkMissions();
   const sw=selWeapon;selWeapon=null;buildWBar();
   if(sw==='laser'){
     balls=balls.filter(b=>{if(Math.abs(b.x-player.x)<58){spawnParts(b.x,b.y,b.c,10);score+=b.pts;updScore();return false;}return true;});
@@ -1485,6 +1973,358 @@ function updScore(){const e=document.getElementById('score');e.textContent=score
 function updCombo(){setText('cv',combo);document.getElementById('comboDisp').style.opacity=combo>=3?'1':'0';}
 
 // ── GAME OVER ──
+// ═══════════════════════════════════════════════════
+// MİSSİYALAR SİSTEMİ
+// ═══════════════════════════════════════════════════
+const MISSIONS=[
+  // XAL MİSSİYALARI
+  {id:'m_score50',icon:'🎯',name:'İlk 50',desc:'50 xal topla',target:50,type:'score',reward:150,unit:'xal'},
+  {id:'m_score200',icon:'🔥',name:'200 Çatdır',desc:'200 xal topla',target:200,type:'score',reward:300,unit:'xal'},
+  {id:'m_score500',icon:'⚡',name:'500 Ustalik',desc:'500 xal topla',target:500,type:'score',reward:600,unit:'xal'},
+  {id:'m_score1000',icon:'💎',name:'Min Xal',desc:'1000 xal topla',target:1000,type:'score',reward:1200,unit:'xal'},
+  {id:'m_score2000',icon:'👑',name:'2000 Legenda',desc:'2000 xal topla',target:2000,type:'score',reward:2000,unit:'xal'},
+  // COMBO
+  {id:'m_combo5',icon:'💥',name:'5x Combo',desc:'5x combo qur',target:5,type:'combo',reward:100,unit:'x combo'},
+  {id:'m_combo10',icon:'🌊',name:'Combo Ustası',desc:'10x combo qur',target:10,type:'combo',reward:200,unit:'x combo'},
+  {id:'m_combo20',icon:'🌪️',name:'Combo Tanrısı',desc:'20x combo qur',target:20,type:'combo',reward:500,unit:'x combo'},
+  {id:'m_combo30',icon:'🏆',name:'30x TANRI',desc:'30x combo qur',target:30,type:'combo',reward:1000,unit:'x combo'},
+  // OYUN SAYI
+  {id:'m_play5',icon:'🕹️',name:'5 Oyun',desc:'5 oyun oyna',target:5,type:'games',reward:100,unit:'oyun'},
+  {id:'m_play20',icon:'🎮',name:'20 Oyun',desc:'20 oyun oyna',target:20,type:'games',reward:250,unit:'oyun'},
+  {id:'m_play50',icon:'🎯',name:'50 Oyun',desc:'50 oyun oyna',target:50,type:'games',reward:500,unit:'oyun'},
+  {id:'m_play100',icon:'🌟',name:'100 Oyun',desc:'100 oyun oyna',target:100,type:'games',reward:1000,unit:'oyun'},
+  // YAYINMA
+  {id:'m_dodge50',icon:'💨',name:'50 Yayınma',desc:'50 top yayın',target:50,type:'dodge',reward:100,unit:'yayınma'},
+  {id:'m_dodge200',icon:'🌪️',name:'200 Yayınma',desc:'200 top yayın',target:200,type:'dodge',reward:200,unit:'yayınma'},
+  {id:'m_dodge500',icon:'💫',name:'500 Yayınma',desc:'500 top yayın',target:500,type:'dodge',reward:400,unit:'yayınma'},
+  {id:'m_dodge1000',icon:'🚀',name:'1000 Ninja',desc:'1000 top yayın',target:1000,type:'dodge',reward:800,unit:'yayınma'},
+  {id:'m_dodge5000',icon:'🥷',name:'5000 Yayınma',desc:'5000 top yayın',target:5000,type:'dodge',reward:2000,unit:'yayınma'},
+  // LEVEL
+  {id:'m_level3',icon:'📈',name:'Level 3',desc:'Level 3-ə çat',target:3,type:'level',reward:100,unit:'level'},
+  {id:'m_level5',icon:'🚀',name:'Level 5',desc:'Level 5-ə çat',target:5,type:'level',reward:250,unit:'level'},
+  {id:'m_level8',icon:'💪',name:'Level 8',desc:'Level 8-ə çat',target:8,type:'level',reward:500,unit:'level'},
+  {id:'m_level10',icon:'🌟',name:'Level 10',desc:'Level 10-a çat',target:10,type:'level',reward:800,unit:'level'},
+  {id:'m_level12',icon:'👑',name:'Level 12 MAX',desc:'Maksimum levelə çat',target:12,type:'level',reward:1500,unit:'level'},
+  // DƏVƏT
+  {id:'m_invite1',icon:'🤝',name:'İlk Dəvət',desc:'1 dost dəvət et',target:1,type:'invite',reward:300,unit:'dəvət'},
+  {id:'m_invite3',icon:'👥',name:'3 Dost',desc:'3 dost dəvət et',target:3,type:'invite',reward:600,unit:'dəvət'},
+  {id:'m_invite5',icon:'🌐',name:'5 Dost',desc:'5 dost dəvət et',target:5,type:'invite',reward:1000,unit:'dəvət'},
+  {id:'m_invite10',icon:'🏅',name:'10 Dost',desc:'10 dost dəvət et',target:10,type:'invite',reward:2000,unit:'dəvət'},
+  // PAYLAŞIM
+  {id:'m_share1',icon:'📤',name:'İlk Paylaşım',desc:'Nəticəni paylaş',target:1,type:'share',reward:200,unit:'paylaşım'},
+  {id:'m_share5',icon:'📲',name:'5 Paylaşım',desc:'5 dəfə paylaş',target:5,type:'share',reward:500,unit:'paylaşım'},
+  // COİN
+  {id:'m_coins300',icon:'💰',name:'300 Coin',desc:'300 coin yığ',target:300,type:'coins',reward:100,unit:'coin'},
+  {id:'m_coins1000',icon:'💎',name:'1000 Coin',desc:'1000 coin yığ',target:1000,type:'coins',reward:200,unit:'coin'},
+  {id:'m_coins5000',icon:'🏦',name:'5000 Coin',desc:'5000 coin yığ',target:5000,type:'coins',reward:500,unit:'coin'},
+  // SİLAH
+  {id:'m_weapon1',icon:'⚡',name:'İlk Silah',desc:'Silah al',target:1,type:'weapon',reward:150,unit:'silah'},
+  {id:'m_weapon10',icon:'🔫',name:'10 Silah',desc:'10 silah istifadə et',target:10,type:'weaponuse',reward:300,unit:'istifadə'},
+  {id:'m_weapon30',icon:'🚀',name:'30 Silah',desc:'30 silah istifadə et',target:30,type:'weaponuse',reward:600,unit:'istifadə'},
+];
+
+let missProgress=JSON.parse(localStorage.getItem('ds4_miss')||'{}');
+let missClaimed=JSON.parse(localStorage.getItem('ds4_miss_claimed')||'{}');
+let totalDodged=parseInt(localStorage.getItem('ds4_dodged')||'0');
+let totalInvited=parseInt(localStorage.getItem('ds4_invited')||'0');
+let totalShared=parseInt(localStorage.getItem('ds4_shared')||'0');
+let maxComboEver=parseInt(localStorage.getItem('ds4_maxcombo')||'0');
+let maxLevelEver=parseInt(localStorage.getItem('ds4_maxlevel')||'0');
+let totalWeaponsBought=parseInt(localStorage.getItem('ds4_wpnbought')||'0');
+let totalWeaponsUsed=parseInt(localStorage.getItem('ds4_wpnused')||'0');
+
+function saveMissions(){
+  localStorage.setItem('ds4_miss',JSON.stringify(missProgress));
+  localStorage.setItem('ds4_miss_claimed',JSON.stringify(missClaimed));
+  localStorage.setItem('ds4_dodged',totalDodged);
+  localStorage.setItem('ds4_invited',totalInvited);
+  localStorage.setItem('ds4_shared',totalShared);
+  localStorage.setItem('ds4_maxcombo',maxComboEver);
+  localStorage.setItem('ds4_maxlevel',maxLevelEver);
+  localStorage.setItem('ds4_wpnbought',totalWeaponsBought);
+  localStorage.setItem('ds4_wpnused',totalWeaponsUsed);
+}
+
+function getMissValue(m){
+  switch(m.type){
+    case 'score': return bestScore;
+    case 'games': return totalGames;
+    case 'combo': return maxComboEver;
+    case 'level': return maxLevelEver;
+    case 'dodge': return totalDodged;
+    case 'invite': return totalInvited;
+    case 'share': return totalShared;
+    case 'coins': return coins;
+    case 'weapon': return totalWeaponsBought;
+    case 'weaponuse': return totalWeaponsUsed;
+    default: return 0;
+  }
+}
+
+function checkMissions(){
+  let anyNew=false;
+  MISSIONS.forEach(m=>{
+    if(missClaimed[m.id]) return;
+    const val=getMissValue(m);
+    if(val>=m.target){
+      // Auto-complete: show toast, don't claim yet (player must open missions to claim)
+      if(!missProgress[m.id+'_done']){
+        missProgress[m.id+'_done']=true;
+        anyNew=true;
+      }
+    }
+  });
+  if(anyNew) saveMissions();
+}
+
+function claimMission(id){
+  if(missClaimed[id]) return;
+  const m=MISSIONS.find(x=>x.id===id);
+  if(!m) return;
+  if(getMissValue(m)<m.target) return;
+  missClaimed[id]=true;
+  coins+=m.reward;
+  saveAll();saveMissions();
+  renderMissions();
+  showAchieveToast(m.icon,'Missiya tamamlandı!','+'+m.reward+'💰');
+}
+
+function openMiss(){
+  renderMissions();
+  ['startScreen','gameOverScreen'].forEach(hide);
+  show('missScreen');
+}
+function closeMiss(){hide('missScreen');show('startScreen');}
+
+function renderMissions(){
+  const list=document.getElementById('missList');
+  if(!list) return;
+  list.innerHTML='';
+  MISSIONS.forEach(m=>{
+    const val=Math.min(getMissValue(m),m.target);
+    const pct=Math.round(val/m.target*100);
+    const done=val>=m.target;
+    const claimed=missClaimed[m.id];
+    const card=document.createElement('div');
+    card.style.cssText=`background:${claimed?'rgba(0,245,212,0.04)':done?'rgba(255,208,96,0.06)':'rgba(255,255,255,0.025)'};border:1px solid ${claimed?'rgba(0,245,212,0.2)':done?'rgba(255,208,96,0.25)':'rgba(255,255,255,0.06)'};border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;`;
+    card.innerHTML=`
+      <div style="font-size:28px;flex-shrink:0;">${m.icon}</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:${claimed?'rgba(0,245,212,0.6)':'#fff'};letter-spacing:1px;line-height:1;">${m.name} ${claimed?'✓':''}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:2px;font-weight:600;">${m.desc}</div>
+        <div style="margin-top:6px;background:rgba(255,255,255,0.05);border-radius:3px;height:3px;overflow:hidden;">
+          <div style="height:100%;width:${pct}%;background:${done?'linear-gradient(90deg,var(--neon),#00c4ff)':'linear-gradient(90deg,#5c6bff,var(--neon))'};border-radius:3px;transition:width 0.5s;"></div>
+        </div>
+        <div style="font-size:9px;color:rgba(255,255,255,0.2);margin-top:2px;font-weight:700;">${val}/${m.target} ${m.unit}</div>
+      </div>
+      <div style="flex-shrink:0;text-align:center;">
+        ${claimed
+          ? '<div style="font-size:9px;color:rgba(0,245,212,0.4);font-weight:700;letter-spacing:2px;">ALINDI</div>'
+          : done
+            ? `<button onclick="claimMission('${m.id}')" style="background:linear-gradient(135deg,var(--gold),#ff8800);border:none;color:#1a0a00;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;padding:7px 12px;border-radius:12px;cursor:pointer;box-shadow:0 4px 14px rgba(255,180,0,0.35);">+${m.reward}💰<br>AL</button>`
+            : `<div style="text-align:center;"><div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);">+${m.reward}</div><div style="font-size:9px;color:rgba(255,208,96,0.4);font-weight:700;">💰</div></div>`
+        }
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// DOST DƏVƏT SİSTEMİ — DÜZƏLDİLMİŞ
+// ═══════════════════════════════════════════════════
+function getInviteCode(){
+  let code=localStorage.getItem('ds4_invite_code');
+  if(!code){
+    // Readable code: DS + 4 random uppercase letters
+    const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    code='DS-';for(let i=0;i<4;i++)code+=chars[Math.floor(Math.random()*chars.length)];
+    localStorage.setItem('ds4_invite_code',code);
+  }
+  return code;
+}
+
+function openInvite(){
+  const code=getInviteCode();
+  const el=document.getElementById('inviteCodeDisp');if(el)el.textContent=code;
+  const cnt=document.getElementById('inviteCount');if(cnt)cnt.textContent=totalInvited;
+  ['startScreen','gameOverScreen','missScreen'].forEach(hide);
+  show('inviteScreen');
+}
+function closeInvite(){hide('inviteScreen');show('startScreen');}
+
+function buildInviteUrl(){
+  return `https://bit.ly/dodge-survive?ref=${getInviteCode()}`;
+}
+
+function getInviteMsg(){
+  return `🎮 Dodge & Survive oynayıram!\n🏆 Mənim rekord: ${bestScore} xal\n\nSən döyə bilərsən? Gəl sübut et 👇\n${buildInviteUrl()}\n\n💰 Qoşulduqda +100 coin bonus sənin, +200 mənə!`;
+}
+
+function inviteWA(){
+  window.open('https://wa.me/?text='+encodeURIComponent(getInviteMsg()),'_blank');
+  recordInvite('WhatsApp');
+}
+function inviteCopyLink(){
+  try{navigator.clipboard.writeText(buildInviteUrl()).then(()=>{showAchieveToast('📋','Link kopyalandı!','Dostuna göndər');});}
+  catch(e){prompt('Kodu kopyala:',buildInviteUrl());}
+  recordInvite('CopyLink');
+}
+async function inviteNative(){
+  try{
+    if(navigator.share){
+      await navigator.share({title:'Dodge & Survive',text:getInviteMsg(),url:buildInviteUrl()});
+      recordInvite('Native');
+    }else{inviteCopyLink();}
+  }catch(e){inviteCopyLink();}
+}
+function copyInviteCode(){
+  try{navigator.clipboard.writeText(getInviteCode()).then(()=>{showAchieveToast('📋','Kod kopyalandı!','Dostuna göndər 💬');});}
+  catch(e){prompt('Kodun:',getInviteCode());}
+}
+function recordInvite(src){
+  totalInvited++;saveMissions();
+  const cnt=document.getElementById('inviteCount');if(cnt)cnt.textContent=totalInvited;
+  if(totalInvited===1){coins+=200;saveAll();rui();showAchieveToast('🤝','İlk Dəvət!','+200💰 hesabına köçürüldü!');}
+  else if(totalInvited===3){coins+=300;saveAll();rui();showAchieveToast('👥','3 Dost Dəvət!','+300💰 bonus!');}
+  else if(totalInvited===5){coins+=500;saveAll();rui();showAchieveToast('🌟','5 Dost Dəvət!','+500💰 bonus!');}
+  checkMissions();
+}
+
+// ═══════════════════════════════════════════════════
+// SOCIAL SHARE — IG, FB, TT, WA
+// ═══════════════════════════════════════════════════
+function openSocialShare(){
+  const sc=state==='over'?score:bestScore;
+  document.getElementById('socialCardScore').textContent=sc||bestScore;
+  document.getElementById('socialCardLevel').textContent=maxLevelEver||1;
+  document.getElementById('socialCardCombo').textContent=maxComboEver||0;
+  document.getElementById('socialCardBest').textContent=bestScore;
+  const rankLbl=sc>=500?'🌟 ELİTA OYUNÇU':sc>=200?'💎 PRO OYUNÇU':sc>=100?'🔥 GÜCLƏNİR':sc>=50?'🚀 YENİ ÇIXAN':'🌱 YENİ OYUNÇU';
+  document.getElementById('socialCardRank').textContent=rankLbl;
+  document.getElementById('socialShareOverlay').style.display='flex';
+}
+function closeSocialShare(){document.getElementById('socialShareOverlay').style.display='none';}
+
+function getShareMsg(){
+  const sc=state==='over'?score:bestScore;
+  return `🎮 Dodge & Survive — ${sc} xal qazandım!\nSən döyə bilərsən? 🔥\nhttps://bit.ly/dodge-survive`;
+}
+
+function doSocialShare(type){
+  const msg=getShareMsg();
+  const url=encodeURIComponent('https://bit.ly/dodge-survive');
+  const txt=encodeURIComponent(msg);
+  if(type==='wa'){window.open('https://wa.me/?text='+txt,'_blank');}
+  else if(type==='ig'){
+    // Instagram: copy text + open app
+    try{navigator.clipboard.writeText(msg);}catch(e){}
+    window.open('instagram://camera','_blank');
+    setTimeout(()=>{showAchieveToast('📸','Instagram','Mətn kopyalandı — story-yə yapışdır!');},400);
+  }
+  else if(type==='fb'){window.open('https://www.facebook.com/sharer/sharer.php?u='+url+'&quote='+txt,'_blank');}
+  else if(type==='tt'){
+    // TikTok: copy text + open app
+    try{navigator.clipboard.writeText(msg);}catch(e){}
+    window.open('tiktok://','_blank');
+    setTimeout(()=>{showAchieveToast('🎵','TikTok','Mətn kopyalandı — bio-ya yapışdır!');},400);
+  }
+  else if(type==='copy'){
+    try{navigator.clipboard.writeText(msg).then(()=>showAchieveToast('📋','Kopyalandı!','İstədiyin yerə yapışdır'));}
+    catch(e){prompt('Kopyala:',msg);}
+  }
+  else if(type==='native'){
+    if(navigator.share){navigator.share({title:'Dodge & Survive',text:msg,url:'https://bit.ly/dodge-survive'}).catch(()=>{});}
+    else{try{navigator.clipboard.writeText(msg);}catch(e){}showAchieveToast('📋','Kopyalandı!','');}
+  }
+  totalShared++;saveMissions();
+  if(totalShared===1){coins+=200;saveAll();rui();showAchieveToast('📤','İlk Paylaşım!','+200💰 qazandın!');}
+  checkMissions();
+}
+
+// ═══════════════════════════════════════════════════
+// LIVE SOCIAL TICKER — REAL GLOBAL NAMES
+// ═══════════════════════════════════════════════════
+const TICKER_POOL=[
+  // AZ
+  {n:'Anar B.',flag:'🇦🇿'},{n:'Cavid M.',flag:'🇦🇿'},{n:'Nigar H.',flag:'🇦🇿'},{n:'Tural A.',flag:'🇦🇿'},
+  {n:'Günel R.',flag:'🇦🇿'},{n:'Murad K.',flag:'🇦🇿'},{n:'Sevinc N.',flag:'🇦🇿'},{n:'Bəhruz T.',flag:'🇦🇿'},
+  // RU
+  {n:'Дмитрий К.',flag:'🇷🇺'},{n:'Анастасия В.',flag:'🇷🇺'},{n:'Артём Л.',flag:'🇷🇺'},{n:'Ольга П.',flag:'🇷🇺'},
+  {n:'Максим Ф.',flag:'🇷🇺'},{n:'Наталья С.',flag:'🇷🇺'},{n:'Иван Т.',flag:'🇷🇺'},
+  // CN
+  {n:'李伟',flag:'🇨🇳'},{n:'王芳',flag:'🇨🇳'},{n:'张磊',flag:'🇨🇳'},{n:'刘洋',flag:'🇨🇳'},{n:'陈静',flag:'🇨🇳'},
+  // JP
+  {n:'田中 翔',flag:'🇯🇵'},{n:'鈴木 葵',flag:'🇯🇵'},{n:'佐藤 蓮',flag:'🇯🇵'},{n:'山田 陽',flag:'🇯🇵'},
+  // TR
+  {n:'Emre K.',flag:'🇹🇷'},{n:'Zeynep A.',flag:'🇹🇷'},{n:'Burak Y.',flag:'🇹🇷'},{n:'Elif Ş.',flag:'🇹🇷'},
+  // EN
+  {n:'Alex J.',flag:'🇺🇸'},{n:'Sophie M.',flag:'🇬🇧'},{n:'Carlos R.',flag:'🇧🇷'},{n:'Lena K.',flag:'🇩🇪'},
+  {n:'Noah P.',flag:'🇺🇸'},{n:'Aria L.',flag:'🇮🇳'},{n:'Omar S.',flag:'🇸🇦'},{n:'Yuna C.',flag:'🇰🇷'},
+];
+
+// Realistic online counts (seeded by minute so same session looks consistent)
+function liveCount(){return 3200+Math.floor((Date.now()/60000)%100)*13+Math.floor(Math.random()*80);}
+
+const TICKER_TEMPLATES=[
+  p=>`${p.flag} <b style="color:var(--neon)">${p.n}</b> <span style="color:rgba(255,255,255,0.35)">${Math.floor(Math.random()*350+80)} xal qazandı</span>`,
+  p=>`${p.flag} <b style="color:var(--hot)">${p.n}</b> <span style="color:rgba(255,255,255,0.35)">🔥 yeni rekord: ${Math.floor(Math.random()*500+200)}</span>`,
+  p=>`${p.flag} <b style="color:var(--gold)">${p.n}</b> <span style="color:rgba(255,255,255,0.35)">${Math.floor(Math.random()*18+5)}x combo vurdu 💥</span>`,
+  ()=>`🌍 <span style="color:rgba(255,255,255,0.3)">Hal-hazırda </span><b style="color:var(--neon)">${liveCount().toLocaleString()}</b><span style="color:rgba(255,255,255,0.3)"> nəfər oynayır</span>`,
+  p=>`${p.flag} <b style="color:var(--elec)">${p.n}</b> <span style="color:rgba(255,255,255,0.3)">oyuna qoşuldu</span>`,
+  p=>`${p.flag} <b style="color:var(--gold)">${p.n}</b> <span style="color:rgba(255,255,255,0.3)">bu həftənin #1-idir 🏆</span>`,
+  p=>`${p.flag} <b style="color:var(--hot)">${p.n}</b> <span style="color:rgba(255,255,255,0.3)">dostunu dəvət etdi 🤝</span>`,
+  ()=>`💰 <span style="color:rgba(255,255,255,0.3)">Son </span><b style="color:var(--gold)">${Math.floor(Math.random()*20+5)}</b><span style="color:rgba(255,255,255,0.3)"> dəqiqədə ${Math.floor(Math.random()*300+100)} coin paylandı</span>`,
+  p=>`${p.flag} <b style="color:var(--neon)">${p.n}</b> <span style="color:rgba(255,255,255,0.3)">Level ${Math.floor(Math.random()*8+4)}-ə çatdı ⬆️</span>`,
+  ()=>`🎯 <span style="color:rgba(255,255,255,0.3)">Bugünkü TOP xal: </span><b style="color:var(--gold)">${Math.floor(Math.random()*400+800)}</b>`,
+  p=>`${p.flag} <b style="color:#ff8800">${p.n}</b> <span style="color:rgba(255,255,255,0.3)">missiyanı tamamladı ✅</span>`,
+  ()=>`📲 <b style="color:rgba(255,255,255,0.4)">${Math.floor(Math.random()*50+30)}</b><span style="color:rgba(255,255,255,0.25)"> yeni oyunçu bu saat qoşuldu</span>`,
+];
+
+function buildTickerItem(){
+  const p=TICKER_POOL[Math.floor(Math.random()*TICKER_POOL.length)];
+  const tmpl=TICKER_TEMPLATES[Math.floor(Math.random()*TICKER_TEMPLATES.length)];
+  return tmpl(p);
+}
+
+function initLiveTicker(){
+  const track=document.getElementById('liveTickerTrack');
+  if(!track) return;
+  // Inject keyframes once
+  if(!document.getElementById('tickKf')){
+    const st=document.createElement('style');st.id='tickKf';
+    st.textContent='@keyframes tickLive{0%{transform:translateX(100vw)}100%{transform:translateX(-200%)}}';
+    document.head.appendChild(st);
+  }
+  let items=[];
+  function makeItems(){
+    track.innerHTML='';
+    items=[];
+    for(let i=0;i<10;i++){
+      const span=document.createElement('span');
+      span.style.cssText='font-size:10px;font-weight:600;letter-spacing:0.5px;margin-right:40px;white-space:nowrap;flex-shrink:0;';
+      span.innerHTML='&bull;&nbsp;'+buildTickerItem();
+      track.appendChild(span);
+      items.push(span);
+    }
+    track.style.cssText='display:flex;align-items:center;height:100%;white-space:nowrap;animation:tickLive 32s linear infinite;';
+  }
+  makeItems();
+  // Refresh items every 30s (matches animation duration)
+  setInterval(makeItems,30000);
+}
+
+// ═══════════════════════════════════════════════════
+// ACHIEVE TOAST (shared util)
+// ═══════════════════════════════════════════════════
+function showAchieveToast(icon,name,sub){
+  const t=document.getElementById('achieveToast');if(!t)return;
+  const ic=document.getElementById('atIcon');const nm=document.getElementById('atName');const sb=document.getElementById('atSub');
+  if(ic)ic.textContent=icon;if(nm)nm.textContent=name;if(sb)sb.textContent=sub;
+  t.style.display='flex';
+  clearTimeout(window._achT);
+  window._achT=setTimeout(()=>{t.style.display='none';},3200);
+}
+
 function gameOver(){
   if(dead)return;dead=true;state='over';
   if(rafId){cancelAnimationFrame(rafId);rafId=null;}
@@ -1492,25 +2332,133 @@ function gameOver(){
   const isNew=score>bestScore;if(isNew)bestScore=score;
   const coinEarned=Math.floor(score/10);
   coins+=coinEarned;saveAll();rui();
+  // Update mission trackers
+  if(level>maxLevelEver){maxLevelEver=level;}
+  saveMissions();checkMissions();
   setText('finalScore',score);
-  const nb=document.getElementById('newBestTag');nb.style.display=isNew?'block':'none';nb.textContent=L('newRecord');
-  // Near-miss psychology: if score close to best, show encouraging message
+
+  // ── Rekorddan məsafə göstəricisi ──
+  const nb=document.getElementById('newBestTag');
+  const gapEl=document.getElementById('gapToRecord');
+  const barEl=document.getElementById('bestProgressBar');
+  const barLbl=document.getElementById('bestProgressLbl');
+  if(isNew){
+    nb.style.display='block';
+    nb.className='scBest newRec';
+    nb.textContent=L('newRecord');
+    if(gapEl)gapEl.style.display='none';
+    if(barEl)barEl.style.width='100%';
+    if(barLbl)barLbl.textContent='🏆 EN YAXŞI!';
+    // Konfetti!
+    spawnConfetti();
+  } else {
+    nb.style.display='none';
+    const gap=bestScore-score;
+    const pct=bestScore>0?Math.min(100,Math.round(score/bestScore*100)):0;
+    if(gapEl){
+      gapEl.style.display='block';
+      if(gap<=3) gapEl.textContent='😱 Rekorddan cəmi '+gap+' xal azdı!';
+      else if(gap<=10) gapEl.textContent='🔥 Rekorddan '+gap+' xal azdı!';
+      else if(pct>=80) gapEl.textContent='💪 Rekordun '+pct+'%-i — yaxınlaşırsan!';
+      else gapEl.textContent='🎯 Rekord: '+bestScore+' | Bu oyun: '+score;
+    }
+    if(barEl){setTimeout(()=>{barEl.style.width=pct+'%';},300);}
+    else if(barEl){barEl.style.width='0%';}
+    if(barLbl)barLbl.textContent='REKORDun '+pct+'%';
+  }
+
+  // Near-miss psychology
   const pctOfBest=bestScore>0?score/bestScore:0;
   let msg;
   if(isNew){msg=TR[curLang].newRecord.replace('🏆 ','');}
   else if(pctOfBest>=0.85){msg=getNearMissMsg();}
   else{const motArr=TR[curLang].motives;msg=motArr[Math.floor(Math.random()*motArr.length)];}
   setText('motTxt',msg+(coinEarned>0?' (+'+coinEarned+'💰)':''));
-  // Show first-death tip
   if(totalGames<=3)maybeShowContextTip('firstDeath');
   flash('#ff224455');
-  // Show lang button again
   const lb=document.getElementById('langBtnTop');if(lb)lb.style.display='';
   setTimeout(()=>{
     show('gameOverScreen');
-    // Firebase: submit score
     if(window._firebaseReady&&window.onGameOverFB)window.onGameOverFB();
   },500);
+}
+
+// Konfetti efekti — yeni rekord üçün
+function spawnConfetti(){
+  const colors=['#ffcc00','#ff4488','#44ffcc','#ff8800','#aaffaa','#ffffff'];
+  const gw=document.getElementById('gw');
+  for(let i=0;i<38;i++){
+    const c=document.createElement('div');
+    c.className='confetti-piece';
+    c.style.left=Math.random()*360+'px';
+    c.style.top='0px';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.animationDuration=(1.2+Math.random()*1.8)+'s';
+    c.style.animationDelay=(Math.random()*0.6)+'s';
+    c.style.width=(6+Math.random()*8)+'px';
+    c.style.height=(6+Math.random()*8)+'px';
+    gw.appendChild(c);
+    setTimeout(()=>c.remove(),3000);
+  }
+}
+
+// Start ekranı motivasiya paneli — hər açılışda fərqli mesaj
+function updateMotivPanel(){
+  const ml=document.getElementById('motivLine');
+  const ms=document.getElementById('motivSub');
+  if(!ml)return;
+  const panels={
+    az:[
+      {line:'🔥 REKORDU QIR!',sub:'Ən yaxşı nəticən: '+bestScore},
+      {line:'💰 '+coins+' COİN VAR',sub:'Silah al, daha uzun oyna!'},
+      {line:'🏅 TOP 100-Ə GİR',sub:'Həftəlik 5 USDT qazan!'},
+      {line:'⚡ COMBO QURSAN — SÜRƏTLƏ QAZAN',sub:'x5 combo = 2x coin!'},
+      {line:'🎯 '+totalGames+'. OYUNUN',sub:'Hər oyun daha yaxşı olursan!'},
+    ],
+    en:[
+      {line:'🔥 BREAK YOUR RECORD!',sub:'Your best: '+bestScore},
+      {line:'💰 YOU HAVE '+coins+' COINS',sub:'Buy weapons, survive longer!'},
+      {line:'🏅 ENTER TOP 100',sub:'Win 5 USDT weekly!'},
+      {line:'⚡ BUILD COMBOS — EARN FAST',sub:'x5 combo = 2x coins!'},
+      {line:'🎯 GAME #'+totalGames,sub:'You get better every game!'},
+    ],
+    ru:[
+      {line:'🔥 ПОБЕЙ РЕКОРД!',sub:'Твой рекорд: '+bestScore},
+      {line:'💰 У ТЕБЯ '+coins+' МОНЕТ',sub:'Купи оружие, живи дольше!'},
+      {line:'🏅 В ТОП 100',sub:'Выиграй 5 USDT каждую неделю!'},
+      {line:'⚡ КОМБО = БЫСТРЫЕ МОНЕТЫ',sub:'x5 комбо = монеты x2!'},
+      {line:'🎯 ИГРА #'+totalGames,sub:'Каждая игра делает тебя лучше!'},
+    ],
+    tr:[
+      {line:'🔥 REKORU KIR!',sub:'En iyin: '+bestScore},
+      {line:'💰 '+coins+' COİN VAR',sub:'Silah al, daha uzun oyna!'},
+      {line:'🏅 TOP 100\'E GİR',sub:'Haftalık 5 USDT kazan!'},
+      {line:'⚡ COMBO KUR — HIZLI KAZAN',sub:'x5 combo = 2x coin!'},
+      {line:'🎯 '+totalGames+'. OYUNUN',sub:'Her oyunda daha iyisin!'},
+    ],
+    zh:[
+      {line:'🔥 打破记录！',sub:'你的最佳: '+bestScore},
+      {line:'💰 你有 '+coins+' 金币',sub:'买武器，活得更久！'},
+      {line:'🏅 进入TOP 100',sub:'每周赢5 USDT！'},
+      {line:'⚡ 连击 = 快速获币',sub:'x5连击 = 2倍金币！'},
+      {line:'🎯 第'+totalGames+'局',sub:'每局都比上局好！'},
+    ],
+  };
+  const arr=panels[curLang]||panels.en;
+  // Hər 4 saniyədə bir dəyişir
+  let idx=0;
+  const show=()=>{
+    ml.style.opacity='0';
+    setTimeout(()=>{
+      const p=arr[idx%arr.length];idx++;
+      ml.textContent=p.line;ms.textContent=p.sub;
+      ml.style.opacity='1';
+    },300);
+  };
+  ml.style.transition='opacity 0.3s';
+  show();
+  clearInterval(window._motivT);
+  window._motivT=setInterval(show,4000);
 }
 
 // ── MAIN LOOP ──
@@ -1523,37 +2471,75 @@ function loop(ts){
   if(shakeT>0){shakeT-=dt;sx=(Math.random()-0.5)*shake;sy=(Math.random()-0.5)*shake;shake*=0.82;if(shake<0.4)shakeT=0;}
   ctx.save();ctx.translate(sx,sy);
 
-  // ── BACKGROUND — changes every level ──
+  // ── BACKGROUND — neon cyberpunk ──
   const cfg=getLevelBG(level);
+  // Deep dark base
+  ctx.fillStyle='#050508';ctx.fillRect(0,0,360,640);
+  
+  // Animated ambient glow blobs
+  const t=frame*0.012;
   if(cfg.h1===null){
-    // XAOS: hue shifting
-    const h1=`hsl(${bgHue%360},55%,4%)`;
-    const h2=`hsl(${(bgHue+130)%360},55%,7%)`;
-    const bg=ctx.createLinearGradient(0,0,0,640);bg.addColorStop(0,h1);bg.addColorStop(1,h2);
-    ctx.fillStyle=bg;ctx.fillRect(0,0,360,640);
+    // XAOS: hue-shifting neon
+    const h=bgHue%360;
+    const ag1=ctx.createRadialGradient(80+Math.sin(t)*30,120,0,80,120,200);
+    ag1.addColorStop(0,`hsla(${h},80%,50%,0.07)`);ag1.addColorStop(1,'transparent');
+    ctx.fillStyle=ag1;ctx.fillRect(0,0,360,640);
+    const ag2=ctx.createRadialGradient(280+Math.cos(t)*30,500,0,280,500,180);
+    ag2.addColorStop(0,`hsla(${(h+120)%360},80%,50%,0.06)`);ag2.addColorStop(1,'transparent');
+    ctx.fillStyle=ag2;ctx.fillRect(0,0,360,640);
   }else{
-    const bg=ctx.createLinearGradient(0,0,0,640);bg.addColorStop(0,cfg.h1);bg.addColorStop(1,cfg.h2);
-    ctx.fillStyle=bg;ctx.fillRect(0,0,360,640);
+    // Level-specific ambient
+    const acRgb=hexToRgb(cfg.ac);
+    const ag=ctx.createRadialGradient(180,0,0,180,0,360);
+    ag.addColorStop(0,`rgba(${acRgb},0.05)`);ag.addColorStop(1,'transparent');
+    ctx.fillStyle=ag;ctx.fillRect(0,0,360,640);
+    const ag2=ctx.createRadialGradient(180,640,0,180,640,280);
+    ag2.addColorStop(0,`rgba(${acRgb},0.04)`);ag2.addColorStop(1,'transparent');
+    ctx.fillStyle=ag2;ctx.fillRect(0,0,360,640);
   }
 
-  // Grid lines
-  ctx.strokeStyle='rgba(255,255,255,0.015)';ctx.lineWidth=1;
-  for(let x=0;x<=360;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,640);ctx.stroke();}
-  for(let y=0;y<=640;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(360,y);ctx.stroke();}
+  // Perspective grid — cyberpunk floor
+  ctx.save();
+  ctx.strokeStyle='rgba(255,255,255,0.025)';ctx.lineWidth=0.8;
+  // Vertical lines
+  for(let x=0;x<=360;x+=36){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,640);ctx.stroke();}
+  // Horizontal lines — perspective convergence
+  for(let y=0;y<=640;y+=40){
+    const alpha=0.012+0.02*(y/640);
+    ctx.strokeStyle=`rgba(255,255,255,${alpha})`;
+    ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(360,y);ctx.stroke();
+  }
+  ctx.restore();
 
-  // Ground glow
-  const gg=ctx.createLinearGradient(0,580,0,640);gg.addColorStop(0,'transparent');gg.addColorStop(1,cfg.ac+'28');
-  ctx.fillStyle=gg;ctx.fillRect(0,580,360,60);
+  // Ground neon glow line
+  const acRgbG=hexToRgb(cfg.ac);
+  ctx.beginPath();ctx.moveTo(0,590);ctx.lineTo(360,590);
+  ctx.strokeStyle=`rgba(${acRgbG},0.35)`;ctx.lineWidth=1.5;
+  ctx.shadowBlur=12;ctx.shadowColor=cfg.ac;ctx.stroke();ctx.shadowBlur=0;
+  const gg=ctx.createLinearGradient(0,590,0,640);
+  gg.addColorStop(0,`rgba(${acRgbG},0.1)`);gg.addColorStop(1,'transparent');
+  ctx.fillStyle=gg;ctx.fillRect(0,590,360,50);
 
-  // Stars
-  stars.forEach(s=>{s.y+=s.spd*dt;s.tw+=0.04*dt;if(s.y>640){s.y=0;s.x=Math.random()*360;}
-    const tw=0.5+0.5*Math.sin(s.tw);ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,'+(s.a*tw)+')';ctx.fill();});
+  // Stars — twinkling
+  stars.forEach(s=>{
+    s.y+=s.spd*dt;s.tw+=0.05*dt;
+    if(s.y>640){s.y=0;s.x=Math.random()*360;}
+    const tw=0.4+0.6*Math.sin(s.tw);
+    ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle='rgba(255,255,255,'+(s.a*tw)+')';ctx.fill();
+  });
 
-  // Level watermark
-  ctx.save();ctx.globalAlpha=0.035;ctx.font='bold 56px Bebas Neue';ctx.fillStyle='#fff';ctx.textAlign='center';ctx.fillText(cfg.name,180,330);ctx.restore();
+  // Level zone name — large watermark
+  ctx.save();ctx.globalAlpha=0.028;
+  ctx.font='bold 60px Bebas Neue';ctx.fillStyle='#fff';ctx.textAlign='center';
+  ctx.fillText(cfg.name,180,340);ctx.restore();
 
-  // Frozen tint
-  if(frozenT>0){ctx.fillStyle='rgba(136,220,255,0.07)';ctx.fillRect(0,0,360,640);}
+  // Frozen tint — icy blue overlay
+  if(frozenT>0){
+    ctx.fillStyle='rgba(100,200,255,0.06)';ctx.fillRect(0,0,360,640);
+    ctx.strokeStyle='rgba(136,220,255,0.08)';ctx.lineWidth=1;
+    for(let x=0;x<=360;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,640);ctx.stroke();}
+  }
 
   if(state!=='playing'){ctx.restore();rafId=requestAnimationFrame(loop);return;}
 
@@ -1592,17 +2578,42 @@ function loop(ts){
   // Allow moving 1 row up (≈80px) and stay near bottom
   player.y=Math.max(440,Math.min(560,player.y));
   player.trail.push({x:player.x,y:player.y});
-  if(player.trail.length>16)player.trail.shift();
-  player.trail.forEach((tr,i)=>{ctx.beginPath();ctx.arc(tr.x,tr.y,player.r*(i/player.trail.length)*0.58,0,Math.PI*2);ctx.fillStyle='rgba(100,155,255,'+(i/player.trail.length*0.22)+')';ctx.fill();});
+  if(player.trail.length>22)player.trail.shift();
+  // Teal chromatic trail
+  player.trail.forEach((tr,i)=>{
+    const a=i/player.trail.length;
+    ctx.beginPath();ctx.arc(tr.x,tr.y,player.r*a*0.5,0,Math.PI*2);
+    ctx.fillStyle=`rgba(0,245,212,${a*0.14})`;ctx.fill();
+  });
 
   if(!inv||Math.floor(frame/4)%2===0){
-    if(inv){ctx.beginPath();ctx.arc(player.x,player.y,player.r+10,0,Math.PI*2);ctx.strokeStyle='rgba(68,153,255,0.5)';ctx.lineWidth=2.5;ctx.shadowBlur=16;ctx.shadowColor='#4499ff';ctx.stroke();ctx.shadowBlur=0;}
-    const pg=ctx.createRadialGradient(player.x-5,player.y-6,2,player.x,player.y,player.r);
-    pg.addColorStop(0,'#fff');pg.addColorStop(0.4,'#aaccff');pg.addColorStop(1,'#4455ff');
+    // Invincibility — double rotating ring
+    if(inv){
+      const shieldR=player.r+11+Math.sin(frame*0.2)*2;
+      for(let ri=0;ri<2;ri++){
+        const ang=frame*0.09*(ri?-1:1);
+        ctx.beginPath();ctx.arc(player.x,player.y,shieldR,ang,ang+Math.PI*(ri?0.6:0.7));
+        ctx.strokeStyle=ri?'rgba(0,245,212,0.7)':'rgba(0,196,255,0.5)';ctx.lineWidth=2;
+        ctx.shadowBlur=16;ctx.shadowColor='#00f5d4';ctx.stroke();ctx.shadowBlur=0;
+      }
+    }
+    // Outer pulse glow
+    const pulse=1+0.06*Math.sin(frame*0.12);
+    const outerHalo=ctx.createRadialGradient(player.x,player.y,player.r*0.8,player.x,player.y,(player.r+8)*pulse);
+    outerHalo.addColorStop(0,'rgba(0,245,212,0.18)');outerHalo.addColorStop(1,'rgba(0,245,212,0)');
+    ctx.beginPath();ctx.arc(player.x,player.y,(player.r+8)*pulse,0,Math.PI*2);ctx.fillStyle=outerHalo;ctx.fill();
+    // Player body — teal neon core
+    const pg=ctx.createRadialGradient(player.x-4,player.y-5,1,player.x,player.y,player.r);
+    pg.addColorStop(0,'#ffffff');pg.addColorStop(0.2,'#aaffee');pg.addColorStop(0.65,'#00c4a7');pg.addColorStop(1,'#006655');
     ctx.beginPath();ctx.arc(player.x,player.y,player.r,0,Math.PI*2);
-    ctx.fillStyle=pg;ctx.shadowBlur=24;ctx.shadowColor='#7788ff';ctx.fill();ctx.shadowBlur=0;
-    ctx.beginPath();ctx.arc(player.x-5,player.y-6,4,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,0.36)';ctx.fill();
-    if(selWeapon){ctx.font='13px serif';ctx.textAlign='center';ctx.fillText(WPNS_EMOJI[selWeapon]||'?',player.x,player.y-player.r-4);}
+    ctx.fillStyle=pg;ctx.shadowBlur=28;ctx.shadowColor='#00f5d4';ctx.fill();ctx.shadowBlur=0;
+    // Chromatic rim — hot pink outline
+    ctx.beginPath();ctx.arc(player.x,player.y,player.r,0,Math.PI*2);
+    ctx.strokeStyle='rgba(255,45,120,0.35)';ctx.lineWidth=1.5;ctx.stroke();
+    // Shine
+    ctx.beginPath();ctx.arc(player.x-4,player.y-5,3.5,0,Math.PI*2);
+    ctx.fillStyle='rgba(255,255,255,0.45)';ctx.fill();
+    if(selWeapon){ctx.font='12px serif';ctx.textAlign='center';ctx.fillStyle='#fff';ctx.fillText(WPNS_EMOJI[selWeapon]||'?',player.x,player.y-player.r-4);}
   }
 
   // Rocket aim
@@ -1613,20 +2624,74 @@ function loop(ts){
     ctx.beginPath();ctx.arc(rocketAimX,rocketAimY,10,0,Math.PI*2);ctx.strokeStyle='rgba(255,85,0,0.4)';ctx.lineWidth=1.5;ctx.stroke();
   }
 
-  // ── DROPS ──
+  // ── DROPS — HEDİYYƏ QUTUSU (açıq görünən tip, topdaqn tam fərqli) ──
   drops=drops.filter(d=>{
-    d.y+=d.spd*dt;d.age+=dt;d.bob+=0.08*dt;const by=d.y+Math.sin(d.bob)*3.5;
-    ctx.beginPath();ctx.arc(d.x,by,d.r+2+Math.sin(d.bob)*1.5,0,Math.PI*2);ctx.strokeStyle=d.c+'50';ctx.lineWidth=1.5;ctx.shadowBlur=10;ctx.shadowColor=d.c;ctx.stroke();ctx.shadowBlur=0;
-    ctx.beginPath();ctx.arc(d.x,by,d.r,0,Math.PI*2);ctx.fillStyle=d.c+'30';ctx.strokeStyle=d.c;ctx.lineWidth=1.5;ctx.fill();ctx.stroke();
-    ctx.font='12px serif';ctx.textAlign='center';ctx.fillStyle='#fff';ctx.fillText(d.e,d.x,by+4);
-    const dx=d.x-player.x,dy2=by-player.y;
-    if(Math.sqrt(dx*dx+dy2*dy2)<d.r+player.r){collectDrop(d);return false;}
-    return d.y<680;
+    d.y+=d.spd*dt;d.age+=dt;d.bob+=0.06*dt;
+    const by=d.y+Math.sin(d.bob)*4;
+    const sc=canvas.getBoundingClientRect();
+
+    // === HEDİYYƏ QUTUSU RENDERING ===
+    ctx.save();ctx.translate(d.x,by);
+
+    // Outer soft glow
+    const hg=ctx.createRadialGradient(0,0,d.r*0.4,0,0,d.r*2.4);
+    hg.addColorStop(0,d.c+'55');hg.addColorStop(1,d.c+'00');
+    ctx.beginPath();ctx.arc(0,0,d.r*2.4,0,Math.PI*2);ctx.fillStyle=hg;ctx.fill();
+
+    // Gift box BODY — rounded square, not circle
+    const hs=d.r*1.15;
+    ctx.beginPath();ctx.roundRect(-hs,-hs*0.8,hs*2,hs*1.6,6);
+    ctx.fillStyle=d.c+'1a';ctx.strokeStyle=d.c;ctx.lineWidth=2;
+    ctx.shadowBlur=16;ctx.shadowColor=d.c;ctx.fill();ctx.stroke();ctx.shadowBlur=0;
+
+    // Ribbon cross
+    ctx.strokeStyle='rgba(255,255,255,0.5)';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(-hs,0);ctx.lineTo(hs,0);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(0,-hs*0.8);ctx.lineTo(0,hs*0.8);ctx.stroke();
+
+    // Bow dots top center
+    ctx.fillStyle='rgba(255,255,255,0.4)';
+    ctx.beginPath();ctx.arc(-5,-hs*0.8,3,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(5,-hs*0.8,3,0,Math.PI*2);ctx.fill();
+
+    // BIG EMOJI center — clearly visible
+    ctx.font=(d.r*1.3)+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(d.e,0,0);
+
+    // TYPE LABEL below box
+    ctx.font='bold '+(d.r*0.72)+'px Space Grotesk,sans-serif';
+    ctx.textAlign='center';ctx.textBaseline='top';
+    ctx.fillStyle=d.c;ctx.shadowBlur=8;ctx.shadowColor=d.c;
+    ctx.fillText(d.lbl||d.e,0,hs*0.85);
+    ctx.shadowBlur=0;
+
+    ctx.restore();
+
+    // Downward arrow
+    ctx.save();ctx.globalAlpha=0.4+0.25*Math.abs(Math.sin(d.bob));
+    ctx.fillStyle=d.c;ctx.font='11px sans-serif';ctx.textAlign='center';
+    ctx.fillText('▼',d.x,by+hs*1.6+6);ctx.restore();
+
+    const dx2=d.x-player.x,dy2=by-player.y;
+    if(Math.sqrt(dx2*dx2+dy2*dy2)<d.r*1.3+player.r){collectDrop(d);return false;}
+    return d.y<690;
   });
 
   // ── PROJECTILES ──
   projs=projs.filter(p=>{
-    if(p.tp==='laser'){p.life-=dt;ctx.beginPath();ctx.moveTo(p.x,0);ctx.lineTo(p.x,640);ctx.strokeStyle=p.c;ctx.lineWidth=2.5+Math.sin(p.life*0.4)*1;ctx.shadowBlur=20;ctx.shadowColor=p.c;ctx.stroke();ctx.shadowBlur=0;return p.life>0;}
+    if(p.tp==='laser'){
+      p.life-=dt;
+      // Neon laser beam with glow
+      const lw=2+Math.sin(p.life*0.5)*1.5;
+      ctx.beginPath();ctx.moveTo(p.x,0);ctx.lineTo(p.x,640);
+      ctx.strokeStyle=p.c;ctx.lineWidth=lw;
+      ctx.shadowBlur=28;ctx.shadowColor=p.c;ctx.stroke();
+      // Secondary wider glow
+      ctx.beginPath();ctx.moveTo(p.x,0);ctx.lineTo(p.x,640);
+      ctx.strokeStyle=p.c+'22';ctx.lineWidth=lw*5;ctx.stroke();
+      ctx.shadowBlur=0;
+      return p.life>0;
+    }
     if(p.tp==='bullet'){p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.c;ctx.shadowBlur=9;ctx.shadowColor=p.c;ctx.fill();ctx.shadowBlur=0;
       balls=balls.filter(b=>{const dx=b.x-p.x,dy=b.y-p.y;if(Math.sqrt(dx*dx+dy*dy)<b.r+p.r){spawnParts(b.x,b.y,b.c,8);score+=b.pts;updScore();if(b.split)splitBall(b);return false;}return true;});
       return p.life>0&&p.y>-20;}
@@ -1639,6 +2704,45 @@ function loop(ts){
         addExp(p.x,p.y,'#ff5500',p.er);spawnParts(p.x,p.y,'#ff5500',22);
         balls=balls.filter(b=>{const dx=b.x-p.x,dy=b.y-p.y;if(Math.sqrt(dx*dx+dy*dy)<p.er){spawnParts(b.x,b.y,b.c,6);score+=b.pts;updScore();return false;}return true;});
         return false;}return true;}
+    // ── DÜŞMƏN ATƏŞ PROYEKTİLLƏRİ (oyunçuya vurur) ──
+    if(p.tp==='elaser'){p.life-=dt;
+      // Enemy laser — red vertical stripe
+      ctx.beginPath();ctx.moveTo(p.x,-10);ctx.lineTo(p.x,680);
+      ctx.strokeStyle='#ff0000';ctx.lineWidth=3;ctx.shadowBlur=20;ctx.shadowColor='#ff0000';ctx.stroke();
+      ctx.beginPath();ctx.moveTo(p.x,-10);ctx.lineTo(p.x,680);
+      ctx.strokeStyle='rgba(255,0,0,0.15)';ctx.lineWidth=12;ctx.stroke();ctx.shadowBlur=0;
+      if(!inv&&Math.abs(p.x-player.x)<20){
+        spawnParts(player.x,player.y,'#ff0000',12);lives--;updateLives();
+        inv=true;invT=80;shake=10;shakeT=25;
+        if(navigator.vibrate)navigator.vibrate([60,30,60]);
+        const h=document.getElementById('h'+(lives+1));if(h){h.classList.add('pop');setTimeout(()=>h.classList.remove('pop'),400);}
+        if(lives<=0){gameOver();ctx.restore();return;}
+      }
+      return p.life>0;}
+    if(p.tp==='ebullet'){p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=p.c;ctx.shadowBlur=10;ctx.shadowColor=p.c;ctx.fill();ctx.shadowBlur=0;
+      if(!inv){const dx=p.x-player.x,dy=p.y-player.y;
+        if(Math.sqrt(dx*dx+dy*dy)<p.r+player.r-2){
+          spawnParts(player.x,player.y,p.c,10);lives--;updateLives();
+          inv=true;invT=80;shake=8;shakeT=20;
+          if(navigator.vibrate)navigator.vibrate([50,25,50]);
+          const h=document.getElementById('h'+(lives+1));if(h){h.classList.add('pop');setTimeout(()=>h.classList.remove('pop'),400);}
+          if(lives<=0){gameOver();ctx.restore();return;}
+          return false;}}
+      return p.life>0&&p.y<700&&p.y>-20&&p.x>-20&&p.x<380;}
+    if(p.tp==='erocket'){p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;
+      if(frame%3===0)parts.push({x:p.x,y:p.y,vx:(Math.random()-0.5)*2,vy:-Math.random()*2,r:3,c:p.c,life:1,dec:0.1});
+      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.ang+Math.PI/2);ctx.font='16px serif';ctx.textAlign='center';ctx.fillText('🔴',0,6);ctx.restore();
+      if(!inv){const dx=p.x-player.x,dy=p.y-player.y;
+        if(Math.sqrt(dx*dx+dy*dy)<p.r+player.r+4){
+          addExp(p.x,p.y,p.c,60);spawnParts(player.x,player.y,p.c,14);lives--;updateLives();
+          inv=true;invT=90;shake=14;shakeT=30;
+          if(navigator.vibrate)navigator.vibrate([80,40,80]);
+          const h=document.getElementById('h'+(lives+1));if(h){h.classList.add('pop');setTimeout(()=>h.classList.remove('pop'),400);}
+          if(lives<=0){gameOver();ctx.restore();return;}
+          return false;}}
+      return p.life>0&&p.y<700&&p.y>-30&&p.x>-30&&p.x<390;}
     return false;
   });
 
@@ -1648,13 +2752,91 @@ function loop(ts){
   // ── BALLS ──
   const fz=frozenT>0;const nb=[];
   for(const b of balls){
-    if(!fz){b.y+=b.spd*dt;b.age+=dt;if(b.wb!==undefined)b.x+=Math.sin(b.age*0.1+b.wb)*(b.wa||0);if(b.zz){b.x+=b.zzd*b.zzs*dt;if(b.x<b.r||b.x>360-b.r)b.zzd*=-1;}if(b.homing){const hd=player.x-b.x;b.vx+=(hd>0?1:-1)*0.33*dt;b.vx=Math.max(-5,Math.min(5,b.vx));b.x+=b.vx*dt;}b.x=Math.max(b.r,Math.min(360-b.r,b.x));}
-    const bc=fz?'#88ddff':b.c;const bg2=ctx.createRadialGradient(b.x-3,b.y-4,1,b.x,b.y,b.r);bg2.addColorStop(0,'#fff');bg2.addColorStop(0.32,bc);bg2.addColorStop(1,bc+'44');
-    ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fillStyle=bg2;ctx.shadowBlur=b.giant?14:5;ctx.shadowColor=bc;ctx.fill();ctx.shadowBlur=0;
-    if(fz){ctx.strokeStyle='rgba(136,220,255,0.35)';ctx.lineWidth=1.5;ctx.stroke();}
-    if(b.homing){ctx.strokeStyle=bc+'50';ctx.lineWidth=1;ctx.setLineDash([3,5]);ctx.beginPath();ctx.moveTo(b.x,b.y+b.r);ctx.lineTo(player.x,player.y);ctx.stroke();ctx.setLineDash([]);}
+    if(!fz){b.y+=b.spd*dt;b.age+=dt;if(b.wb!==undefined)b.x+=Math.sin(b.age*0.1+b.wb)*(b.wa||0);if(b.zz){b.x+=b.zzd*b.zzs*dt;if(b.x<b.r||b.x>360-b.r)b.zzd*=-1;}if(b.homing){const hd=player.x-b.x;b.vx+=(hd>0?1:-1)*0.33*dt;b.vx=Math.max(-5,Math.min(5,b.vx));b.x+=b.vx*dt;}b.x=Math.max(b.r,Math.min(360-b.r,b.x));
+      // ── DÜŞMƏN SİLAHI (enemy weapon) ──
+      if(b.enemyWeapon&&!b.done){
+        b.ewCooldown-=dt;
+        if(b.ewCooldown<=0&&b.y>0&&b.y<player.y){
+          b.ewCooldown=b.ewTimer;
+          if(b.enemyWeapon==='laser'){
+            // Spawn enemy laser projectile toward player column
+            projs.push({tp:'elaser',x:b.x,life:22,c:b.c});
+          }else if(b.enemyWeapon==='bullet'){
+            const dx=player.x-b.x,dy=player.y-b.y,dist=Math.sqrt(dx*dx+dy*dy)||1,spd=6;
+            projs.push({tp:'ebullet',x:b.x,y:b.y,vx:(dx/dist)*spd,vy:(dy/dist)*spd,r:5,c:b.c,life:80});
+          }else if(b.enemyWeapon==='rocket'){
+            const dx=player.x-b.x,dy=player.y-b.y,dist=Math.sqrt(dx*dx+dy*dy)||1,spd=4;
+            projs.push({tp:'erocket',x:b.x,y:b.y,vx:(dx/dist)*spd,vy:(dy/dist)*spd,c:b.c,life:90,r:7,ang:Math.atan2(dy,dx)});
+          }
+        }
+      }
+    }
+    const bc=fz?'#88ddff':b.c;
+    const pulse=1+0.08*Math.sin(b.age*0.15+b.x);
+    const br=b.r*pulse;
 
-    // Collision
+    // Far outer halo
+    const outerHalo=ctx.createRadialGradient(b.x,b.y,br*0.6,b.x,b.y,br*2.2);
+    outerHalo.addColorStop(0,bc+'28');outerHalo.addColorStop(1,bc+'00');
+    ctx.beginPath();ctx.arc(b.x,b.y,br*2.2,0,Math.PI*2);ctx.fillStyle=outerHalo;ctx.fill();
+
+    // ── SHAPE RENDERING ──
+    ctx.save();ctx.translate(b.x,b.y);
+    const rot=b.age*0.025*(b.zz?2:1);
+    ctx.rotate(rot);
+
+    function drawShape(shape,r,fill,stroke,lw){
+      ctx.beginPath();
+      if(shape==='diamond'){ctx.moveTo(0,-r);ctx.lineTo(r*0.7,0);ctx.lineTo(0,r);ctx.lineTo(-r*0.7,0);ctx.closePath();}
+      else if(shape==='triangle'){const h=r;for(let i=0;i<3;i++){const a=(Math.PI*2/3)*i-Math.PI/2;ctx.lineTo(Math.cos(a)*h,Math.sin(a)*h);}ctx.closePath();}
+      else if(shape==='square'){ctx.roundRect(-r*0.8,-r*0.8,r*1.6,r*1.6,4);}
+      else if(shape==='hexagon'){for(let i=0;i<6;i++){const a=(Math.PI/3)*i-Math.PI/6;ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r);}ctx.closePath();}
+      else if(shape==='star'){for(let i=0;i<10;i++){const a=(Math.PI/5)*i-Math.PI/2;const rad=i%2===0?r:r*0.45;ctx.lineTo(Math.cos(a)*rad,Math.sin(a)*rad);}ctx.closePath();}
+      else{ctx.arc(0,0,r,0,Math.PI*2);} // circle default
+      if(fill){ctx.fillStyle=fill;ctx.fill();}
+      if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||2;ctx.shadowBlur=b.giant?20:14;ctx.shadowColor=bc;ctx.stroke();ctx.shadowBlur=0;}
+    }
+
+    // Dark hollow fill
+    drawShape(b.shape||'circle',br,'rgba(4,4,10,0.7)',null,0);
+    // Neon ring stroke
+    drawShape(b.shape||'circle',br,null,bc,b.giant?3.5:(b.enemyWeapon?2.5:2));
+    // Inner ring
+    drawShape(b.shape||'circle',br*0.6,null,bc+'44',1);
+    ctx.restore();
+
+    // Hot center spark
+    ctx.beginPath();ctx.arc(b.x,b.y,br*0.15,0,Math.PI*2);
+    ctx.fillStyle='#fff';ctx.shadowBlur=8;ctx.shadowColor=bc;ctx.fill();ctx.shadowBlur=0;
+
+    // Enemy weapon indicator — exclamation mark above
+    if(b.enemyWeapon){
+      ctx.font='bold 12px sans-serif';ctx.textAlign='center';ctx.textBaseline='bottom';
+      ctx.fillStyle=bc;ctx.shadowBlur=6;ctx.shadowColor=bc;
+      ctx.fillText('⚠️',b.x,b.y-br-6);ctx.shadowBlur=0;
+    }
+
+    // STICKER EMOJI — balls with emoji prop render face over ring
+    if(b.emoji){
+      const fs=Math.round(br*1.1);
+      ctx.font=fs+'px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(b.emoji,b.x,b.y);
+      // Sticker label above ball
+      if(!b.done&&b.y>60&&b.y<200){
+        ctx.font='bold 9px sans-serif';ctx.textAlign='center';ctx.textBaseline='top';
+        ctx.fillStyle=bc;ctx.shadowBlur=6;ctx.shadowColor=bc;
+        ctx.fillText(b.label||'',b.x,b.y-br-12);ctx.shadowBlur=0;
+      }
+    }
+
+    // Frozen overlay
+    if(fz){ctx.beginPath();ctx.arc(b.x,b.y,br,0,Math.PI*2);ctx.strokeStyle='rgba(136,220,255,0.5)';ctx.lineWidth=1.5;ctx.stroke();}
+    // Homing dashed tracker
+    if(b.homing){ctx.strokeStyle=bc+'40';ctx.lineWidth=1;ctx.setLineDash([3,6]);ctx.beginPath();ctx.moveTo(b.x,b.y+br);ctx.lineTo(player.x,player.y);ctx.stroke();ctx.setLineDash([]);}
+    // Giant extra ring
+    if(b.giant){ctx.beginPath();ctx.arc(b.x,b.y,br+6,0,Math.PI*2);ctx.strokeStyle=bc+'30';ctx.lineWidth=2;ctx.stroke();}
+
+    // Collision — use base radius (b.r) for fairness, not visual pulse
     if(!fz&&!inv){const dx=b.x-player.x,dy=b.y-player.y;
       if(Math.sqrt(dx*dx+dy*dy)<b.r+player.r-4){
         spawnParts(b.x,b.y,b.c,14);lives--;updateLives();
@@ -1665,15 +2847,20 @@ function loop(ts){
         continue;
       }
     }
-    // Dodged — Flappy Bird style: sadə, dərhal mükafat
+    // Dodged
     if(!b.done&&b.y>player.y+30){
       b.done=true;const earned=b.pts*(combo>=5?2:1);
-      score+=earned;combo++;comboTimer=110;updCombo();updScore();  // combo 142→110: daha tez sıfırlanır = çətin saxlamaq
+      score+=earned;combo++;comboTimer=110;updCombo();updScore();
+      totalDodged++;
+      if(combo>maxComboEver){maxComboEver=combo;saveMissions();}
+      if(level>maxLevelEver){maxLevelEver=level;saveMissions();}
       spawnParts(b.x,620,b.c,3);
       if(earned>=4)float2(b.x,b.y,'+'+(earned)+'✨','#ffcc00');
       else if(combo>=5)float2(b.x,b.y,'🔥x'+combo,'#ff8800');
       else if(combo>=3)float2(b.x,b.y,'🔥x'+combo,'#ffaa44');
-      if(Math.random()<0.03){coins++;saveAll();}  // 4%→3% passiv coin
+      const coinChance = combo>=5 ? 0.35 : combo>=3 ? 0.22 : 0.15;
+      const coinAmt = combo>=5 ? 3 : combo>=3 ? 2 : 1;
+      if(Math.random()<coinChance){coins+=coinAmt;saveAll();document.getElementById('coinVal').textContent=coins;}
       streak++;
       if(streak>=streakMax){streak=0;streakMax=Math.max(8,streakMax-1);spawnDrop();float2(130,280,'⚡ STREAK!','#ffcc00',19);}
       document.getElementById('streakFill').style.width=Math.min(streak/streakMax*100,100)+'%';
@@ -1682,9 +2869,13 @@ function loop(ts){
   }
   balls=nb;
 
-  // Particles
+  // Particles — brighter, neon
   const np=[];
-  for(const p of parts){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=0.11*dt;p.life-=p.dec*dt;if(p.life>0){ctx.beginPath();ctx.arc(p.x,p.y,p.r*p.life,0,Math.PI*2);ctx.fillStyle=p.c+Math.floor(p.life*255).toString(16).padStart(2,'0');ctx.fill();np.push(p);}}
+  for(const p of parts){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=0.1*dt;p.life-=p.dec*dt;if(p.life>0){
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r*p.life,0,Math.PI*2);
+    ctx.shadowBlur=6;ctx.shadowColor=p.c;
+    ctx.fillStyle=p.c+Math.floor(p.life*255).toString(16).padStart(2,'0');ctx.fill();
+    ctx.shadowBlur=0;np.push(p);}}
   parts=np;
 
   ctx.restore();
@@ -1692,6 +2883,12 @@ function loop(ts){
 }
 
 function splitBall(b){for(let i=0;i<2;i++)balls.push({x:b.x+(i?12:-12),y:b.y,r:Math.round(b.r*0.55),spd:b.spd*1.3,c:'#ffaa00',pts:1,wb:0,wa:0,age:0,done:false});}
+
+// Hex color to "r,g,b" string for rgba()
+function hexToRgb(hex){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return isNaN(r)?'120,108,255':`${r},${g},${b}`;
+}
 
 // ── CONTROLS ──
 canvas.addEventListener('mousemove',e=>{
@@ -1724,6 +2921,14 @@ applyLang();rui();
 initPlayer();lastTime=performance.now();rafId=requestAnimationFrame(loop);
 // Check daily login bonus on app open
 checkDailyBonus();
+// Missions check on load
+checkMissions();
+// Live social ticker
+initLiveTicker();
+// Invite code display on invite screen
+const _ic=document.getElementById('inviteCodeDisp');if(_ic)_ic.textContent=getInviteCode();
+// Check referral param
+(()=>{const p=new URLSearchParams(window.location.search).get('ref');if(p&&p!==getInviteCode()){coins+=100;saveAll();rui();showAchieveToast('🎁','Dəvət Bonusu!','+100💰 qazandın!');}})();
 // Show low coins tip after 3 seconds if coins < 50
 setTimeout(()=>{if(coins<50&&totalGames>0)maybeShowContextTip('lowCoins');},3000);
 </script>
