@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Dodge & Survive</title>
+<title>ZVOOM</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Bebas+Neue&display=swap');
 
@@ -11,6 +11,9 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 :root{
   --neon:#00f5d4;        /* electric teal — dominant */
+  --theme-main:#00f5d4;
+  --theme-sec:#ff2d78;
+  --theme-accent:#5c6bff;
   --hot:#ff2d78;         /* hot pink — accent */
   --elec:#5c6bff;        /* electric blue — secondary */
   --gold:#ffd060;
@@ -166,13 +169,13 @@ canvas{display:block;width:100%;height:100%;}
 /* ══ START SCREEN ══ */
 .gtitle{
   font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(46px,12vw,66px);
-  color:#fff;line-height:0.88;text-align:center;letter-spacing:3px;
-  animation:gtp 3.5s ease-in-out infinite;margin-top:6px;
+  font-size:clamp(68px,18vw,96px);
+  color:var(--theme-main,#00f5d4);line-height:0.85;text-align:center;letter-spacing:8px;
+  animation:gtp 2.8s ease-in-out infinite;margin-top:4px;
 }
 @keyframes gtp{
-  0%,100%{text-shadow:0 0 30px rgba(0,245,212,0.6),0 0 60px rgba(92,107,255,0.2)}
-  50%{text-shadow:0 0 50px rgba(0,245,212,1),0 0 100px rgba(0,245,212,0.4),0 0 180px rgba(92,107,255,0.2)}
+  0%,100%{text-shadow:0 0 24px var(--theme-main,#00f5d4),0 0 60px rgba(92,107,255,0.15),0 2px 0 rgba(0,0,0,0.5)}
+  50%{text-shadow:0 0 55px var(--theme-main,#00f5d4),0 0 110px var(--theme-main,#00f5d4),0 0 200px rgba(92,107,255,0.2),0 2px 0 rgba(0,0,0,0.5)}
 }
 .gsubt{font-size:9px;letter-spacing:6px;color:rgba(0,245,212,0.35);
   margin-top:9px;text-transform:uppercase;text-align:center;padding:0 16px;font-weight:700;}
@@ -191,7 +194,7 @@ canvas{display:block;width:100%;height:100%;}
 .slbl{font-size:9px;letter-spacing:3px;color:rgba(255,255,255,0.22);text-transform:uppercase;margin-top:2px;font-weight:700;}
 
 /* Play button */
-.bigBtn{color:#fff;font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:5px;
+.bigBtn{color:#fff;font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:5px;
   border:none;padding:15px 58px;border-radius:60px;cursor:pointer;
   animation:bbp 2s ease-in-out infinite;position:relative;overflow:hidden;}
 .bigBtn::before{content:'';position:absolute;inset:0;
@@ -212,10 +215,10 @@ canvas{display:block;width:100%;height:100%;}
 
 /* Small buttons */
 .smBtn{background:var(--glass);border:1px solid var(--glass-border-lit);
-  color:rgba(255,255,255,0.5);font-family:'Space Grotesk',sans-serif;
-  font-size:13px;font-weight:600;letter-spacing:2px;
-  border-radius:30px;padding:9px 22px;cursor:pointer;margin-top:6px;
-  transition:all 0.15s;backdrop-filter:blur(6px);}
+  color:rgba(255,255,255,0.55);font-family:'Space Grotesk',sans-serif;
+  font-size:15px;font-weight:700;letter-spacing:2px;
+  border-radius:32px;padding:13px 28px;cursor:pointer;margin-top:8px;
+  transition:all 0.15s;backdrop-filter:blur(8px);}
 .smBtn:active{background:rgba(255,255,255,0.09);}
 .hint{font-size:10px;color:rgba(255,255,255,0.12);letter-spacing:1px;margin-top:8px;
   text-align:center;padding:0 20px;line-height:1.7;font-weight:600;}
@@ -280,9 +283,9 @@ canvas{display:block;width:100%;height:100%;}
 .shopCoinCTA .sccSub{font-size:11px;color:rgba(0,0,0,0.5);font-weight:700;margin-top:2px;}
 .shopCoinCTA .sccRight{font-size:34px;line-height:1;}
 .closeBtn{background:var(--glass);border:1px solid var(--glass-border-lit);
-  color:rgba(255,255,255,0.35);font-family:'Space Grotesk',sans-serif;font-size:13px;
-  font-weight:600;letter-spacing:2px;border-radius:30px;padding:9px 22px;cursor:pointer;margin-top:8px;
-  flex-shrink:0;transition:all 0.15s;backdrop-filter:blur(6px);}
+  color:rgba(255,255,255,0.45);font-family:'Space Grotesk',sans-serif;font-size:15px;
+  font-weight:700;letter-spacing:2px;border-radius:32px;padding:13px 30px;cursor:pointer;margin-top:10px;
+  flex-shrink:0;transition:all 0.15s;backdrop-filter:blur(8px);}
 .closeBtn:active{background:rgba(255,255,255,0.09);}
 
 /* ══ LIVES ══ */
@@ -592,6 +595,7 @@ canvas{display:block;width:100%;height:100%;}
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
         <div id="coinBadge" onclick="openCoinShop()">💰 <span id="coinVal">0</span></div>
         <div id="levelBadge">LVL 1</div>
+        <div id="formBadge" style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(0,245,212,0.7);text-shadow:0 0 8px rgba(0,245,212,0.5);display:flex;align-items:center;gap:3px;">🔵 NEON</div>
       </div>
     </div>
     <div id="comboDisp">🔥 x<span id="cv">0</span></div>
@@ -613,6 +617,7 @@ canvas{display:block;width:100%;height:100%;}
   <div id="powerFlash"></div>
   <div id="weapTip"></div>
   <div class="langBtn" id="langBtnTop" onclick="openLang()">🌐 LANG</div>
+  <div class="langBtn" id="musicToggleBtn" style="right:auto;left:12px;top:12px;" onclick="toggleBGM()">🔊</div>
 
   <!-- LANG -->
   <div id="langScreen" class="screen">
@@ -628,7 +633,8 @@ canvas{display:block;width:100%;height:100%;}
 
   <!-- START -->
   <div id="startScreen" class="screen">
-    <div class="gtitle">DODGE<br>&amp;<br>SURVIVE</div>
+    <div class="gtitle" style="letter-spacing:14px;">ZVOOM</div>
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;letter-spacing:8px;color:rgba(255,255,255,0.2);font-weight:700;text-align:center;margin-top:3px;">SÜRÜNMƏ · YAYIN · DAYAN</div>
     <div class="gsubt" id="startSubt">-</div>
 
     <!-- Motivasiya paneli — dinamik məzmun -->
@@ -654,14 +660,19 @@ canvas{display:block;width:100%;height:100%;}
     <button class="bigBtn play" id="startBtn">OYNA</button>
     <button class="smBtn" id="shopBtnS">🛒 Mağaza</button>
     <div style="display:flex;gap:6px;margin-top:2px;flex-wrap:wrap;justify-content:center;">
-      <button class="smBtn" style="margin-top:0;font-size:11px;padding:6px 12px;" id="wgBtnS">⚔️ Silahlar</button>
-      <button class="smBtn" style="margin-top:0;font-size:11px;padding:6px 12px;color:#ffcc00;border-color:rgba(255,204,0,0.3);" id="prizeBtnS">🏆 Mükafat</button>
-      <button class="smBtn" style="margin-top:0;font-size:11px;padding:6px 12px;color:#44ffaa;border-color:rgba(68,255,170,0.3);" id="lbBtnS">🏅 Top 100</button>
+      <button class="smBtn" style="margin-top:0;font-size:14px;padding:12px 18px;" id="wgBtnS">⚔️ Silahlar</button>
+      <button class="smBtn" style="margin-top:0;font-size:14px;padding:12px 18px;color:#ffcc00;border-color:rgba(255,204,0,0.3);" id="prizeBtnS">🏆 Mükafat</button>
+      <button class="smBtn" style="margin-top:0;font-size:14px;padding:12px 18px;color:#44ffaa;border-color:rgba(68,255,170,0.3);" id="lbBtnS">🏅 Top 100</button>
     </div>
     <div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;justify-content:center;">
-      <button class="smBtn" style="margin-top:0;font-size:11px;padding:6px 14px;color:var(--neon);border-color:rgba(0,245,212,0.3);" onclick="openMiss()">🎯 Missiyalar</button>
-      <button class="smBtn" style="margin-top:0;font-size:11px;padding:6px 14px;color:var(--hot);border-color:rgba(255,45,120,0.3);" onclick="openInvite()">🤝 Dost Dəvət Et</button>
-      <button class="smBtn" style="margin-top:0;font-size:11px;padding:6px 14px;color:#aabbff;border-color:rgba(170,187,255,0.25);" onclick="openSocialShare()">📤 Paylaş</button>
+      <button class="smBtn" style="margin-top:0;font-size:14px;padding:12px 18px;color:var(--neon);border-color:rgba(0,245,212,0.3);" onclick="openMiss()">🎯 Missiyalar</button>
+      <button class="smBtn" style="margin-top:0;font-size:14px;padding:12px 18px;color:var(--hot);border-color:rgba(255,45,120,0.3);" onclick="openInvite()">🤝 Dost Dəvət Et</button>
+      <button class="smBtn" style="margin-top:0;font-size:14px;padding:12px 18px;color:#aabbff;border-color:rgba(170,187,255,0.25);" onclick="openSocialShare()">📤 Paylaş</button>
+    </div>
+    <!-- MUSİQİ TƏNZİMLƏMƏLƏRİ -->
+    <div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;justify-content:center;">
+      <button id="bgmToggleBtn" class="smBtn" style="margin-top:0;font-size:13px;padding:10px 16px;color:#88ffdd;border-color:rgba(136,255,221,0.3);" onclick="toggleBGM()">🎵 MUSİQİ: AÇIQ</button>
+      <button id="sfxToggleBtn" class="smBtn" style="margin-top:0;font-size:13px;padding:10px 16px;color:#ffcc88;border-color:rgba(255,204,136,0.3);" onclick="toggleSFX()">🔔 SFX: AÇIQ</button>
     </div>
     <div class="hint" id="startHint">Barmağını sürüşdür · Silah seç · Tap et</div>
   </div>
@@ -811,7 +822,7 @@ canvas{display:block;width:100%;height:100%;}
         <span style="background:rgba(255,204,0,0.2);border:1px solid rgba(255,204,0,0.4);color:#ffcc00;font-family:'Bebas Neue',sans-serif;font-size:13px;border-radius:8px;padding:2px 9px;letter-spacing:1px;">BEP20</span>
         <span style="background:rgba(255,100,0,0.2);border:1px solid rgba(255,100,0,0.4);color:#ff8844;font-family:'Bebas Neue',sans-serif;font-size:13px;border-radius:8px;padding:2px 9px;letter-spacing:1px;">TRC20</span>
       </div>
-      <div class="prizeNote" id="prizeNoteTxt">Telegram: @DodgeANDSurvive · Mükafat hər bazar ertəsi verilir</div>
+      <div class="prizeNote" id="prizeNoteTxt">Telegram: @ZvoomGame · Mükafat hər bazar ertəsi verilir</div>
     </div>
     <div class="prizeRules" id="prizeRulesCont"></div>
     <div class="prizeTimer">
@@ -889,9 +900,13 @@ canvas{display:block;width:100%;height:100%;}
 
     <!-- Share buttons -->
     <div style="display:flex;flex-direction:column;gap:8px;width:280px;">
-      <button onclick="inviteWA()" style="background:linear-gradient(135deg,#25d366,#128c7e);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;padding:13px;border-radius:50px;cursor:pointer;box-shadow:0 6px 20px rgba(37,211,102,0.35);">📲 WHATSAPP İLƏ PAYLAŞ</button>
-      <button onclick="inviteCopyLink()" style="background:var(--glass);border:1px solid var(--glass-border-lit);color:rgba(255,255,255,0.6);font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;padding:12px;border-radius:50px;cursor:pointer;">🔗 LİNKİ KOPYALA</button>
-      <button onclick="inviteNative()" style="background:var(--glass);border:1px solid var(--glass-border-lit);color:rgba(255,255,255,0.6);font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;padding:12px;border-radius:50px;cursor:pointer;">📤 DİGƏR TƏTBIQ</button>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;width:290px;">
+        <button onclick="inviteWA()" style="background:linear-gradient(135deg,#25d366,#128c7e);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;padding:14px 8px;border-radius:18px;cursor:pointer;box-shadow:0 4px 16px rgba(37,211,102,0.3);">📲 WHATSAPP</button>
+        <button onclick="inviteIG()" style="background:linear-gradient(135deg,#e1306c,#833ab4,#fd1d1d);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;padding:14px 8px;border-radius:18px;cursor:pointer;box-shadow:0 4px 16px rgba(225,48,108,0.3);">📸 INSTAGRAM</button>
+        <button onclick="inviteFB()" style="background:linear-gradient(135deg,#1877f2,#0d5bba);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;padding:14px 8px;border-radius:18px;cursor:pointer;box-shadow:0 4px 16px rgba(24,119,242,0.3);">👍 FACEBOOK</button>
+        <button onclick="inviteTT()" style="background:linear-gradient(135deg,#010101,#69c9d0);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;padding:14px 8px;border-radius:18px;cursor:pointer;box-shadow:0 4px 16px rgba(105,201,208,0.3);">🎵 TIKTOK</button>
+      </div>
+      <button onclick="inviteCopyLink()" style="background:linear-gradient(135deg,var(--neon),#00c4ff);border:none;color:#001a14;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;padding:13px 28px;border-radius:50px;cursor:pointer;width:290px;margin-top:2px;">🔗 LİNKİ KOPYALA</button>
     </div>
 
     <!-- Invited count -->
@@ -905,7 +920,7 @@ canvas{display:block;width:100%;height:100%;}
     <div id="socialCard" style="width:300px;background:linear-gradient(145deg,#03030d,#080415,#030a07);border:1px solid rgba(0,245,212,0.15);border-radius:20px;overflow:hidden;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.7);">
       <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 25% 20%,rgba(0,245,212,0.1) 0%,transparent 50%),radial-gradient(ellipse at 75% 80%,rgba(255,45,120,0.08) 0%,transparent 50%);pointer-events:none;"></div>
       <div style="padding:20px 18px 16px;position:relative;text-align:center;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:6px;color:rgba(255,255,255,0.2);margin-bottom:12px;">DODGE & SURVIVE</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:6px;color:rgba(255,255,255,0.2);margin-bottom:12px;">ZVOOM</div>
         <div style="font-size:9px;letter-spacing:5px;color:rgba(255,255,255,0.18);font-weight:700;">XAL</div>
         <div style="font-family:'Bebas Neue',sans-serif;font-size:76px;color:#fff;line-height:1;text-shadow:0 0 40px rgba(0,245,212,0.5);" id="socialCardScore">0</div>
         <div style="display:flex;justify-content:center;gap:10px;margin-top:10px;">
@@ -923,7 +938,7 @@ canvas{display:block;width:100%;height:100%;}
           </div>
         </div>
         <div style="margin-top:10px;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:rgba(0,245,212,0.6);padding:4px 0;background:linear-gradient(90deg,transparent,rgba(0,245,212,0.06),transparent);" id="socialCardRank">OYUNÇu</div>
-        <div style="font-size:9px;color:rgba(255,255,255,0.12);margin-top:5px;letter-spacing:2px;font-weight:700;">bit.ly/dodge-survive · Üstünlüyünü sübut et</div>
+        <div style="font-size:9px;color:rgba(255,255,255,0.12);margin-top:5px;letter-spacing:2px;font-weight:700;">zvoom.app · Üstünlüyünü sübut et</div>
       </div>
     </div>
     <!-- Share buttons grid -->
@@ -943,6 +958,19 @@ canvas{display:block;width:100%;height:100%;}
   <!-- ═══ LIVE SOCIAL TICKER ═══ -->
   <div id="liveTicker" style="position:absolute;bottom:0;left:0;right:0;height:26px;pointer-events:none;z-index:15;overflow:hidden;background:linear-gradient(90deg,transparent,rgba(0,0,0,0.5),transparent);">
     <div id="liveTickerTrack" style="display:flex;align-items:center;height:100%;white-space:nowrap;"></div>
+  </div>
+
+  <!-- ═══ PLAYER TRANSFORM POPUP ═══ -->
+  <div id="transformPopup" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    z-index:60;pointer-events:none;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),opacity 0.3s;
+    background:rgba(4,4,14,0.92);border:1px solid rgba(255,255,255,0.15);border-radius:24px;
+    padding:18px 28px;min-width:260px;text-align:center;
+    box-shadow:0 20px 60px rgba(0,0,0,0.8);">
+    <div id="tpEmoji" style="font-size:52px;line-height:1;">🔵</div>
+    <div id="tpTitle" style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;color:#fff;">TRANSFORM!</div>
+    <div id="tpForm" style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;"></div>
+    <div id="tpPassive" style="font-size:11px;font-weight:700;letter-spacing:1px;opacity:0.7;margin-top:2px;"></div>
   </div>
 
   <!-- ═══ ACHIEVE TOAST ═══ -->
@@ -994,9 +1022,9 @@ import{getFirestore,collection,addDoc,getDocs,query,orderBy,limit,where,doc,setD
 
 const fbApp=initializeApp({
   apiKey:"AIzaSyAIZbQ4RsXEPQqzFP0LZSm-P2wbhL7RPqE",
-  authDomain:"dodge-survive.firebaseapp.com",
-  projectId:"dodge-survive",
-  storageBucket:"dodge-survive.firebasestorage.app",
+  authDomain:"zvoom-game.firebaseapp.com",
+  projectId:"zvoom-game",
+  storageBucket:"zvoom-game.firebasestorage.app",
   messagingSenderId:"13836879632",
   appId:"1:13836879632:web:6da81ac35cd8000e898795"
 });
@@ -1341,52 +1369,52 @@ document.getElementById('closeWgBtn').onclick=()=>{hide('weapGuideScreen');if(de
 // ── PRIZE SCREEN ──
 const PRIZE_TEXTS={
   az:{title:'HƏFTƏLIK MÜKAFAT',subt:'ƏN ÇOX XAL QAZANAN QALIB OLUR',cardLbl:'1-Cİ YER MÜKAFATİ',
-    note:'Telegram: @DodgeANDSurvive · Mükafat hər bazar ertəsi verilir',
+    note:'Telegram: @ZvoomGame · Mükafat hər bazar ertəsi verilir',
     timerLbl:'HƏFTƏNIN BITMƏSINƏ QALAN',myScoreLbl:'SƏNİN REKORDUN',
     rules:[
-      {t:'Oyun oyna, rekord qır',d:'Dodge & Survive-da bu həftə <b>ən yüksək xalı</b> toplayın'},
+      {t:'Oyun oyna, rekord qır',d:'ZVOOM-da bu həftə <b>ən yüksək xalı</b> toplayın'},
       {t:'Avtomatik qeydiyyat',d:'Oynadıqca <b>rekordun saxlanılır</b> — heç bir qeydiyyat lazım deyil'},
-      {t:'Qalib ol, mükafat al',d:'Bazar ertəsi <b>@DodgeANDSurvive</b> Telegram-da qalib elan edilir'},
+      {t:'Qalib ol, mükafat al',d:'Bazar ertəsi <b>@ZvoomGame</b> Telegram-da qalib elan edilir'},
       {t:'Ödəniş — 5 USDT',d:'<b>BEP20</b> (BSC) və ya <b>TRC20</b> (TRON) şəbəkəsi ilə ödənilir'},
       {t:'⚠️ Hiylə qadağandır',d:'<span class="warn">Hiylə, bot, skript istifadə edən hesablar DİSKVALİFİKASİYA edilir</span> — yalnız dürüst oyunçular mükafat alır'}
     ]},
   en:{title:'WEEKLY PRIZE',subt:'HIGHEST SCORE WINS',cardLbl:'1ST PLACE PRIZE',
-    note:'Telegram: @DodgeANDSurvive · Prize given every Monday',
+    note:'Telegram: @ZvoomGame · Prize given every Monday',
     timerLbl:'TIME LEFT THIS WEEK',myScoreLbl:'YOUR BEST SCORE',
     rules:[
-      {t:'Play & set a record',d:'Get the <b>highest score</b> in Dodge & Survive this week'},
+      {t:'Play & set a record',d:'Get the <b>highest score</b> in ZVOOM this week'},
       {t:'Auto registered',d:'Your <b>best score is saved</b> as you play — no signup needed'},
-      {t:'Win & claim',d:'Every Monday the winner is announced on <b>@DodgeANDSurvive</b> Telegram'},
+      {t:'Win & claim',d:'Every Monday the winner is announced on <b>@ZvoomGame</b> Telegram'},
       {t:'Payment — 5 USDT',d:'Paid via <b>BEP20</b> (BSC) or <b>TRC20</b> (TRON) network'},
       {t:'⚠️ Cheating is banned',d:'<span class="warn">Accounts using cheats, bots or scripts will be DISQUALIFIED</span> — only fair players win'}
     ]},
   ru:{title:'ЕЖЕНЕДЕЛЬНЫЙ ПРИЗ',subt:'ПОБЕЖДАЕТ НАБРАВШИЙ БОЛЬШЕ ОЧКОВ',cardLbl:'ПРИЗ ЗА 1-Е МЕСТО',
-    note:'Telegram: @DodgeANDSurvive · Приз каждый понедельник',
+    note:'Telegram: @ZvoomGame · Приз каждый понедельник',
     timerLbl:'ОСТАЛОСЬ ДО КОНЦА НЕДЕЛИ',myScoreLbl:'ТВОЙ РЕКОРД',
     rules:[
       {t:'Играй и ставь рекорд',d:'Набери <b>наибольшее количество очков</b> за эту неделю'},
       {t:'Авторегистрация',d:'Твой <b>лучший результат сохраняется</b> — регистрация не нужна'},
-      {t:'Победи и получи',d:'Каждый понедельник победитель объявляется на <b>@DodgeANDSurvive</b>'},
+      {t:'Победи и получи',d:'Каждый понедельник победитель объявляется на <b>@ZvoomGame</b>'},
       {t:'Оплата — 5 USDT',d:'Выплата через <b>BEP20</b> (BSC) или <b>TRC20</b> (TRON)'},
       {t:'⚠️ Читерство запрещено',d:'<span class="warn">Аккаунты с читами, ботами или скриптами ДИСКВАЛИФИЦИРУЮТСЯ</span> — побеждают только честные игроки'}
     ]},
   tr:{title:'HAFTALIK ÖDÜL',subt:'EN YÜKSEK PUAN KAZANIR',cardLbl:'1. ÖDÜLÜ',
-    note:'Telegram: @DodgeANDSurvive · Her Pazartesi verilir',
+    note:'Telegram: @ZvoomGame · Her Pazartesi verilir',
     timerLbl:'HAFTA BİTİŞİNE KALAN',myScoreLbl:'SENİN REKORU',
     rules:[
       {t:'Oyna ve rekor kır',d:'Bu hafta <b>en yüksek puanı</b> topla'},
       {t:'Otomatik kayıt',d:'Oynadıkça <b>rekoru kaydedilir</b> — kayıt gerekmez'},
-      {t:'Kazan ve al',d:'Her Pazartesi kazanan <b>@DodgeANDSurvive</b> Telegram\'da açıklanır'},
+      {t:'Kazan ve al',d:'Her Pazartesi kazanan <b>@ZvoomGame</b> Telegram\'da açıklanır'},
       {t:'Ödeme — 5 USDT',d:'<b>BEP20</b> (BSC) veya <b>TRC20</b> (TRON) ağı ile ödenir'},
       {t:'⚠️ Hile yasaktır',d:'<span class="warn">Hile, bot veya script kullanan hesaplar DİSKALİFİYE edilir</span> — sadece dürüst oyuncular kazanır'}
     ]},
   zh:{title:'每周奖励',subt:'最高分获胜',cardLbl:'第一名奖励',
-    note:'Telegram: @DodgeANDSurvive · 每周一发放',
+    note:'Telegram: @ZvoomGame · 每周一发放',
     timerLbl:'本周剩余时间',myScoreLbl:'你的最高分',
     rules:[
       {t:'游玩并创记录',d:'本周在游戏中获得<b>最高分</b>'},
       {t:'自动登记',d:'游戏时<b>自动保存你的最高分</b>，无需注册'},
-      {t:'获胜并领取',d:'每周一在Telegram <b>@DodgeANDSurvive</b>公布获胜者'},
+      {t:'获胜并领取',d:'每周一在Telegram <b>@ZvoomGame</b>公布获胜者'},
       {t:'支付 — 5 USDT',d:'通过 <b>BEP20</b> (BSC) 或 <b>TRC20</b> (TRON) 网络支付'},
       {t:'⚠️ 禁止作弊',d:'<span class="warn">使用外挂、机器人或脚本的账号将被取消资格</span> — 只有公平玩家才能获奖'}
     ]}
@@ -1455,11 +1483,29 @@ for(let i=0;i<110;i++) stars.push({x:Math.random()*360,y:Math.random()*640,r:Mat
 // ── LEVEL CONFIGS ──
 // BG changes every level smoothly via hue shift
 function getLevelBG(lv){
-  // Each level zone has a distinct look
-  if(lv<=3) return {h1:'#04041a',h2:'#080222',ac:'#5566ff',name:'KOSMOZ'};
-  if(lv<=6) return {h1:'#1a0200',h2:'#120000',ac:'#ff4400',name:'LAVA'};
-  if(lv<=9) return {h1:'#001218',h2:'#001a22',ac:'#00ddff',name:'BUZLAR'};
-  return {h1:null,h2:null,ac:'#ff00ff',name:'XAOS 💀'}; // hue-shift
+  const zones=[
+    {h1:'#04041a',h2:'#080222',ac:'#5566ff',name:'KOSMOZ'},      // 1
+    {h1:'#1a0200',h2:'#120000',ac:'#ff4400',name:'ALOV'},         // 2
+    {h1:'#001218',h2:'#001a22',ac:'#00ddff',name:'BUZLAR'},       // 3
+    {h1:'#001a00',h2:'#002200',ac:'#00ff88',name:'ZƏHƏR'},        // 4
+    {h1:'#1a1000',h2:'#221800',ac:'#ffaa00',name:'QIZIL'},        // 5
+    {h1:'#0a001a',h2:'#150022',ac:'#cc00ff',name:'PLAZMA'},       // 6
+    {h1:'#100010',h2:'#180018',ac:'#aa00ff',name:'QARA DEŞİK'},   // 7
+    {h1:'#0a0a00',h2:'#141400',ac:'#ffff00',name:'NÜVƏsi'},       // 8
+    {h1:'#1a0010',h2:'#220015',ac:'#ff0066',name:'EJDAHA'},       // 9
+    {h1:'#100a00',h2:'#180f00',ac:'#ff8800',name:'FENİKS'},       // 10
+    {h1:'#001010',h2:'#001818',ac:'#00ffff',name:'KRİSTAL'},      // 11
+    {h1:'#0a0a00',h2:'#141400',ac:'#ffcc00',name:'GÜNƏŞ'},        // 12
+    {h1:'#000a1a',h2:'#00101a',ac:'#44aaff',name:'TORNADO'},      // 13
+    {h1:null,h2:null,               ac:'#ff00ff',name:'KAOS💥'},  // 14
+    {h1:null,h2:null,               ac:'#ffffaa',name:'İLAHİ🌟'}, // 15
+    {h1:null,h2:null,               ac:'#ffff44',name:'ULDUZ⭐'},  // 16
+    {h1:null,h2:null,               ac:'#ff0066',name:'TANRI☄️'}, // 17
+    {h1:null,h2:null,               ac:'#ccccff',name:'OLIMP🏛️'}, // 18
+    {h1:null,h2:null,               ac:'#ffffff',name:'SONSUZ♾️'},// 19
+  ];
+  const idx=Math.max(0,Math.min((lv||1)-1,18));
+  return zones[idx];
 }
 
 // ── WEAPONS ──
@@ -1722,9 +1768,10 @@ function closeShop(){hide('shopScreen');if(dead)show('gameOverScreen');else show
 // ── COUNTDOWN ──
 function startCD(){
   ['startScreen','gameOverScreen','livesScreen','shopScreen','langScreen','coinShopScreen','weapGuideScreen','prizeScreen','lbScreen'].forEach(hide);
-  // Smart interstitial: show every 3rd game (not every time — avoids frustration)
+  // Reklam: hər 3. oyunda göstər
   const gamesPlayed=parseInt(localStorage.getItem('ds4_games')||'0');
-  const shouldShowAd=(gamesPlayed%3===0)&&gamesPlayed>0;
+  const shouldShowAd=(gamesPlayed%3===0&&gamesPlayed>0)||_pendingAdOnNextDeath;
+  _pendingAdOnNextDeath=false;
   const doStart=()=>{
     const cds=document.getElementById('cdScreen');cds.style.display='flex';
     let n=3;setText('cdNum',n);
@@ -1782,12 +1829,18 @@ function startGame(){
   setText('score','0');
   document.getElementById('comboDisp').style.opacity='0';
   setText('levelBadge','LVL 1');
+  // Reset form badge to Level 1 form
+  plasmaAutoShieldTimer=0;lastFormLevel=1;
+  const _fb0=document.getElementById('formBadge');
+  if(_fb0){const _f0=getPlayerForm(1);_fb0.innerHTML=_f0.emoji+' '+_f0.name.toUpperCase();_fb0.style.color=_f0.glow;_fb0.style.textShadow='0 0 8px '+_f0.glow+'88';}
   document.getElementById('streakFill').style.width='0%';
   // Check daily login bonus
   checkDailyBonus();
   if(rafId)cancelAnimationFrame(rafId);
   lastTime=performance.now();
   rafId=requestAnimationFrame(loop);
+  // Start background music
+  setTimeout(startBGM, 100);
 }
 
 // ── UPDATE LIVES ──
@@ -1802,6 +1855,591 @@ function updateLives(){
 // Flappy Bird psixologiyası: ilk 10 saniyə asandır → oyunçu öyrənir
 // Sonra TƏDRICƏN çətinləşir → "əldən vermirəm" hissi yaranır
 // Kritik nöqtə: can itirilməsi asan olmalı, amma mümkün hiss edilməlidir
+
+// ═══════════════════════════════════════════════════
+// PLAYER FORM SİSTEMİ — level artdıqca TRANSFORM olur
+// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+// 777 SKIN SİSTEMİ — hər level yeni görünüş
+// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+// 19 LEVEL SİSTEMİ — 19 unikal skin
+// LVL 1-17: çatıla bilər, 18: çox çətin, 19: demək olar mümkünsüz
+// ═══════════════════════════════════════════════════
+const PLAYER_FORMS=[
+  // LVL 1 — Başlanğıc
+  {lvl:1, name:'Neon',     emoji:'🔵', trailC:[0,245,212],  glow:'#00f5d4', c0:'#fff',c1:'#aaffee',c2:'#00c4a7',c3:'#006655', rim:'rgba(255,45,120,0.35)',  trailLen:18, passive:null,         passiveDesc:''},
+  // LVL 2
+  {lvl:2, name:'Alov',     emoji:'🔥', trailC:[255,100,0],  glow:'#ff5500', c0:'#fff',c1:'#ffee88',c2:'#ff6600',c3:'#aa2200', rim:'rgba(255,200,0,0.55)',   trailLen:22, passive:'combo2x',     passiveDesc:'🔥 Combo ×2'},
+  // LVL 3
+  {lvl:3, name:'Zəhər',   emoji:'🟢', trailC:[0,255,128],  glow:'#00ff88', c0:'#fff',c1:'#ccffdd',c2:'#00dd77',c3:'#005522', rim:'rgba(0,255,136,0.5)',    trailLen:22, passive:'slowAura',    passiveDesc:'🟢 Yaxın topları yavaşladır'},
+  // LVL 4
+  {lvl:4, name:'Şimşək',  emoji:'⚡', trailC:[255,230,0],  glow:'#ffdd00', c0:'#fff',c1:'#fffaaa',c2:'#ffe000',c3:'#886600', rim:'rgba(255,255,80,0.6)',   trailLen:18, passive:'speed',       passiveDesc:'⚡ +35% sürət'},
+  // LVL 5
+  {lvl:5, name:'Buz',      emoji:'❄️', trailC:[100,220,255], glow:'#00ccff', c0:'#fff',c1:'#ccffff',c2:'#44bbff',c3:'#0044aa', rim:'rgba(0,200,255,0.55)',   trailLen:26, passive:'slowAura',    passiveDesc:'❄️ Buz Aurası'},
+  // LVL 6
+  {lvl:6, name:'Plazma',  emoji:'🌀', trailC:[200,60,255],  glow:'#cc00ff', c0:'#fff',c1:'#ffaaff',c2:'#cc00ff',c3:'#440088', rim:'rgba(200,0,255,0.65)',   trailLen:26, passive:'autoShield',  passiveDesc:'🌀 Hər 40s avtomatik qalxan'},
+  // LVL 7
+  {lvl:7, name:'Qara Deşik',emoji:'🕳️', trailC:[100,0,255], glow:'#6600ff', c0:'#fff',c1:'#ccaaff',c2:'#6600ff',c3:'#220044', rim:'rgba(100,0,255,0.75)',   trailLen:28, passive:'combo2x',     passiveDesc:'🕳️ Combo ×3'},
+  // LVL 8
+  {lvl:8, name:'Nüvə',     emoji:'☢️', trailC:[255,255,0],  glow:'#ffff00', c0:'#fff',c1:'#ffffaa',c2:'#ffff00',c3:'#666600', rim:'rgba(255,255,0,0.8)',    trailLen:30, passive:'allBonus',    passiveDesc:'☢️ Xal ×3 + sürət'},
+  // LVL 9
+  {lvl:9, name:'Ejdaha',   emoji:'🐉', trailC:[255,50,0],   glow:'#ff3300', c0:'#fff',c1:'#ffcc88',c2:'#ff4400',c3:'#880000', rim:'rgba(255,50,0,0.9)',     trailLen:32, passive:'combo2x',     passiveDesc:'🐉 Ejdaha Combo ×4'},
+  // LVL 10
+  {lvl:10,name:'Feniks',   emoji:'🦅', trailC:[255,150,0],  glow:'#ff9900', c0:'#fff',c1:'#ffeeaa',c2:'#ff8800',c3:'#993300', rim:'rgba(255,150,0,0.8)',    trailLen:34, passive:'allBonus',    passiveDesc:'🦅 Feniks ×3 + qalxan'},
+  // LVL 11
+  {lvl:11,name:'Kristal',  emoji:'💎', trailC:[100,255,255], glow:'#00ffff', c0:'#fff',c1:'#aaffff',c2:'#00dddd',c3:'#004444', rim:'rgba(0,255,255,0.7)',    trailLen:34, passive:'slowAura',    passiveDesc:'💎 Kristal Aura güclü'},
+  // LVL 12
+  {lvl:12,name:'Günəş',    emoji:'☀️', trailC:[255,200,0],  glow:'#ffcc00', c0:'#fff',c1:'#fffaaa',c2:'#ffaa00',c3:'#664400', rim:'rgba(255,200,0,0.8)',    trailLen:36, passive:'allBonus',    passiveDesc:'☀️ Günəş Gücü ×3'},
+  // LVL 13
+  {lvl:13,name:'Tornado',  emoji:'🌪️', trailC:[100,200,255], glow:'#44aaff', c0:'#fff',c1:'#ccddff',c2:'#4488dd',c3:'#002266', rim:'rgba(100,180,255,0.7)', trailLen:38, passive:'slowAura',    passiveDesc:'🌪️ Tornado Aurası güclü'},
+  // LVL 14
+  {lvl:14,name:'Kaos',     emoji:'💥', trailC:[255,0,255],   glow:'#ff00ff', c0:'#fff',c1:'#ffccff',c2:'#ff00cc',c3:'#660044', rim:'rgba(255,0,255,0.9)',    trailLen:40, passive:'godMode',     passiveDesc:'💥 Kaos Modu ×5'},
+  // LVL 15
+  {lvl:15,name:'İlahi',    emoji:'🌟', trailC:[255,255,180], glow:'#ffffaa', c0:'#fff',c1:'#ffffcc',c2:'#ffee44',c3:'#ff8800', rim:'rgba(255,255,200,0.8)', trailLen:42, passive:'allBonus',    passiveDesc:'🌟 İlahi Nur ×3 + avtomatik qalxan'},
+  // LVL 16
+  {lvl:16,name:'Ulduz',    emoji:'⭐', trailC:[255,255,100], glow:'#ffff44', c0:'#fff',c1:'#ffffcc',c2:'#ffee00',c3:'#886600', rim:'rgba(255,255,0,0.9)',    trailLen:44, passive:'godMode',     passiveDesc:'⭐ Ulduz Tanrısı ×5'},
+  // LVL 17 — Çatıla bilər son level
+  {lvl:17,name:'TANRI',    emoji:'☄️', trailC:[255,0,100],   glow:'#ff0066', c0:'#fff',c1:'#ffccee',c2:'#ff0066',c3:'#550022', rim:'rgba(255,255,255,0.95)',trailLen:48, passive:'godMode',     passiveDesc:'☄️ TANRI MODU: Qalxan + Xal ×5'},
+  // LVL 18 — Çox çətin, az adam çatır
+  {lvl:18,name:'OLIMP',    emoji:'⚡🏛️',trailC:[200,200,255],glow:'#ccccff', c0:'#fff',c1:'#eeeeff',c2:'#aabbff',c3:'#223388', rim:'rgba(200,200,255,0.98)',trailLen:54, passive:'godMode',     passiveDesc:'🏛️ Olimp Tanrısı: Hər şey ×6'},
+  // LVL 19 — Praktiki olaraq mümkünsüz
+  {lvl:19,name:'∞ SONSUZ', emoji:'♾️', trailC:[255,255,255], glow:'#ffffff', c0:'#fff',c1:'#ffffff',c2:'#ffffff',c3:'#aaaaff', rim:'rgba(255,255,255,1)',   trailLen:60, passive:'godMode',     passiveDesc:'♾️ SONSUZLUQ — Heç kim çatmayıb'},
+];
+function getPlayerForm(lv){
+  const l=lv!=null?lv:level;
+  // Each skin corresponds to level index (19 skins, 19 levels)
+  const idx=Math.max(0,Math.min(l-1,18)); // 19 skins (index 0-18)
+  return PLAYER_FORMS[idx];
+}
+let plasmaAutoShieldTimer=0;
+let lastFormLevel=1;
+let _pendingAdOnNextDeath=false;
+
+// ═══════════════════════════════════════════════════
+// MUSİQİ & SƏS SİSTEMİ (Web Audio API)
+// ═══════════════════════════════════════════════════
+let _audioCtx=null;
+let _bgmRunning=false;
+let _bgmEnabled=localStorage.getItem('ds4_bgm')!=='0';
+let _sfxEnabled=localStorage.getItem('ds4_sfx')!=='0';
+
+function getAudioCtx(){
+  if(!_audioCtx){
+    try{_audioCtx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){_audioCtx=null;}
+  }
+  if(_audioCtx&&_audioCtx.state==='suspended')_audioCtx.resume().catch(()=>{});
+  return _audioCtx;
+}
+
+// ── FLAPPY BIRD ÜSLUBLU CHİPTUNE BGM ──
+// Şən, ritmik, 8-bit adventure — oyunçunu energetik saxlayır
+function startBGM(){
+  const ctx=getAudioCtx();
+  if(!ctx||!_bgmEnabled||_bgmRunning)return;
+  _bgmRunning=true;
+
+  // Master output with slight compression
+  const master=ctx.createGain();
+  master.gain.value=0.38;
+  const comp=ctx.createDynamicsCompressor();
+  comp.threshold.value=-18;comp.knee.value=8;comp.ratio.value=4;
+  master.connect(comp);comp.connect(ctx.destination);
+
+  // ── MELODIYA — Flappy Bird adventure tune ──
+  // C major / G major alternating, upbeat 8-bit feel
+  // Notalar: Do Re Mi Sol La — şən pentatonik
+  const melody=[
+    523,659,784,659,523,392,523,659,
+    784,880,784,659,523,392,392,523,
+    659,784,880,1047,880,784,659,523,
+    659,784,659,523,392,523,659,523
+  ];
+  const melDur=0.18; // hər notun müddəti (sürətli, Flappy kimi)
+
+  function schedMelody(startT){
+    if(!_bgmRunning)return;
+    melody.forEach((freq,i)=>{
+      if(!_bgmRunning)return;
+      // Square wave — klassik 8-bit səs
+      const real=new Float32Array(9);
+      const imag=new Float32Array(9);
+      // Square wave harmonics: 1, 1/3, 1/5, 1/7...
+      for(let h=1;h<9;h+=2){real[h]=1/h;}
+      const wave=ctx.createPeriodicWave(real,imag,{disableNormalization:false});
+      const osc=ctx.createOscillator();
+      osc.setPeriodicWave(wave);
+      osc.frequency.value=freq;
+      const g=ctx.createGain();
+      const noteT=startT+i*melDur;
+      g.gain.setValueAtTime(0,noteT);
+      g.gain.linearRampToValueAtTime(0.22,noteT+0.01);
+      g.gain.setValueAtTime(0.22,noteT+melDur*0.55);
+      g.gain.linearRampToValueAtTime(0,noteT+melDur*0.92);
+      osc.connect(g);g.connect(master);
+      osc.start(noteT);osc.stop(noteT+melDur);
+    });
+    if(_bgmRunning)setTimeout(()=>schedMelody(ctx.currentTime+0.05),melody.length*melDur*1000-100);
+  }
+
+  // ── BAS XƏTTİ — ritmik altlıq ──
+  const bassLine=[
+    130.8,130.8,196,196,164.8,164.8,130.8,130.8,
+    110,110,164.8,164.8,130.8,130.8,98,98
+  ];
+  const bassDur=0.36;
+
+  function schedBass(startT){
+    if(!_bgmRunning)return;
+    bassLine.forEach((freq,i)=>{
+      if(!_bgmRunning)return;
+      const osc=ctx.createOscillator();
+      osc.type='triangle';
+      osc.frequency.value=freq;
+      const g=ctx.createGain();
+      const noteT=startT+i*bassDur;
+      g.gain.setValueAtTime(0,noteT);
+      g.gain.linearRampToValueAtTime(0.18,noteT+0.02);
+      g.gain.setValueAtTime(0.18,noteT+bassDur*0.6);
+      g.gain.linearRampToValueAtTime(0,noteT+bassDur*0.9);
+      osc.connect(g);g.connect(master);
+      osc.start(noteT);osc.stop(noteT+bassDur);
+    });
+    if(_bgmRunning)setTimeout(()=>schedBass(ctx.currentTime+0.05),bassLine.length*bassDur*1000-100);
+  }
+
+  // ── RİTM — 8-bit kick + snare ──
+  function schedDrum(startT){
+    if(!_bgmRunning)return;
+    // kick pattern: 1,0,0,1,0,0,1,0
+    const kicks=[1,0,0,1,0,0,1,0];
+    // snare pattern: 0,0,1,0,0,1,0,0
+    const snares=[0,0,1,0,0,1,0,0];
+    const step=0.18;
+    kicks.forEach((k,i)=>{
+      if(!_bgmRunning)return;
+      if(k){
+        // 8-bit kick — low sine sweep
+        const osc=ctx.createOscillator();
+        const g=ctx.createGain();
+        const kT=startT+i*step;
+        osc.type='sine';
+        osc.frequency.setValueAtTime(200,kT);
+        osc.frequency.exponentialRampToValueAtTime(40,kT+0.08);
+        g.gain.setValueAtTime(0.3,kT);
+        g.gain.exponentialRampToValueAtTime(0.001,kT+0.1);
+        osc.connect(g);g.connect(master);
+        osc.start(kT);osc.stop(kT+0.12);
+      }
+    });
+    snares.forEach((s,i)=>{
+      if(!_bgmRunning)return;
+      if(s){
+        // 8-bit snare — noise burst
+        const bufLen=Math.floor(ctx.sampleRate*0.06);
+        const buf=ctx.createBuffer(1,bufLen,ctx.sampleRate);
+        const d=buf.getChannelData(0);
+        for(let j=0;j<bufLen;j++)d[j]=(Math.random()*2-1)*Math.pow(1-j/bufLen,1.5);
+        const src=ctx.createBufferSource();
+        src.buffer=buf;
+        const g=ctx.createGain();
+        const f=ctx.createBiquadFilter();
+        f.type='bandpass';f.frequency.value=1200;f.Q.value=0.8;
+        const sT=startT+i*step;
+        g.gain.value=0.22;
+        src.connect(f);f.connect(g);g.connect(master);
+        src.start(sT);
+      }
+    });
+    if(_bgmRunning)setTimeout(()=>schedDrum(ctx.currentTime+0.05),kicks.length*step*1000-80);
+  }
+
+  // ── HİGH-HAT — 8-bit tik-tak ──
+  function schedHiHat(startT){
+    if(!_bgmRunning)return;
+    for(let i=0;i<16;i++){
+      if(!_bgmRunning)return;
+      const bufLen=Math.floor(ctx.sampleRate*0.025);
+      const buf=ctx.createBuffer(1,bufLen,ctx.sampleRate);
+      const d=buf.getChannelData(0);
+      for(let j=0;j<bufLen;j++)d[j]=(Math.random()*2-1)*Math.pow(1-j/bufLen,3);
+      const src=ctx.createBufferSource();
+      src.buffer=buf;
+      const g=ctx.createGain();
+      const f=ctx.createBiquadFilter();
+      f.type='highpass';f.frequency.value=6000;
+      const hT=startT+i*(0.18/2);
+      g.gain.value=i%2===0?0.08:0.04;
+      src.connect(f);f.connect(g);g.connect(master);
+      src.start(hT);
+    }
+    if(_bgmRunning)setTimeout(()=>schedHiHat(ctx.currentTime+0.05),16*(0.09)*1000-80);
+  }
+
+  const now=ctx.currentTime+0.1;
+  schedMelody(now);
+  schedBass(now);
+  schedDrum(now);
+  setTimeout(()=>schedHiHat(ctx.currentTime+0.05),500);
+}
+
+function stopBGM(){
+  _bgmRunning=false;
+}
+
+// ── CAN İTİRMƏ SƏSİ ──
+function playLoseLifeSound(){
+  const ctx=getAudioCtx();if(!ctx||!_sfxEnabled)return;
+  const t=ctx.currentTime;
+  // Descending "oof" — Flappy Bird ölüm sesi kimi
+  const freqs=[330,262,196,147];
+  freqs.forEach((freq,i)=>{
+    const osc=ctx.createOscillator();
+    const g=ctx.createGain();
+    osc.type='square';
+    osc.frequency.setValueAtTime(freq,t+i*0.07);
+    osc.frequency.exponentialRampToValueAtTime(freq*0.85,t+i*0.07+0.06);
+    g.gain.setValueAtTime(0.25,t+i*0.07);
+    g.gain.exponentialRampToValueAtTime(0.001,t+i*0.07+0.1);
+    osc.connect(g);g.connect(ctx.destination);
+    osc.start(t+i*0.07);
+    osc.stop(t+i*0.07+0.12);
+  });
+  // Low thud
+  const osc2=ctx.createOscillator();
+  const g2=ctx.createGain();
+  osc2.type='sine';
+  osc2.frequency.setValueAtTime(120,t+0.28);
+  osc2.frequency.exponentialRampToValueAtTime(40,t+0.44);
+  g2.gain.setValueAtTime(0.35,t+0.28);
+  g2.gain.exponentialRampToValueAtTime(0.001,t+0.46);
+  osc2.connect(g2);g2.connect(ctx.destination);
+  osc2.start(t+0.28);osc2.stop(t+0.5);
+}
+
+// ── DÜŞMƏNLƏRİN HƏYƏCANLANDIRICI SƏSLƏRİ ──
+// Levelin sonuna yaxın (xal threshold-a 90% çatanda) oynaşdırılır
+let _lastEnemySoundScore=-999;
+let _enemySoundCooldown=0;
+
+// Level üçün next threshold nədir?
+function getNextLevelThreshold(){
+  const thresholds=[15,40,75,120,180,250,330,420,510,600,700,775,840,900,950,1500,1800,50000,Infinity];
+  for(let i=0;i<thresholds.length;i++){
+    if(score<thresholds[i]) return thresholds[i];
+  }
+  return Infinity;
+}
+
+// Heyəcanlı düşmən səsi — level sonuna yaxın çalınır
+function playEnemyTauntSound(intensity){
+  const ctx=getAudioCtx();if(!ctx||!_sfxEnabled)return;
+  const t=ctx.currentTime;
+  // intensity: 0=yaxınlaşır, 1=çox yaxın, 2=ən yaxın
+
+  if(intensity===0){
+    // Uzaqdan qorxunc uğultu — "bir şey gəlir" hissi
+    const osc=ctx.createOscillator();
+    const g=ctx.createGain();
+    const lfo=ctx.createOscillator();
+    const lfoG=ctx.createGain();
+    osc.type='sawtooth';
+    osc.frequency.setValueAtTime(80,t);
+    osc.frequency.linearRampToValueAtTime(120,t+0.4);
+    osc.frequency.linearRampToValueAtTime(60,t+0.8);
+    lfo.type='sine';lfo.frequency.value=6;
+    lfoG.gain.value=15;
+    lfo.connect(lfoG);lfoG.connect(osc.frequency);
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(0.18,t+0.15);
+    g.gain.exponentialRampToValueAtTime(0.001,t+0.85);
+    osc.connect(g);g.connect(ctx.destination);
+    lfo.start(t);osc.start(t);
+    lfo.stop(t+0.9);osc.stop(t+0.9);
+
+  } else if(intensity===1){
+    // Orta — ritmik metal döymə + uçuş sesi
+    [0,0.12,0.24].forEach((delay,i)=>{
+      const osc=ctx.createOscillator();
+      const g=ctx.createGain();
+      osc.type='square';
+      osc.frequency.value=220-i*40;
+      g.gain.setValueAtTime(0.2,t+delay);
+      g.gain.exponentialRampToValueAtTime(0.001,t+delay+0.18);
+      osc.connect(g);g.connect(ctx.destination);
+      osc.start(t+delay);osc.stop(t+delay+0.2);
+    });
+    // Tiz uçuş sesi
+    const osc2=ctx.createOscillator();
+    const g2=ctx.createGain();
+    osc2.type='sine';
+    osc2.frequency.setValueAtTime(600,t+0.1);
+    osc2.frequency.exponentialRampToValueAtTime(1200,t+0.5);
+    g2.gain.setValueAtTime(0.12,t+0.1);
+    g2.gain.exponentialRampToValueAtTime(0.001,t+0.55);
+    osc2.connect(g2);g2.connect(ctx.destination);
+    osc2.start(t+0.1);osc2.stop(t+0.6);
+
+  } else {
+    // ÇOX YAXIN — alarm, təhlükə səsi, tension building
+    // Sürətli beep-beep
+    [0,0.08,0.16,0.24,0.32,0.40].forEach((delay,i)=>{
+      const osc=ctx.createOscillator();
+      const g=ctx.createGain();
+      osc.type='square';
+      osc.frequency.value=440+i*55; // yüksələn tiz
+      g.gain.setValueAtTime(0.22,t+delay);
+      g.gain.exponentialRampToValueAtTime(0.001,t+delay+0.07);
+      osc.connect(g);g.connect(ctx.destination);
+      osc.start(t+delay);osc.stop(t+delay+0.09);
+    });
+    // Dərin bass rumble
+    const rumble=ctx.createOscillator();
+    const rg=ctx.createGain();
+    rumble.type='sawtooth';
+    rumble.frequency.setValueAtTime(40,t);
+    rumble.frequency.linearRampToValueAtTime(80,t+0.5);
+    rg.gain.setValueAtTime(0,t);
+    rg.gain.linearRampToValueAtTime(0.25,t+0.1);
+    rg.gain.exponentialRampToValueAtTime(0.001,t+0.55);
+    rumble.connect(rg);rg.connect(ctx.destination);
+    rumble.start(t);rumble.stop(t+0.6);
+  }
+}
+
+// Hər frame-dən çağrılır — levelin sonuna yaxınlığı yoxla
+function checkEnemySoundTrigger(){
+  if(!_sfxEnabled||state!=='playing')return;
+  _enemySoundCooldown=Math.max(0,_enemySoundCooldown-1);
+  if(_enemySoundCooldown>0)return;
+
+  const next=getNextLevelThreshold();
+  if(next===Infinity)return;
+  const pct=score/next; // 0..1 — neçə % tamamlanıb
+
+  // 75-85%: uzaqdan ses
+  if(pct>=0.75&&pct<0.85&&Math.random()<0.02){
+    playEnemyTauntSound(0);
+    _enemySoundCooldown=120; // ~2s cooldown
+  }
+  // 85-93%: orta səs
+  else if(pct>=0.85&&pct<0.93&&Math.random()<0.03){
+    playEnemyTauntSound(1);
+    _enemySoundCooldown=90;
+  }
+  // 93-99%: maksimal gərginlik
+  else if(pct>=0.93&&pct<1.0&&Math.random()<0.05){
+    playEnemyTauntSound(2);
+    _enemySoundCooldown=60;
+  }
+}
+
+function playSkinUnlockSound(){
+  const ctx=getAudioCtx();if(!ctx||!_sfxEnabled)return;
+  const t=ctx.currentTime;
+  // Sakitləşdirici, harmonik ascending arpeggio
+  const freqs=[261.6,329.6,392,523.3,659.3,783.9,1046.5];
+  freqs.forEach((freq,i)=>{
+    const osc=ctx.createOscillator();
+    const gain=ctx.createGain();
+    osc.type='sine';
+    osc.frequency.setValueAtTime(freq,t+i*0.1);
+    gain.gain.setValueAtTime(0,t+i*0.1);
+    gain.gain.linearRampToValueAtTime(0.15,t+i*0.1+0.08);
+    gain.gain.exponentialRampToValueAtTime(0.001,t+i*0.1+0.7);
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.start(t+i*0.1);osc.stop(t+i*0.1+0.8);
+  });
+  // Soft final chord
+  [392,523.3,659.3,783.9].forEach((freq,i)=>{
+    const osc=ctx.createOscillator();
+    const gain=ctx.createGain();
+    osc.type='triangle';
+    osc.frequency.value=freq;
+    gain.gain.setValueAtTime(0,t+0.75);
+    gain.gain.linearRampToValueAtTime(0.1,t+0.85);
+    gain.gain.exponentialRampToValueAtTime(0.001,t+2.0);
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.start(t+0.75);osc.stop(t+2.1);
+  });
+}
+
+// ── BGM Toggle ──
+function toggleBGM(){
+  _bgmEnabled=!_bgmEnabled;
+  localStorage.setItem('ds4_bgm',_bgmEnabled?'1':'0');
+  if(_bgmEnabled){
+    if(state==='playing')startBGM();
+  }else{
+    stopBGM();
+  }
+  _updateMusicBtns();
+}
+
+// ── SFX Toggle ──
+function toggleSFX(){
+  _sfxEnabled=!_sfxEnabled;
+  localStorage.setItem('ds4_sfx',_sfxEnabled?'1':'0');
+  _updateMusicBtns();
+  // Preview sfx
+  if(_sfxEnabled)playSkinUnlockSound();
+}
+
+function _updateMusicBtns(){
+  const bgmBtn=document.getElementById('bgmToggleBtn');
+  const sfxBtn=document.getElementById('sfxToggleBtn');
+  if(bgmBtn){
+    bgmBtn.textContent=_bgmEnabled?'🎵 MUSİQİ: AÇIQ':'🎵 MUSİQİ: BAĞLI';
+    bgmBtn.style.opacity=_bgmEnabled?'1':'0.45';
+  }
+  if(sfxBtn){
+    sfxBtn.textContent=_sfxEnabled?'🔔 SFX: AÇIQ':'🔔 SFX: BAĞLI';
+    sfxBtn.style.opacity=_sfxEnabled?'1':'0.45';
+  }
+  // Also update HUD button
+  const hudBtn=document.getElementById('musicToggleBtn');
+  if(hudBtn)hudBtn.textContent=(_bgmEnabled||_sfxEnabled)?'🔊':'🔇';
+}
+
+// Coin toplama sesi
+function playCoinSound(){
+  const ctx=getAudioCtx();if(!ctx||!_sfxEnabled)return;
+  [880,1320].forEach((f,i)=>{
+    const osc=ctx.createOscillator();
+    const gain=ctx.createGain();
+    osc.type='sine';osc.frequency.value=f;
+    gain.gain.setValueAtTime(0.08,ctx.currentTime+i*0.06);
+    gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+i*0.06+0.12);
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.start(ctx.currentTime+i*0.06);osc.stop(ctx.currentTime+i*0.06+0.15);
+  });
+}
+
+
+// 1) Near-miss sistemi — yaxın qaçdı hissi
+// 2) Variable reward — gözlənilməz mükafatlar
+// 3) Loss aversion — itirmə qorxusu
+// 4) FOMO — vaxtlı təkliflər
+// 5) Streak korunması — "itirsən" qorxusu
+let _nearMissCount=0;
+let _hotStreakActive=false;
+let _fomoTimer=null;
+let _luckySpinCooldown=0;
+let _adShownThisSession=parseInt(localStorage.getItem('ds4_ads_shown')||'0');
+
+// Near-miss psixologiyası: top 5px-dən az məsafədə keçdikdə
+function checkNearMiss(b){
+  const dx=b.x-player.x,dy=b.y-player.y;
+  const dist=Math.sqrt(dx*dx+dy*dy);
+  if(dist<player.r+b.r+5&&dist>player.r+b.r){
+    _nearMissCount++;
+    if(_nearMissCount%3===0){
+      float2(player.x,player.y-30,'😰 ÇOX YAXIN!','#ff8800',13);
+      if(navigator.vibrate)navigator.vibrate(30);
+    }
+  }
+}
+
+// Reklam sayacını artır
+function trackAdShown(){
+  _adShownThisSession++;
+  localStorage.setItem('ds4_ads_shown',_adShownThisSession);
+}
+
+// FOMO timeri — hər 90 saniyədə xüsusi təklif
+function startFomoSystem(){
+  clearInterval(_fomoTimer);
+  _fomoTimer=setInterval(()=>{
+    if(state==='playing') return;
+    const msgs=[
+      '⚡ 5 DƏQİQƏLİK BONUS: 2x COIN!',
+      '🎰 ŞANSLİ SPIN MÖVCUDDUR!',
+      '🔥 HƏR ŞEY 50% ENDİRİM!',
+      '⏰ SON 2 DƏQİQƏ — XÜSUSİ PAKET!',
+      '🌟 VİP SKİN AÇILDI — İNDİ AL!',
+    ];
+    const m=msgs[Math.floor(Math.random()*msgs.length)];
+    showFomoBanner(m);
+  },200000);
+}
+
+function showFomoBanner(msg){
+  const existing=document.getElementById('fomoBanner');
+  if(existing)existing.remove();
+  const b=document.createElement('div');
+  b.id='fomoBanner';
+  b.style.cssText=`position:fixed;top:60px;left:50%;transform:translateX(-50%);
+    background:linear-gradient(135deg,#ff0080,#ff8800);
+    color:#fff;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;
+    padding:10px 20px;border-radius:25px;z-index:999;
+    box-shadow:0 4px 20px rgba(255,0,128,0.5);
+    animation:fomoSlide 0.4s ease-out;cursor:pointer;`;
+  b.textContent=msg;
+  b.onclick=()=>{b.remove();openCoinShop();};
+  document.body.appendChild(b);
+  setTimeout(()=>{if(b.parentNode)b.remove();},8000);
+}
+
+// Lucky Spin — gözlənilməz mükafat (variable reward)
+function showLuckySpin(){
+  if(state==='playing')return;
+
+  // Hədiyyə hovuzu — çox müxtəlif, bəziləri nadir
+  const allPrizes=[
+    // Adi hədiyyələr (tez-tez)
+    {label:'💰 +150 COIN',    type:'coin',  val:150,  rare:false, emoji:'💰'},
+    {label:'💰 +300 COIN',    type:'coin',  val:300,  rare:false, emoji:'💰'},
+    {label:'⚡ +2 LAZER',     type:'laser', val:2,    rare:false, emoji:'⚡'},
+    {label:'🛡️ +3 QALXAN',   type:'shield',val:3,    rare:false, emoji:'🛡️'},
+    {label:'🔫 +3 GÜLLƏ',     type:'bullet',val:3,    rare:false, emoji:'🔫'},
+    {label:'❤️ +1 CAN',       type:'life',  val:1,    rare:false, emoji:'❤️'},
+    // Nadir hədiyyələr (ara-sıra)
+    {label:'💎 +800 COIN',    type:'coin',  val:800,  rare:true,  emoji:'💎'},
+    {label:'🚀 +5 RAKET',     type:'rocket',val:5,    rare:true,  emoji:'🚀'},
+    {label:'❤️ +2 CAN',       type:'life',  val:2,    rare:true,  emoji:'❤️'},
+    {label:'💣 +4 BOMBA',     type:'bomb',  val:4,    rare:true,  emoji:'💣'},
+    // Çox nadir (bəxti olanlar üçün)
+    {label:'👑 +2000 COIN',   type:'coin',  val:2000, rare:true,  emoji:'👑'},
+    {label:'🌟 +3 CAN + 500💰',type:'mega', val:0,    rare:true,  emoji:'🌟'},
+  ];
+
+  // Çəkilərə görə seç: adi 70%, nadir 25%, çox nadir 5%
+  const rnd=Math.random();
+  let pool;
+  if(rnd<0.70)      pool=allPrizes.filter(p=>!p.rare);
+  else if(rnd<0.95) pool=allPrizes.filter(p=>p.rare&&p.type!=='mega');
+  else              pool=allPrizes.filter(p=>p.type==='mega');
+  const prize=pool[Math.floor(Math.random()*pool.length)];
+
+  // Ara-sıra reklam (hər 3 spindən 1-i reklam tələb edir)
+  const spinCount=parseInt(localStorage.getItem('ds4_spins')||'0');
+  localStorage.setItem('ds4_spins',spinCount+1);
+  const needsAd=(spinCount%3===2); // hər 3-cü spin
+
+  function giveReward(){
+    if(prize.type==='coin')  { coins+=prize.val; saveAll(); rui(); }
+    if(prize.type==='laser') { const inv=JSON.parse(localStorage.getItem('ds4_inv')||'{}'); inv.laser=(inv.laser||0)+prize.val; localStorage.setItem('ds4_inv',JSON.stringify(inv)); rui(); }
+    if(prize.type==='shield'){ const inv=JSON.parse(localStorage.getItem('ds4_inv')||'{}'); inv.shield=(inv.shield||0)+prize.val; localStorage.setItem('ds4_inv',JSON.stringify(inv)); rui(); }
+    if(prize.type==='bullet'){ const inv=JSON.parse(localStorage.getItem('ds4_inv')||'{}'); inv.bullet=(inv.bullet||0)+prize.val; localStorage.setItem('ds4_inv',JSON.stringify(inv)); rui(); }
+    if(prize.type==='rocket'){ const inv=JSON.parse(localStorage.getItem('ds4_inv')||'{}'); inv.rocket=(inv.rocket||0)+prize.val; localStorage.setItem('ds4_inv',JSON.stringify(inv)); rui(); }
+    if(prize.type==='bomb')  { const inv=JSON.parse(localStorage.getItem('ds4_inv')||'{}'); inv.bomb=(inv.bomb||0)+prize.val; localStorage.setItem('ds4_inv',JSON.stringify(inv)); rui(); }
+    if(prize.type==='life')  { lives=Math.min(5,(lives||0)+prize.val); saveAll(); rui(); updateLives(); }
+    if(prize.type==='mega')  { coins+=500; lives=Math.min(5,(lives||0)+3); saveAll(); rui(); updateLives(); }
+    showAchieveToast(prize.emoji,'QAZANDIN!',prize.label);
+  }
+
+  if(needsAd){
+    // Bu spinde reklam tələb olunur
+    showAchieveToast('🎰','ŞANSLİ SPIN!',prize.label+' — Reklam izlə!');
+    adSim(()=>{ giveReward(); trackAdShown(); });
+  } else {
+    // Birbaşa hədiyyə ver
+    showAchieveToast('🎁','HƏDİYYƏ!',prize.label+' — Pulsuz!');
+    setTimeout(giveReward, 800);
+  }
+}
+
+
 function spawnBall(){
   const cfg=getLevelBG(level);
 
@@ -1813,57 +2451,62 @@ function spawnBall(){
 
   // Sürəti level-ə görə hesabla — ilk levellərdə YAVAŞ, sonra sürətlənir
   // Flappy Bird: ilk pipe çox yavaşdır, sonrakılar sürətlənir
-  const baseSpd = level<=2 ? 1.8+Math.random()*0.5      // öyrəniş
-                : level<=4 ? 2.4+level*0.4+Math.random()*0.6  // artır
-                : level<=7 ? 2.8+level*0.55+Math.random()*0.8 // ciddi çətinlik
-                : 3.2+level*0.65+Math.random()*1.0;           // kaos
+  // Sürəti level-ə görə hesabla — 100+ levellərdə plateau
+  const baseSpd = level<=1  ? 1.6+Math.random()*0.3
+                : level<=2  ? 2.0+Math.random()*0.4
+                : level<=4  ? 2.4+level*0.3+Math.random()*0.5
+                : level<=7  ? 3.0+level*0.4+Math.random()*0.7
+                : level<=12 ? 4.5+level*0.5+Math.random()*0.9
+                : level<=16 ? 7.0+level*0.55+Math.random()*1.2
+                : level<=17 ? 11+Math.random()*1.5
+                : level<=18 ? 14+Math.random()*2    // LVL 18: çox sürətli
+                : 18+Math.random()*3;                // LVL 19: mümkünsüz sürət
 
-  // Level 7+ zigzag (əvvəl 6 idi — biraz gecikdirdik)
-  if(level>=7&&Math.random()<0.16){
-    balls.push({x:180,y:-22,r:20,spd:baseSpd*0.72,c:'#ff00ff',pts:4,zz:true,zzd:1,zzs:3.5+level*0.22,age:0,done:false,shape:'diamond'});return;
-  }
-  // Level 7+ split
-  if(level>=7&&Math.random()<0.13){
-    balls.push({x:Math.random()*280+40,y:-18,r:16,spd:baseSpd*0.82,c:'#ff9900',pts:2,split:true,age:0,done:false,wb:0,wa:0,shape:'square'});return;
-  }
-  // Level 10+ giant
-  if(level>=10&&Math.random()<0.08){
-    balls.push({x:Math.random()*260+50,y:-38,r:32,spd:baseSpd*0.42,c:'#ff0000',pts:6,giant:true,age:0,done:false,wb:0,wa:0,shape:'circle'});return;
-  }
-  // Level 9+ homing
-  if(level>=9&&Math.random()<0.09){
-    balls.push({x:Math.random()*300+30,y:-16,r:12,spd:baseSpd*0.62,c:'#ff44ff',pts:3,homing:true,vx:0,age:0,done:false,wb:0,wa:0,shape:'triangle'});return;
-  }
+  // ── ZVOOM: Temiz, okunakli zorluk sistemi ──
+  // Hər leveldə SADECE 1 xüsusi mechanic aktiv olur — hamısı eyni anda deyil
 
-  // ── LEVEL 8+ DÜŞMƏN SİLAH TOPLARI ── (silah işlədirlər!)
-  if(level>=8&&Math.random()<0.12){
-    // Laser-shooter: yavaş hərəkət edir, oyunçuya doğru lazer atır
-    balls.push({x:Math.random()*280+40,y:-18,r:14,spd:baseSpd*0.4,c:'#ff2222',pts:4,
-      enemyWeapon:'laser',ewTimer:60+Math.random()*40,ewCooldown:0,
+  // Level 4+ aimed — oyuncu addımını öyrənir
+  if(level>=4&&Math.random()<0.20){
+    balls.push({x:player.x+(Math.random()-0.5)*100,y:-16,r:13,spd:baseSpd*0.90,c:cfg.ac,pts:2,age:0,done:false,wb:0,wa:0,shape:'circle'});return;
+  }
+  // Level 5-7: ikili dalğa — amma sadəcə 2 top, boşluq var
+  if(level>=5&&level<=7&&Math.random()<0.14){
+    const gap=180+Math.random()*40;
+    balls.push({x:gap-55,y:-14,r:11,spd:baseSpd,c:cfg.ac,pts:2,age:0,done:false,wb:0,wa:0,shape:'circle'});
+    balls.push({x:gap+55,y:-14,r:11,spd:baseSpd,c:cfg.ac,pts:2,age:0,done:false,wb:0,wa:0,shape:'circle'});
+    return;
+  }
+  // Level 6+ zigzag — bir anda SADECE 1, yavaş
+  if(level>=6&&Math.random()<0.10){
+    balls.push({x:180,y:-22,r:18,spd:baseSpd*0.55,c:'#ff00ff',pts:4,zz:true,zzd:1,zzs:2.5+level*0.15,age:0,done:false,shape:'diamond'});return;
+  }
+  // Level 8+ split — böyük top ikiyə bölünür (hər dəfə max 1)
+  if(level>=8&&Math.random()<0.10){
+    balls.push({x:Math.random()*260+50,y:-18,r:15,spd:baseSpd*0.70,c:'#ff9900',pts:2,split:true,age:0,done:false,wb:0,wa:0,shape:'square'});return;
+  }
+  // Level 9+ homing — YAVAŞ, bir dəfəlik, oyunçu qaça bilər
+  if(level>=9&&Math.random()<0.07){
+    balls.push({x:Math.random()*280+40,y:-18,r:11,spd:baseSpd*0.45,c:'#ff44ff',pts:3,homing:true,vx:0,age:0,done:false,wb:0,wa:0,shape:'triangle'});return;
+  }
+  // Level 10+ giant — böyük amma yavaş, yan keçmək olar
+  if(level>=10&&Math.random()<0.07){
+    balls.push({x:Math.random()*220+70,y:-36,r:28,spd:baseSpd*0.30,c:'#ff0000',pts:6,giant:true,age:0,done:false,wb:0,wa:0,shape:'circle'});return;
+  }
+  // Level 8+ DÜŞMƏN SİLAH — az, aydın xəbərdarlıqlı, SADECE 1 növ aktiv
+  if(level>=8&&level<=9&&Math.random()<0.08){
+    balls.push({x:Math.random()*260+50,y:-18,r:13,spd:baseSpd*0.30,c:'#ff2222',pts:4,
+      enemyWeapon:'laser',ewTimer:90,ewCooldown:30,
       age:0,done:false,wb:0,wa:0,shape:'hexagon'});return;
   }
-  if(level>=10&&Math.random()<0.10){
-    // Bullet-shooter: oyunçuya doğru güllə atır
-    balls.push({x:Math.random()*280+40,y:-18,r:13,spd:baseSpd*0.35,c:'#ffaa00',pts:5,
-      enemyWeapon:'bullet',ewTimer:80,ewCooldown:0,
+  if(level>=10&&Math.random()<0.07){
+    balls.push({x:Math.random()*260+50,y:-18,r:12,spd:baseSpd*0.28,c:'#ffaa00',pts:5,
+      enemyWeapon:'bullet',ewTimer:100,ewCooldown:40,
       age:0,done:false,wb:0,wa:0,shape:'star'});return;
   }
-  if(level>=11&&Math.random()<0.08){
-    // Rocket: yavaş irəliləyir, yaxın gəldikdə sprays bullets
-    balls.push({x:Math.random()*260+50,y:-20,r:16,spd:baseSpd*0.3,c:'#ff6600',pts:6,
-      enemyWeapon:'rocket',ewTimer:100,ewCooldown:0,
-      age:0,done:false,wb:Math.random()*0.6-0.3,wa:1.5,shape:'hexagon'});return;
-  }
-
-  // Level 4+ aimed
-  if(level>=4&&Math.random()<0.18){
-    balls.push({x:player.x+(Math.random()-0.5)*110,y:-16,r:13,spd:baseSpd*0.92,c:cfg.ac,pts:2,age:0,done:false,wb:0,wa:0,shape:'circle'});return;
-  }
-  // Level 5+ wave groups
-  if(level>=5&&Math.random()<0.15){
-    const cnt=2+Math.floor(Math.random()*2);const gap=360/(cnt+1);
-    for(let i=0;i<cnt;i++)balls.push({x:gap*(i+1),y:-12-Math.random()*25,r:11,spd:baseSpd,c:cfg.ac,pts:2,age:0,done:false,wb:0,wa:0,shape:'circle'});
-    return;
+  if(level>=12&&Math.random()<0.05){
+    balls.push({x:Math.random()*240+60,y:-20,r:14,spd:baseSpd*0.25,c:'#ff6600',pts:6,
+      enemyWeapon:'rocket',ewTimer:120,ewCooldown:60,
+      age:0,done:false,wb:0,wa:0,shape:'hexagon'});return;
   }
   // Normal toplar — çeşidli ölçü+sürət
   // Level 3+ STICKER TOPLAR: emoji-sticker görünüşlü maneələr (~20% şans)
@@ -1899,10 +2542,21 @@ function spawnBall(){
 // Level 5: hər 28 frame
 // Level 10+: hər 10 frame (intensiv)
 function getSpawnRate(){
-  if(level<=2) return 50;
-  if(level<=4) return Math.max(32, 50-level*5);
-  if(level<=7) return Math.max(20, 36-level*4);
-  return Math.max(10, 28-level*3);
+  if(level<=1)  return 60;  // LVL 1: çox yavaş — öyrəniş
+  if(level<=2)  return 48;
+  if(level<=3)  return 38;
+  if(level<=4)  return 30;
+  if(level<=5)  return 24;
+  if(level<=6)  return 20;
+  if(level<=7)  return 17;
+  if(level<=8)  return 15;
+  if(level<=10) return 13;
+  if(level<=12) return 12;
+  if(level<=14) return 11;
+  if(level<=16) return 10;
+  if(level<=17) return 9;
+  if(level<=18) return 8;   // LVL 18: çox sürətli
+  return 7;                  // LVL 19: demək olar mümkünsüz
 }
 
 // ── DROPS — very rare ──
@@ -2004,7 +2658,12 @@ const MISSIONS=[
   {id:'m_level5',icon:'🚀',name:'Level 5',desc:'Level 5-ə çat',target:5,type:'level',reward:250,unit:'level'},
   {id:'m_level8',icon:'💪',name:'Level 8',desc:'Level 8-ə çat',target:8,type:'level',reward:500,unit:'level'},
   {id:'m_level10',icon:'🌟',name:'Level 10',desc:'Level 10-a çat',target:10,type:'level',reward:800,unit:'level'},
-  {id:'m_level12',icon:'👑',name:'Level 12 MAX',desc:'Maksimum levelə çat',target:12,type:'level',reward:1500,unit:'level'},
+  {id:'m_level5', icon:'⚡',name:'Level 5',  desc:'Level 5-ə çat',             target:5,  type:'level',reward:300,  unit:'level'},
+  {id:'m_level10',icon:'🔥',name:'Level 10', desc:'Level 10-ə çat',            target:10, type:'level',reward:800,  unit:'level'},
+  {id:'m_level15',icon:'💎',name:'Level 15', desc:'Level 15-ə çat',            target:15, type:'level',reward:2000, unit:'level'},
+  {id:'m_level17',icon:'👑',name:'TANRI',    desc:'Level 17-yə çat — TANRI!',  target:17, type:'level',reward:5000, unit:'level'},
+  {id:'m_level18',icon:'🏛️',name:'OLIMP',   desc:'Level 18 — Az adam çatıb!', target:18, type:'level',reward:15000,unit:'level'},
+  {id:'m_level19',icon:'♾️',name:'SONSUZ',  desc:'Level 19 — Mümkünsüz!',     target:19, type:'level',reward:99999,unit:'level'},
   // DƏVƏT
   {id:'m_invite1',icon:'🤝',name:'İlk Dəvət',desc:'1 dost dəvət et',target:1,type:'invite',reward:300,unit:'dəvət'},
   {id:'m_invite3',icon:'👥',name:'3 Dost',desc:'3 dost dəvət et',target:3,type:'invite',reward:600,unit:'dəvət'},
@@ -2094,7 +2753,7 @@ function openMiss(){
   ['startScreen','gameOverScreen'].forEach(hide);
   show('missScreen');
 }
-function closeMiss(){hide('missScreen');show('startScreen');}
+function closeMiss(){hide('missScreen');show('startScreen');randomizeButtonTheme();}
 
 function renderMissions(){
   const list=document.getElementById('missList');
@@ -2153,16 +2812,32 @@ function openInvite(){
 function closeInvite(){hide('inviteScreen');show('startScreen');}
 
 function buildInviteUrl(){
-  return `https://bit.ly/dodge-survive?ref=${getInviteCode()}`;
+  return `https://zvoom.app?ref=${getInviteCode()}`;
 }
 
 function getInviteMsg(){
-  return `🎮 Dodge & Survive oynayıram!\n🏆 Mənim rekord: ${bestScore} xal\n\nSən döyə bilərsən? Gəl sübut et 👇\n${buildInviteUrl()}\n\n💰 Qoşulduqda +100 coin bonus sənin, +200 mənə!`;
+  return `🎮 ZVOOM oynayıram!\n🏆 Mənim rekord: ${bestScore} xal\n\nSən döyə bilərsən? Gəl sübut et 👇\n${buildInviteUrl()}\n\n💰 Qoşulduqda +100 coin bonus sənin, +200 mənə!`;
 }
 
 function inviteWA(){
   window.open('https://wa.me/?text='+encodeURIComponent(getInviteMsg()),'_blank');
   recordInvite('WhatsApp');
+}
+function inviteIG(){
+  try{navigator.clipboard.writeText(getInviteMsg());}catch(e){}
+  window.open('instagram://','_blank');
+  setTimeout(()=>{showAchieveToast('📸','Instagram','Mətn kopyalandı — story/posta yapışdır!');},400);
+  recordInvite('Instagram');
+}
+function inviteFB(){
+  window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent('https://zvoom.app?ref='+getInviteCode()),'_blank');
+  recordInvite('Facebook');
+}
+function inviteTT(){
+  try{navigator.clipboard.writeText(getInviteMsg());}catch(e){}
+  window.open('tiktok://','_blank');
+  setTimeout(()=>{showAchieveToast('🎵','TikTok','Mətn kopyalandı — bioya yapışdır!');},400);
+  recordInvite('TikTok');
 }
 function inviteCopyLink(){
   try{navigator.clipboard.writeText(buildInviteUrl()).then(()=>{showAchieveToast('📋','Link kopyalandı!','Dostuna göndər');});}
@@ -2172,7 +2847,7 @@ function inviteCopyLink(){
 async function inviteNative(){
   try{
     if(navigator.share){
-      await navigator.share({title:'Dodge & Survive',text:getInviteMsg(),url:buildInviteUrl()});
+      await navigator.share({title:'ZVOOM',text:getInviteMsg(),url:buildInviteUrl()});
       recordInvite('Native');
     }else{inviteCopyLink();}
   }catch(e){inviteCopyLink();}
@@ -2207,12 +2882,12 @@ function closeSocialShare(){document.getElementById('socialShareOverlay').style.
 
 function getShareMsg(){
   const sc=state==='over'?score:bestScore;
-  return `🎮 Dodge & Survive — ${sc} xal qazandım!\nSən döyə bilərsən? 🔥\nhttps://bit.ly/dodge-survive`;
+  return `🎮 ZVOOM — ${sc} xal qazandım!\nSən döyə bilərsən? 🔥\nhttps://zvoom.app`;
 }
 
 function doSocialShare(type){
   const msg=getShareMsg();
-  const url=encodeURIComponent('https://bit.ly/dodge-survive');
+  const url=encodeURIComponent('https://zvoom.app');
   const txt=encodeURIComponent(msg);
   if(type==='wa'){window.open('https://wa.me/?text='+txt,'_blank');}
   else if(type==='ig'){
@@ -2233,7 +2908,7 @@ function doSocialShare(type){
     catch(e){prompt('Kopyala:',msg);}
   }
   else if(type==='native'){
-    if(navigator.share){navigator.share({title:'Dodge & Survive',text:msg,url:'https://bit.ly/dodge-survive'}).catch(()=>{});}
+    if(navigator.share){navigator.share({title:'ZVOOM',text:msg,url:'https://zvoom.app'}).catch(()=>{});}
     else{try{navigator.clipboard.writeText(msg);}catch(e){}showAchieveToast('📋','Kopyalandı!','');}
   }
   totalShared++;saveMissions();
@@ -2316,6 +2991,48 @@ function initLiveTicker(){
 // ═══════════════════════════════════════════════════
 // ACHIEVE TOAST (shared util)
 // ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════
+// PLAYER TRANSFORM POPUP + BURST
+// ═══════════════════════════════════════════════════
+function showPlayerTransformPopup(pf){
+  const popup=document.getElementById('transformPopup');
+  if(!popup) return;
+  document.getElementById('tpEmoji').textContent=pf.emoji;
+  document.getElementById('tpTitle').textContent=pf.name.toUpperCase()+' FORMASINA ÇEVRILDIN!';
+  document.getElementById('tpTitle').style.color=pf.glow;
+  document.getElementById('tpForm').textContent=pf.name.toUpperCase();
+  document.getElementById('tpForm').style.color=pf.glow;
+  document.getElementById('tpPassive').textContent=pf.passiveDesc;
+  popup.style.borderColor=pf.glow+'44';
+  popup.style.boxShadow='0 20px 60px rgba(0,0,0,0.8), 0 0 40px '+pf.glow+'33';
+  popup.style.transform='translate(-50%,-50%) scale(1)';
+  popup.style.opacity='1';
+  clearTimeout(window._tpTimer);
+  window._tpTimer=setTimeout(()=>{
+    popup.style.transform='translate(-50%,-50%) scale(0)';
+    popup.style.opacity='0';
+  },2400);
+}
+
+function spawnTransformBurst(pf){
+  const [r,g,b]=pf.trailC;
+  const colors=[`rgb(${r},${g},${b})`,pf.glow,'#ffffff'];
+  for(let i=0;i<60;i++){
+    const ang=Math.random()*Math.PI*2;
+    const spd=Math.random()*8+2;
+    parts.push({
+      x:player.x,y:player.y,
+      vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd,
+      r:Math.random()*5+2,
+      c:colors[Math.floor(Math.random()*colors.length)],
+      life:1,dec:Math.random()*0.015+0.008
+    });
+  }
+  // Also flash screen with form color
+  const fl=document.getElementById('powerFlash');
+  if(fl){fl.style.background=pf.glow+'55';fl.style.opacity='1';setTimeout(()=>fl.style.opacity='0',300);}
+}
+
 function showAchieveToast(icon,name,sub){
   const t=document.getElementById('achieveToast');if(!t)return;
   const ic=document.getElementById('atIcon');const nm=document.getElementById('atName');const sb=document.getElementById('atSub');
@@ -2328,6 +3045,7 @@ function showAchieveToast(icon,name,sub){
 function gameOver(){
   if(dead)return;dead=true;state='over';
   if(rafId){cancelAnimationFrame(rafId);rafId=null;}
+  stopBGM();
   if(navigator.vibrate)navigator.vibrate([120,60,120]);
   const isNew=score>bestScore;if(isNew)bestScore=score;
   const coinEarned=Math.floor(score/10);
@@ -2337,7 +3055,7 @@ function gameOver(){
   saveMissions();checkMissions();
   setText('finalScore',score);
 
-  // ── Rekorddan məsafə göstəricisi ──
+  // Reklam izlə üçün near-miss mesajı — oyunçunu geri çəkir
   const nb=document.getElementById('newBestTag');
   const gapEl=document.getElementById('gapToRecord');
   const barEl=document.getElementById('bestProgressBar');
@@ -2349,17 +3067,19 @@ function gameOver(){
     if(gapEl)gapEl.style.display='none';
     if(barEl)barEl.style.width='100%';
     if(barLbl)barLbl.textContent='🏆 EN YAXŞI!';
-    // Konfetti!
     spawnConfetti();
+    trackAdShown();
   } else {
     nb.style.display='none';
     const gap=bestScore-score;
     const pct=bestScore>0?Math.min(100,Math.round(score/bestScore*100)):0;
     if(gapEl){
       gapEl.style.display='block';
-      if(gap<=3) gapEl.textContent='😱 Rekorddan cəmi '+gap+' xal azdı!';
-      else if(gap<=10) gapEl.textContent='🔥 Rekorddan '+gap+' xal azdı!';
-      else if(pct>=80) gapEl.textContent='💪 Rekordun '+pct+'%-i — yaxınlaşırsan!';
+      // NEAR-MISS psixologiyası — oyunçunu reklamla can almağa yönəldir
+      if(gap<=2) gapEl.textContent='😱 CƏMİ '+gap+' XAL AZDIII! Reklam izlə = +3 can → REKORD!';
+      else if(gap<=5) gapEl.textContent='🔥 '+gap+' XAL AZDIII! 1 reklam = 1 can = rekord şansı!';
+      else if(gap<=15) gapEl.textContent='💪 '+gap+' xal az — reklam izlə, davam et!';
+      else if(pct>=85) gapEl.textContent='📈 REKORDun '+pct+'%! İndi reklam izlə → CAN AL!';
       else gapEl.textContent='🎯 Rekord: '+bestScore+' | Bu oyun: '+score;
     }
     if(barEl){setTimeout(()=>{barEl.style.width=pct+'%';},300);}
@@ -2367,7 +3087,7 @@ function gameOver(){
     if(barLbl)barLbl.textContent='REKORDun '+pct+'%';
   }
 
-  // Near-miss psychology
+  // Near-miss psixologiya mesajı
   const pctOfBest=bestScore>0?score/bestScore:0;
   let msg;
   if(isNew){msg=TR[curLang].newRecord.replace('🏆 ','');}
@@ -2377,9 +3097,19 @@ function gameOver(){
   if(totalGames<=3)maybeShowContextTip('firstDeath');
   flash('#ff224455');
   const lb=document.getElementById('langBtnTop');if(lb)lb.style.display='';
+
+  // Her 5. oyundan sonra Lucky Spin göstər
+  if(totalGames>0&&totalGames%5===0){
+    setTimeout(()=>showLuckySpin(),2500);
+  }
+
   setTimeout(()=>{
     show('gameOverScreen');
     if(window._firebaseReady&&window.onGameOverFB)window.onGameOverFB();
+    // FOMO Banner: çox az xalla rekorddan ayrıldısa
+    if(bestScore-score<=10&&bestScore>0&&!isNew){
+      setTimeout(()=>showFomoBanner('⚡ '+( bestScore-score)+' XAL AZDIII — REKLAM İZLƏ → CAN AL!'),1000);
+    }
   },500);
 }
 
@@ -2543,18 +3273,60 @@ function loop(ts){
 
   if(state!=='playing'){ctx.restore();rafId=requestAnimationFrame(loop);return;}
 
-  // ── LEVEL UP — tədricən çətinləşir ──
-  // İlk levellar uzun (oyunçu özünü usta hiss edir), sonrakılar sürətli
-  const levelThresholds=[0,30,65,110,160,220,290,370,460,560,670,790,920];
-  const nl=levelThresholds.findIndex(t=>score<t);
-  const newLevel=nl===-1?12:Math.max(1,nl);
-  if(newLevel!==level&&newLevel<=12){
+  // ── PSİXOLOJİ LEVEL SİSTEMİ — 19 level ──
+  // İlk levellar ÇOX TƏZ keçilir → dopamin, "bu asandır" hissi
+  // Orta levellar gözlənilməz çətinlik artımı → "bir az da" effekti
+  // 17-ci level əsl hədəf, 18-19 praktiki olaraq sonsuz
+  function calcLevel(sc){
+    // LVL 1-5: sürətli başlanğıc — ilk dəqiqədə heyranlanır
+    if(sc<15)  return 1;
+    if(sc<40)  return 2;
+    if(sc<75)  return 3;
+    if(sc<120) return 4;
+    if(sc<180) return 5;
+    // LVL 6-10: 250-600 xal aralığı
+    if(sc<250) return 6;
+    if(sc<330) return 7;
+    if(sc<420) return 8;
+    if(sc<510) return 9;
+    if(sc<600) return 10;
+    // LVL 11-15: 700-950 xal aralığı
+    if(sc<700) return 11;
+    if(sc<775) return 12;
+    if(sc<840) return 13;
+    if(sc<900) return 14;
+    if(sc<950) return 15;
+    // LVL 16-17: 1200-1800 xal aralığı
+    if(sc<1500) return 16;
+    if(sc<1800) return 17; // çatıla bilər son level
+    // LVL 18: çox çətin
+    if(sc<50000) return 18;
+    // LVL 19: 50000 xal — praktiki olaraq mümkünsüz
+    return 19;
+  }
+  const newLevel=calcLevel(score);
+  if(newLevel!==level&&newLevel<=19){
     level=newLevel;
     setText('levelBadge','LVL '+level);
+    const _fb=document.getElementById('formBadge');
+    if(_fb){const _f=getPlayerForm();_fb.innerHTML=_f.emoji+' '+_f.name.toUpperCase();_fb.style.color=_f.glow;_fb.style.textShadow='0 0 10px '+_f.glow+'88';}
     const nc=getLevelBG(level);
-    float2(130,280,'⬆️ LVL '+level+'  '+nc.name,nc.ac,18);
     flash(nc.ac+'22');shake=8;shakeT=22;
     if(navigator.vibrate)navigator.vibrate(55);
+    const newForm=getPlayerForm(level);
+    const oldForm=getPlayerForm(level-1);
+    if(newForm.emoji!==oldForm.emoji||newForm.name!==oldForm.name){
+      float2(180,260,newForm.emoji+' '+newForm.name.toUpperCase()+' AÇILDI!',newForm.glow,16);
+      showPlayerTransformPopup(newForm);
+      shake=18;shakeT=40;
+      spawnTransformBurst(newForm);
+      // YENİ SKİN SƏSİ — sakitləşdirici triumf
+      playSkinUnlockSound();
+      if(level===10||level===15||level===17){_pendingAdOnNextDeath=true;}
+    } else {
+      float2(130,280,'⬆️ LVL '+level,nc.ac,18);
+    }
+    lastFormLevel=level;
   }
 
   // Timers
@@ -2569,51 +3341,134 @@ function loop(ts){
   const dropInterval = level<=5 ? 600 : level<=8 ? 900 : 1200;
   const dropChance = level<=5 ? 0.22 : level<=8 ? 0.14 : 0.08;
   if(frame%dropInterval===0&&Math.random()<dropChance)spawnDrop();
+  // Düşmən heyəcan səsləri — levelin sonuna yaxın
+  checkEnemySoundTrigger();
 
   // ── PLAYER ──
   // Horizontal + limited vertical (2 rows = ~80px range centered on y=520)
-  player.x+=(player.tx-player.x)*0.19*dt*3;
+  // Speed passive — lightning form moves faster
+  const _spd=(getPlayerForm().passive==='speed'||getPlayerForm().passive==='allBonus'||getPlayerForm().passive==='godMode')?1.45:1;
+  player.x+=(player.tx-player.x)*0.19*dt*3*_spd;
   player.x=Math.max(player.r,Math.min(360-player.r,player.x));
-  player.y+=(player.ty-player.y)*0.14*dt*3;
+  player.y+=(player.ty-player.y)*0.14*dt*3*_spd;
   // Allow moving 1 row up (≈80px) and stay near bottom
   player.y=Math.max(440,Math.min(560,player.y));
+  // ── PLAYER FORM SİSTEMİ ──
+  const pf=getPlayerForm();
+  const [tr,tg,tb]=pf.trailC;
+  const maxTrail=pf.trailLen;
   player.trail.push({x:player.x,y:player.y});
-  if(player.trail.length>22)player.trail.shift();
-  // Teal chromatic trail
-  player.trail.forEach((tr,i)=>{
+  if(player.trail.length>maxTrail)player.trail.shift();
+
+  // ── PASSIVE: slowAura (Buz) ──
+  if(pf.passive==='slowAura'&&!frozenT){
+    balls.forEach(b=>{
+      const dx=b.x-player.x,dy=b.y-player.y;
+      if(Math.sqrt(dx*dx+dy*dy)<90)b.spd=Math.max(0.8,b.spd*0.985);
+    });
+  }
+  // ── PASSIVE: autoShield (Plazma) ──
+  if(pf.passive==='autoShield'||pf.passive==='godMode'){
+    plasmaAutoShieldTimer-=dt;
+    if(plasmaAutoShieldTimer<=0&&!inv){inv=true;invT=80;plasmaAutoShieldTimer=pf.passive==='godMode'?120:600;float2(player.x,player.y-28,'🛡','#cc00ff',18);}
+  }
+
+  // ── TRAIL RENDERING ──
+  player.trail.forEach((tr2,i)=>{
     const a=i/player.trail.length;
-    ctx.beginPath();ctx.arc(tr.x,tr.y,player.r*a*0.5,0,Math.PI*2);
-    ctx.fillStyle=`rgba(0,245,212,${a*0.14})`;ctx.fill();
+    if(pf.passive==='godMode'||pf.lvl>=11){
+      // God trail: sparkles
+      if(i%3===0){ctx.beginPath();ctx.arc(tr2.x+(Math.random()-0.5)*4,tr2.y+(Math.random()-0.5)*4,player.r*a*0.35,0,Math.PI*2);
+        ctx.fillStyle=`rgba(${tr},${tg},${tb},${a*0.35})`;ctx.fill();}
+    } else if(pf.passive==='combo2x'){
+      // Fire trail: elongated flicker
+      ctx.beginPath();ctx.arc(tr2.x+(Math.random()-0.5)*3,tr2.y,player.r*a*0.55,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${tr},${tg},${tb},${a*0.22})`;ctx.fill();
+    } else if(pf.passive==='speed'){
+      // Lightning trail: sharp streaks
+      if(i>0&&i%2===0){
+        const prev=player.trail[i-1];
+        ctx.beginPath();ctx.moveTo(prev.x,prev.y);ctx.lineTo(tr2.x,tr2.y);
+        ctx.strokeStyle=`rgba(${tr},${tg},${tb},${a*0.4})`;ctx.lineWidth=player.r*a*0.6;ctx.stroke();
+      }
+    } else {
+      ctx.beginPath();ctx.arc(tr2.x,tr2.y,player.r*a*0.5,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${tr},${tg},${tb},${a*0.16})`;ctx.fill();
+    }
   });
 
   if(!inv||Math.floor(frame/4)%2===0){
-    // Invincibility — double rotating ring
-    if(inv){
-      const shieldR=player.r+11+Math.sin(frame*0.2)*2;
-      for(let ri=0;ri<2;ri++){
-        const ang=frame*0.09*(ri?-1:1);
-        ctx.beginPath();ctx.arc(player.x,player.y,shieldR,ang,ang+Math.PI*(ri?0.6:0.7));
-        ctx.strokeStyle=ri?'rgba(0,245,212,0.7)':'rgba(0,196,255,0.5)';ctx.lineWidth=2;
-        ctx.shadowBlur=16;ctx.shadowColor='#00f5d4';ctx.stroke();ctx.shadowBlur=0;
+    const pulse=1+0.07*Math.sin(frame*0.12);
+    const pr=player.r;
+
+    // ── SPECIAL FORM OUTER EFFECTS ──
+    if(pf.passive==='combo2x'){
+      // Alov — flame particles around player
+      if(frame%3===0){parts.push({x:player.x+(Math.random()-0.5)*pr,y:player.y+pr*0.5,vx:(Math.random()-0.5)*1.2,vy:-Math.random()*2.5-1,r:Math.random()*3+1.5,c:Math.random()<0.5?'#ff6600':'#ffcc00',life:1,dec:0.045});}
+    }
+    if(pf.passive==='speed'){
+      // Şimşək — arc bolts around
+      if(frame%8===0){
+        const ang=Math.random()*Math.PI*2;
+        ctx.beginPath();ctx.moveTo(player.x+Math.cos(ang)*pr,player.y+Math.sin(ang)*pr);
+        ctx.lineTo(player.x+Math.cos(ang)*pr*2.2,player.y+Math.sin(ang)*pr*2.2);
+        ctx.strokeStyle='rgba(255,255,0,0.7)';ctx.lineWidth=2;ctx.shadowBlur=10;ctx.shadowColor='#ffff00';ctx.stroke();ctx.shadowBlur=0;
       }
     }
-    // Outer pulse glow
-    const pulse=1+0.06*Math.sin(frame*0.12);
-    const outerHalo=ctx.createRadialGradient(player.x,player.y,player.r*0.8,player.x,player.y,(player.r+8)*pulse);
-    outerHalo.addColorStop(0,'rgba(0,245,212,0.18)');outerHalo.addColorStop(1,'rgba(0,245,212,0)');
-    ctx.beginPath();ctx.arc(player.x,player.y,(player.r+8)*pulse,0,Math.PI*2);ctx.fillStyle=outerHalo;ctx.fill();
-    // Player body — teal neon core
-    const pg=ctx.createRadialGradient(player.x-4,player.y-5,1,player.x,player.y,player.r);
-    pg.addColorStop(0,'#ffffff');pg.addColorStop(0.2,'#aaffee');pg.addColorStop(0.65,'#00c4a7');pg.addColorStop(1,'#006655');
-    ctx.beginPath();ctx.arc(player.x,player.y,player.r,0,Math.PI*2);
-    ctx.fillStyle=pg;ctx.shadowBlur=28;ctx.shadowColor='#00f5d4';ctx.fill();ctx.shadowBlur=0;
-    // Chromatic rim — hot pink outline
-    ctx.beginPath();ctx.arc(player.x,player.y,player.r,0,Math.PI*2);
-    ctx.strokeStyle='rgba(255,45,120,0.35)';ctx.lineWidth=1.5;ctx.stroke();
-    // Shine
+    if(pf.passive==='slowAura'){
+      // Buz — crystalline outer ring
+      const iceR=pr+16+Math.sin(frame*0.08)*3;
+      ctx.beginPath();ctx.arc(player.x,player.y,iceR,0,Math.PI*2);
+      ctx.strokeStyle='rgba(100,220,255,0.15)';ctx.lineWidth=8;ctx.stroke();
+      ctx.beginPath();ctx.arc(player.x,player.y,iceR,0,Math.PI*2);
+      ctx.strokeStyle='rgba(100,220,255,0.35)';ctx.lineWidth=1.5;ctx.shadowBlur=10;ctx.shadowColor='#44aaff';ctx.stroke();ctx.shadowBlur=0;
+    }
+    if(pf.passive==='allBonus'||pf.passive==='godMode'){
+      // God/İlahi — rotating stars
+      for(let si=0;si<(pf.passive==='godMode'?6:4);si++){
+        const sang=frame*0.06+si*(Math.PI*2/(pf.passive==='godMode'?6:4));
+        const sx=player.x+Math.cos(sang)*(pr+14),sy=player.y+Math.sin(sang)*(pr+14);
+        ctx.font='10px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+        ctx.fillText(pf.passive==='godMode'?'✦':'★',sx,sy);
+      }
+    }
+
+    // Invincibility shield ring
+    if(inv){
+      const shieldR=pr+12+Math.sin(frame*0.2)*2;
+      for(let ri=0;ri<2;ri++){
+        const ang2=frame*0.09*(ri?-1:1);
+        const [r2,g2,b2]=pf.trailC;
+        ctx.beginPath();ctx.arc(player.x,player.y,shieldR,ang2,ang2+Math.PI*(ri?0.6:0.7));
+        ctx.strokeStyle=ri?`rgba(${r2},${g2},${b2},0.8)`:`rgba(${r2},${g2},${b2},0.45)`;
+        ctx.lineWidth=2;ctx.shadowBlur=16;ctx.shadowColor=pf.glow;ctx.stroke();ctx.shadowBlur=0;
+      }
+    }
+
+    // Outer pulse halo
+    const haloG=ctx.createRadialGradient(player.x,player.y,pr*0.8,player.x,player.y,(pr+10)*pulse);
+    const [hr,hg,hb]=pf.trailC;
+    haloG.addColorStop(0,`rgba(${hr},${hg},${hb},0.22)`);haloG.addColorStop(1,`rgba(${hr},${hg},${hb},0)`);
+    ctx.beginPath();ctx.arc(player.x,player.y,(pr+10)*pulse,0,Math.PI*2);ctx.fillStyle=haloG;ctx.fill();
+
+    // Player body core
+    const pg=ctx.createRadialGradient(player.x-4,player.y-5,1,player.x,player.y,pr);
+    pg.addColorStop(0,pf.c0);pg.addColorStop(0.2,pf.c1);pg.addColorStop(0.65,pf.c2);pg.addColorStop(1,pf.c3);
+    ctx.beginPath();ctx.arc(player.x,player.y,pr,0,Math.PI*2);
+    ctx.fillStyle=pg;
+    ctx.shadowBlur=pf.passive==='godMode'?44:28;
+    ctx.shadowColor=pf.glow;ctx.fill();ctx.shadowBlur=0;
+
+    // Chromatic rim
+    ctx.beginPath();ctx.arc(player.x,player.y,pr,0,Math.PI*2);
+    ctx.strokeStyle=pf.rim;ctx.lineWidth=1.8;ctx.stroke();
+
+    // Center shine
     ctx.beginPath();ctx.arc(player.x-4,player.y-5,3.5,0,Math.PI*2);
-    ctx.fillStyle='rgba(255,255,255,0.45)';ctx.fill();
-    if(selWeapon){ctx.font='12px serif';ctx.textAlign='center';ctx.fillStyle='#fff';ctx.fillText(WPNS_EMOJI[selWeapon]||'?',player.x,player.y-player.r-4);}
+    ctx.fillStyle='rgba(255,255,255,0.5)';ctx.fill();
+
+    // Weapon icon above player
+    if(selWeapon){ctx.font='12px serif';ctx.textAlign='center';ctx.fillStyle='#fff';ctx.fillText(WPNS_EMOJI[selWeapon]||'?',player.x,player.y-pr-4);}
   }
 
   // Rocket aim
@@ -2712,7 +3567,7 @@ function loop(ts){
       ctx.beginPath();ctx.moveTo(p.x,-10);ctx.lineTo(p.x,680);
       ctx.strokeStyle='rgba(255,0,0,0.15)';ctx.lineWidth=12;ctx.stroke();ctx.shadowBlur=0;
       if(!inv&&Math.abs(p.x-player.x)<20){
-        spawnParts(player.x,player.y,'#ff0000',12);lives--;updateLives();
+        spawnParts(player.x,player.y,'#ff0000',12);lives--;updateLives();playLoseLifeSound();
         inv=true;invT=80;shake=10;shakeT=25;
         if(navigator.vibrate)navigator.vibrate([60,30,60]);
         const h=document.getElementById('h'+(lives+1));if(h){h.classList.add('pop');setTimeout(()=>h.classList.remove('pop'),400);}
@@ -2724,7 +3579,7 @@ function loop(ts){
       ctx.fillStyle=p.c;ctx.shadowBlur=10;ctx.shadowColor=p.c;ctx.fill();ctx.shadowBlur=0;
       if(!inv){const dx=p.x-player.x,dy=p.y-player.y;
         if(Math.sqrt(dx*dx+dy*dy)<p.r+player.r-2){
-          spawnParts(player.x,player.y,p.c,10);lives--;updateLives();
+          spawnParts(player.x,player.y,p.c,10);lives--;updateLives();playLoseLifeSound();
           inv=true;invT=80;shake=8;shakeT=20;
           if(navigator.vibrate)navigator.vibrate([50,25,50]);
           const h=document.getElementById('h'+(lives+1));if(h){h.classList.add('pop');setTimeout(()=>h.classList.remove('pop'),400);}
@@ -2736,7 +3591,7 @@ function loop(ts){
       ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.ang+Math.PI/2);ctx.font='16px serif';ctx.textAlign='center';ctx.fillText('🔴',0,6);ctx.restore();
       if(!inv){const dx=p.x-player.x,dy=p.y-player.y;
         if(Math.sqrt(dx*dx+dy*dy)<p.r+player.r+4){
-          addExp(p.x,p.y,p.c,60);spawnParts(player.x,player.y,p.c,14);lives--;updateLives();
+          addExp(p.x,p.y,p.c,60);spawnParts(player.x,player.y,p.c,14);lives--;updateLives();playLoseLifeSound();
           inv=true;invT=90;shake=14;shakeT=30;
           if(navigator.vibrate)navigator.vibrate([80,40,80]);
           const h=document.getElementById('h'+(lives+1));if(h){h.classList.add('pop');setTimeout(()=>h.classList.remove('pop'),400);}
@@ -2838,8 +3693,11 @@ function loop(ts){
 
     // Collision — use base radius (b.r) for fairness, not visual pulse
     if(!fz&&!inv){const dx=b.x-player.x,dy=b.y-player.y;
-      if(Math.sqrt(dx*dx+dy*dy)<b.r+player.r-4){
-        spawnParts(b.x,b.y,b.c,14);lives--;updateLives();
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      // Near-miss psychology
+      if(dist>b.r+player.r-4&&dist<b.r+player.r+8)checkNearMiss(b);
+      if(dist<b.r+player.r-4){
+        spawnParts(b.x,b.y,b.c,14);lives--;updateLives();playLoseLifeSound();
         inv=true;invT=100;combo=0;updCombo();shake=13;shakeT=30;
         if(navigator.vibrate)navigator.vibrate([85,40,85]);
         const h=document.getElementById('h'+(lives+1));if(h){h.classList.add('pop');setTimeout(()=>h.classList.remove('pop'),400);}
@@ -2849,7 +3707,12 @@ function loop(ts){
     }
     // Dodged
     if(!b.done&&b.y>player.y+30){
-      b.done=true;const earned=b.pts*(combo>=5?2:1);
+      b.done=true;
+      // PASSIVE BONUSES from player form
+      const _pf=getPlayerForm();
+      const _comboMult=(_pf.passive==='combo2x'||_pf.passive==='allBonus')?2:(_pf.passive==='godMode'?3:1);
+      const _scoreMult=(_pf.passive==='godMode')?5:(_pf.passive==='allBonus')?3:1;
+      const earned=Math.round(b.pts*(combo>=5?2:1)*_comboMult*_scoreMult);
       score+=earned;combo++;comboTimer=110;updCombo();updScore();
       totalDodged++;
       if(combo>maxComboEver){maxComboEver=combo;saveMissions();}
@@ -2916,9 +3779,58 @@ canvas.addEventListener('touchend',e=>{
   fire((t.clientX-r.left)*sc,(t.clientY-r.top)*sc);
 },{passive:true});
 
+
+// ═══════════════════════════════════════════════════
+// ZVOOM: Random button color theme every game open
+// ═══════════════════════════════════════════════════
+const ZVOOM_THEMES=[
+  {name:'Neon',   main:'#00f5d4', sec:'#ff2d78',  accent:'#5c6bff'},
+  {name:'Alov',   main:'#ff6600', sec:'#ffcc00',  accent:'#ff2244'},
+  {name:'Buz',    main:'#44ccff', sec:'#ffffff',  accent:'#0088ff'},
+  {name:'Plazma', main:'#cc44ff', sec:'#ff44cc',  accent:'#8800ff'},
+  {name:'Zəhər',  main:'#44ff88', sec:'#00ffaa',  accent:'#ff4488'},
+  {name:'Qan',    main:'#ff2244', sec:'#ff8800',  accent:'#cc0000'},
+  {name:'Qızıl',  main:'#ffcc00', sec:'#ff8800',  accent:'#fff700'},
+  {name:'Kosmik', main:'#aabbff', sec:'#ff88ff',  accent:'#5544ff'},
+];
+let _currentTheme=ZVOOM_THEMES[0];
+
+function randomizeButtonTheme(){
+  _currentTheme=ZVOOM_THEMES[Math.floor(Math.random()*ZVOOM_THEMES.length)];
+  const t=_currentTheme;
+  document.documentElement.style.setProperty('--theme-main', t.main);
+  document.documentElement.style.setProperty('--theme-sec', t.sec);
+  document.documentElement.style.setProperty('--theme-accent', t.accent);
+  // Update play button glow
+  const playBtn=document.getElementById('startBtn');
+  if(playBtn){
+    playBtn.style.background=`linear-gradient(135deg,${t.main},${t.accent})`;
+    playBtn.style.color=isDark(t.main)?'#fff':'#000';
+    playBtn.style.boxShadow=`0 8px 32px ${t.main}55`;
+  }
+  // Update smBtns color
+  document.querySelectorAll('.smBtn').forEach((b,i)=>{
+    const clr=[t.main,t.sec,t.accent][i%3];
+    b.style.color=clr;
+    b.style.borderColor=clr+'44';
+  });
+  // Title color
+  const title=document.querySelector('.gtitle');
+  if(title){title.style.color=t.main;title.style.textShadow=`0 0 40px ${t.main}88, 0 0 80px ${t.main}44`;}
+}
+function isDark(hex){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return (r*299+g*587+b*114)/1000 < 128;
+}
 // ── INIT ──
 applyLang();rui();
+randomizeButtonTheme();
 initPlayer();lastTime=performance.now();rafId=requestAnimationFrame(loop);
+// Wake up AudioContext on first user interaction (iOS)
+document.addEventListener('touchstart',()=>getAudioCtx(),{once:true});
+document.addEventListener('click',()=>getAudioCtx(),{once:true});
+// Init music button states
+_updateMusicBtns();
 // Check daily login bonus on app open
 checkDailyBonus();
 // Missions check on load
@@ -2931,6 +3843,25 @@ const _ic=document.getElementById('inviteCodeDisp');if(_ic)_ic.textContent=getIn
 (()=>{const p=new URLSearchParams(window.location.search).get('ref');if(p&&p!==getInviteCode()){coins+=100;saveAll();rui();showAchieveToast('🎁','Dəvət Bonusu!','+100💰 qazandın!');}})();
 // Show low coins tip after 3 seconds if coins < 50
 setTimeout(()=>{if(coins<50&&totalGames>0)maybeShowContextTip('lowCoins');},3000);
+// FOMO & PSİXOLOJİ SİSTEM
+startFomoSystem();
+// Add fomoSlide keyframe
+(()=>{const s=document.createElement('style');
+  s.textContent='@keyframes fomoSlide{0%{top:-50px;opacity:0}100%{top:60px;opacity:1}}';
+  document.head.appendChild(s);})();
+// Lucky Spin button — start ekranında
+setTimeout(()=>{
+  if(totalGames>=2){
+    showAchieveToast('🎰','ŞANSLİ SPIN!','Reklam izlə → Böyük ödül qazan!');
+  }
+},5000);
+// Streak korunması mesajı — "itirəcəksən" qorxusu
+setTimeout(()=>{
+  const streak=parseInt(localStorage.getItem('ds4_daystreak')||'0');
+  if(streak>=3&&state!=='playing'){
+    showFomoBanner('🔥 '+streak+' GÜNLÜK SERIYA! İtirmə — bu gün oyna!');
+  }
+},8000);
 </script>
 </body>
 </html>
