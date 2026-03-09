@@ -144,7 +144,7 @@ canvas{display:block;width:100%;height:100%;}
 #gameOverScreen{background:rgba(2,2,8,0.97);display:none;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
 #shopScreen,#livesScreen,#langScreen,#coinShopScreen,
 #weapGuideScreen,#prizeScreen,#lbScreen,#achieveScreen,#referScreen,
-#missScreen,#inviteScreen{
+#missScreen,#inviteScreen,#spinScreen{
   background:rgba(3,3,10,0.98);display:none;
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
 
@@ -662,6 +662,7 @@ canvas{display:block;width:100%;height:100%;}
       <button class="smBtn" style="margin-top:0;font-size:14px;padding:12px 18px;color:#44ffaa;border-color:rgba(68,255,170,0.3);" id="lbBtnS">🏅 Top 100</button>
     </div>
     <div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;justify-content:center;">
+      <button class="smBtn" style="margin-top:0;font-size:14px;padding:12px 18px;color:#ffd060;border-color:rgba(255,208,96,0.35);background:rgba(255,208,96,0.06);" onclick="openSpinScreen()">🎰 Şanslı Spin</button>
       <button class="smBtn" style="margin-top:0;font-size:14px;padding:12px 18px;color:var(--neon);border-color:rgba(0,245,212,0.3);" onclick="openMiss()">🎯 Missiyalar</button>
       <button class="smBtn" style="margin-top:0;font-size:14px;padding:12px 18px;color:var(--hot);border-color:rgba(255,45,120,0.3);" onclick="openInvite()">🤝 Dost Dəvət Et</button>
       <button class="smBtn" style="margin-top:0;font-size:14px;padding:12px 18px;color:#aabbff;border-color:rgba(170,187,255,0.25);" onclick="openSocialShare()">📤 Paylaş</button>
@@ -831,6 +832,45 @@ canvas{display:block;width:100%;height:100%;}
       <div class="pmsVal" id="pmsVal">0</div>
     </div>
     <button class="closeBtn" id="closePrizeBtn">← Geri</button>
+  </div>
+
+  <!-- ═══ LUCKY SPIN SCREEN ═══ -->
+  <div id="spinScreen" class="screen" style="display:none;background:rgba(3,3,12,0.98);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:#ffd060;letter-spacing:4px;text-shadow:0 0 30px rgba(255,208,96,0.7);margin-bottom:2px;">🎰 ŞANSLİ SPIN</div>
+    <div style="font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:4px;font-weight:700;margin-bottom:6px;">FIRL · QAZAN · ZƏFƏRİ ƏL</div>
+
+    <!-- Cooldown info -->
+    <div id="spinCooldownInfo" style="font-size:10px;color:rgba(255,208,96,0.5);letter-spacing:2px;font-weight:700;margin-bottom:8px;"></div>
+
+    <!-- Wheel wrapper -->
+    <div style="position:relative;width:300px;height:300px;flex-shrink:0;">
+      <!-- Pointer -->
+      <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);z-index:10;font-size:28px;filter:drop-shadow(0 2px 8px rgba(255,208,96,0.9));">▼</div>
+      <canvas id="spinCanvas" width="300" height="300" style="border-radius:50%;box-shadow:0 0 40px rgba(255,208,96,0.25),0 0 80px rgba(92,107,255,0.15);"></canvas>
+      <!-- Center cap -->
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;background:radial-gradient(circle,#fff 0%,#ccc 100%);border:3px solid rgba(255,255,255,0.3);box-shadow:0 0 20px rgba(255,255,255,0.4);display:flex;align-items:center;justify-content:center;font-size:20px;z-index:5;">⭐</div>
+    </div>
+
+    <!-- Prize display -->
+    <div id="spinPrizeBox" style="margin-top:10px;min-height:44px;display:flex;align-items:center;justify-content:center;">
+      <div id="spinPrizeTxt" style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#fff;letter-spacing:2px;opacity:0;transition:all 0.4s;text-shadow:0 0 20px rgba(255,208,96,0.8);"></div>
+    </div>
+
+    <!-- Spin button -->
+    <button id="spinBtn" onclick="doSpin()" style="
+      background:linear-gradient(135deg,#ffd060,#ff8800);
+      border:none;color:#1a0800;font-family:'Bebas Neue',sans-serif;
+      font-size:26px;letter-spacing:4px;padding:14px 52px;border-radius:60px;
+      cursor:pointer;box-shadow:0 8px 30px rgba(255,180,0,0.5);
+      transition:all 0.15s;margin-top:4px;
+    ">🎰 FIRLA!</button>
+
+    <!-- Spin count -->
+    <div style="font-size:10px;color:rgba(255,255,255,0.2);letter-spacing:2px;margin-top:8px;font-weight:700;">
+      Gündəlik spin: <span id="spinCountDisp" style="color:rgba(255,208,96,0.6);">3</span> qalır
+    </div>
+
+    <button class="closeBtn" style="margin-top:8px;" onclick="closeSpinScreen()">← Geri</button>
   </div>
 
   <!-- LEADERBOARD -->
@@ -1739,8 +1779,7 @@ function closeShop(){hide('shopScreen');if(dead)show('gameOverScreen');else show
 
 // ── COUNTDOWN ──
 function startCD(){
-  ['startScreen','gameOverScreen','livesScreen','shopScreen','langScreen','coinShopScreen','weapGuideScreen','prizeScreen','lbScreen'].forEach(hide);
-  // Reklam: hər 3. oyunda göstər
+  ['startScreen','gameOverScreen','livesScreen','shopScreen','langScreen','coinShopScreen','weapGuideScreen','prizeScreen','lbScreen','spinScreen'].forEach(hide);
   const gamesPlayed=parseInt(localStorage.getItem('ds4_games')||'0');
   const shouldShowAd=(gamesPlayed%3===0&&gamesPlayed>0)||_pendingAdOnNextDeath;
   _pendingAdOnNextDeath=false;
@@ -1758,7 +1797,7 @@ function startCD(){
 
 // ── RESUME GAME (can aldıqdan sonra — oyun qaldığı yerdən davam edir) ──
 function resumeCD(){
-  ['startScreen','gameOverScreen','livesScreen','shopScreen','langScreen','coinShopScreen','weapGuideScreen','prizeScreen','lbScreen'].forEach(hide);
+  ['startScreen','gameOverScreen','livesScreen','shopScreen','langScreen','coinShopScreen','weapGuideScreen','prizeScreen','lbScreen','spinScreen'].forEach(hide);
   const cds=document.getElementById('cdScreen');cds.style.display='flex';
   let n=3;setText('cdNum',n);
   const iv=setInterval(()=>{
@@ -2352,64 +2391,228 @@ function showFomoBanner(msg){
   setTimeout(()=>{if(b.parentNode)b.remove();},8000);
 }
 
-// Lucky Spin — gözlənilməz mükafat (variable reward)
-function showLuckySpin(){
+// ═══════════════════════════════════════════
+// REAL LUCKY SPIN — Visual Wheel System
+// ═══════════════════════════════════════════
+
+const SPIN_SEGMENTS = [
+  { label:'💰 +150',   type:'coin',   val:150,  color:'#1a1a3e', glow:'#5c6bff', weight:18 },
+  { label:'⚡ +2 Lazer',type:'laser', val:2,    color:'#001a14', glow:'#00f5d4', weight:14 },
+  { label:'💰 +300',   type:'coin',   val:300,  color:'#1a0a2e', glow:'#cc44ff', weight:12 },
+  { label:'🔫 +3 Güllə',type:'bullet',val:3,    color:'#1a0a00', glow:'#ff8800', weight:12 },
+  { label:'❤️ +1 Can', type:'life',   val:1,    color:'#1a0010', glow:'#ff2d78', weight:10 },
+  { label:'🛡️ +2 Qalxan',type:'shield',val:2,  color:'#001520', glow:'#00aaff', weight:10 },
+  { label:'💎 +800',   type:'coin',   val:800,  color:'#0a0020', glow:'#aa44ff', weight:6  },
+  { label:'🚀 +3 Raket',type:'rocket',val:3,    color:'#1a1000', glow:'#ffcc00', weight:6  },
+  { label:'💣 +2 Bomba',type:'bomb',  val:2,    color:'#0a0000', glow:'#ff4422', weight:5  },
+  { label:'👑 +1500',  type:'coin',   val:1500, color:'#100a00', glow:'#ffd060', weight:4  },
+  { label:'🌟 MEGA',   type:'mega',   val:0,    color:'#000810', glow:'#00f5d4', weight:2  },
+  { label:'❤️ +2 Can', type:'life',   val:2,    color:'#1a0018', glow:'#ff2d78', weight:1  },
+];
+
+// Build weighted pool
+const SPIN_POOL = [];
+SPIN_SEGMENTS.forEach((seg,i)=>{ for(let w=0;w<seg.weight;w++) SPIN_POOL.push(i); });
+
+const SPIN_DAILY_MAX = 3;
+const SPIN_COOLDOWN_KEY = 'ds4_spin_data';
+
+function getSpinData(){
+  try{
+    const d=JSON.parse(localStorage.getItem(SPIN_COOLDOWN_KEY)||'{}');
+    const today=new Date().toDateString();
+    if(d.date!==today){ d.date=today; d.count=0; }
+    return d;
+  }catch(e){ return {date:new Date().toDateString(),count:0}; }
+}
+function saveSpinData(d){ localStorage.setItem(SPIN_COOLDOWN_KEY,JSON.stringify(d)); }
+
+let _spinAngle = 0;        // current wheel rotation
+let _spinAnimId = null;    // rAF handle
+let _spinning = false;
+
+function openSpinScreen(){
   if(state==='playing')return;
+  ['startScreen','gameOverScreen','shopScreen'].forEach(hide);
+  drawSpinWheel(_spinAngle);
+  updateSpinUI();
+  show('spinScreen');
+}
 
-  // Hədiyyə hovuzu — çox müxtəlif, bəziləri nadir
-  const allPrizes=[
-    // Adi hədiyyələr (tez-tez)
-    {label:'💰 +150 COIN',    type:'coin',  val:150,  rare:false, emoji:'💰'},
-    {label:'💰 +300 COIN',    type:'coin',  val:300,  rare:false, emoji:'💰'},
-    {label:'⚡ +2 LAZER',     type:'laser', val:2,    rare:false, emoji:'⚡'},
-    {label:'🛡️ +3 QALXAN',   type:'shield',val:3,    rare:false, emoji:'🛡️'},
-    {label:'🔫 +3 GÜLLƏ',     type:'bullet',val:3,    rare:false, emoji:'🔫'},
-    {label:'❤️ +1 CAN',       type:'life',  val:1,    rare:false, emoji:'❤️'},
-    // Nadir hədiyyələr (ara-sıra)
-    {label:'💎 +800 COIN',    type:'coin',  val:800,  rare:true,  emoji:'💎'},
-    {label:'🚀 +5 RAKET',     type:'rocket',val:5,    rare:true,  emoji:'🚀'},
-    {label:'❤️ +2 CAN',       type:'life',  val:2,    rare:true,  emoji:'❤️'},
-    {label:'💣 +4 BOMBA',     type:'bomb',  val:4,    rare:true,  emoji:'💣'},
-    // Çox nadir (bəxti olanlar üçün)
-    {label:'👑 +2000 COIN',   type:'coin',  val:2000, rare:true,  emoji:'👑'},
-    {label:'🌟 +3 CAN + 500💰',type:'mega', val:0,    rare:true,  emoji:'🌟'},
-  ];
+function closeSpinScreen(){
+  hide('spinScreen');
+  if(dead) show('gameOverScreen'); else show('startScreen');
+}
 
-  // Çəkilərə görə seç: adi 70%, nadir 25%, çox nadir 5%
-  const rnd=Math.random();
-  let pool;
-  if(rnd<0.70)      pool=allPrizes.filter(p=>!p.rare);
-  else if(rnd<0.95) pool=allPrizes.filter(p=>p.rare&&p.type!=='mega');
-  else              pool=allPrizes.filter(p=>p.type==='mega');
-  const prize=pool[Math.floor(Math.random()*pool.length)];
-
-  // Ara-sıra reklam (hər 3 spindən 1-i reklam tələb edir)
-  const spinCount=parseInt(localStorage.getItem('ds4_spins')||'0');
-  localStorage.setItem('ds4_spins',spinCount+1);
-  const needsAd=(spinCount%3===2); // hər 3-cü spin
-
-  function giveReward(){
-    if(prize.type==='coin')  { coins+=prize.val; saveAll(); rui(); }
-    if(prize.type==='laser') { const inv=JSON.parse(localStorage.getItem('ds4_inv')||'{}'); inv.laser=(inv.laser||0)+prize.val; localStorage.setItem('ds4_inv',JSON.stringify(inv)); rui(); }
-    if(prize.type==='shield'){ const inv=JSON.parse(localStorage.getItem('ds4_inv')||'{}'); inv.shield=(inv.shield||0)+prize.val; localStorage.setItem('ds4_inv',JSON.stringify(inv)); rui(); }
-    if(prize.type==='bullet'){ const inv=JSON.parse(localStorage.getItem('ds4_inv')||'{}'); inv.bullet=(inv.bullet||0)+prize.val; localStorage.setItem('ds4_inv',JSON.stringify(inv)); rui(); }
-    if(prize.type==='rocket'){ const inv=JSON.parse(localStorage.getItem('ds4_inv')||'{}'); inv.rocket=(inv.rocket||0)+prize.val; localStorage.setItem('ds4_inv',JSON.stringify(inv)); rui(); }
-    if(prize.type==='bomb')  { const inv=JSON.parse(localStorage.getItem('ds4_inv')||'{}'); inv.bomb=(inv.bomb||0)+prize.val; localStorage.setItem('ds4_inv',JSON.stringify(inv)); rui(); }
-    if(prize.type==='life')  { lives=Math.min(5,(lives||0)+prize.val); saveAll(); rui(); updateLives(); }
-    if(prize.type==='mega')  { coins+=500; lives=Math.min(5,(lives||0)+3); saveAll(); rui(); updateLives(); }
-    showAchieveToast(prize.emoji,'QAZANDIN!',prize.label);
-  }
-
-  if(needsAd){
-    // Bu spinde reklam tələb olunur
-    showAchieveToast('🎰','ŞANSLİ SPIN!',prize.label+' — Reklam izlə!');
-    adSim(()=>{ giveReward(); trackAdShown(); });
+function updateSpinUI(){
+  const d=getSpinData();
+  const left=Math.max(0, SPIN_DAILY_MAX - d.count);
+  document.getElementById('spinCountDisp').textContent=left;
+  const cd=document.getElementById('spinCooldownInfo');
+  if(left<=0){
+    // Sabah reset olacaq
+    const now=new Date();
+    const midnight=new Date(); midnight.setHours(24,0,0,0);
+    const ms=midnight-now;
+    const h=Math.floor(ms/3600000),m=Math.floor((ms%3600000)/60000);
+    cd.textContent=`Sabah yenilənir: ${h}s ${m}d`;
+    document.getElementById('spinBtn').style.opacity='0.4';
+    document.getElementById('spinBtn').style.pointerEvents='none';
   } else {
-    // Birbaşa hədiyyə ver
-    showAchieveToast('🎁','HƏDİYYƏ!',prize.label+' — Pulsuz!');
-    setTimeout(giveReward, 800);
+    cd.textContent='';
+    document.getElementById('spinBtn').style.opacity='1';
+    document.getElementById('spinBtn').style.pointerEvents='all';
   }
 }
+
+function drawSpinWheel(angle){
+  const canvas=document.getElementById('spinCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const cx=150,cy=150,r=144;
+  const n=SPIN_SEGMENTS.length;
+  const arc=Math.PI*2/n;
+
+  ctx.clearRect(0,0,300,300);
+
+  // Outer glow ring
+  const grad=ctx.createRadialGradient(cx,cy,r-8,cx,cy,r+2);
+  grad.addColorStop(0,'rgba(255,208,96,0.25)');
+  grad.addColorStop(1,'transparent');
+  ctx.beginPath();ctx.arc(cx,cy,r+4,0,Math.PI*2);ctx.fillStyle=grad;ctx.fill();
+
+  SPIN_SEGMENTS.forEach((seg,i)=>{
+    const startA = angle + i*arc;
+    const endA   = startA + arc;
+
+    // Segment fill
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,startA,endA);
+    ctx.closePath();
+    ctx.fillStyle=seg.color;
+    ctx.fill();
+
+    // Glow border
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,startA,endA);
+    ctx.closePath();
+    ctx.strokeStyle=seg.glow+'66';
+    ctx.lineWidth=1.5;
+    ctx.stroke();
+
+    // Inner arc highlight
+    ctx.beginPath();
+    ctx.arc(cx,cy,r-4,startA+0.04,endA-0.04);
+    ctx.strokeStyle=seg.glow+'44';
+    ctx.lineWidth=3;
+    ctx.stroke();
+
+    // Label text
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.rotate(startA + arc/2);
+    ctx.textAlign='right';
+    ctx.font='bold 11px Space Grotesk, sans-serif';
+    ctx.fillStyle='#fff';
+    ctx.shadowColor=seg.glow;
+    ctx.shadowBlur=8;
+    ctx.fillText(seg.label, r-8, 4);
+    ctx.restore();
+  });
+
+  // Inner dark circle
+  ctx.beginPath();ctx.arc(cx,cy,28,0,Math.PI*2);
+  ctx.fillStyle='#04040a';ctx.fill();
+  ctx.beginPath();ctx.arc(cx,cy,28,0,Math.PI*2);
+  ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=2;ctx.stroke();
+}
+
+function doSpin(){
+  if(_spinning)return;
+  const d=getSpinData();
+  if(d.count>=SPIN_DAILY_MAX){ updateSpinUI(); return; }
+
+  // Pick winning segment BEFORE animation
+  const winIdx = SPIN_POOL[Math.floor(Math.random()*SPIN_POOL.length)];
+  const seg = SPIN_SEGMENTS[winIdx];
+
+  _spinning=true;
+  document.getElementById('spinBtn').style.opacity='0.4';
+  document.getElementById('spinBtn').style.pointerEvents='none';
+  document.getElementById('spinPrizeTxt').style.opacity='0';
+
+  const n=SPIN_SEGMENTS.length;
+  const arc=Math.PI*2/n;
+
+  // Target angle: spin at least 5 full rotations, land on winIdx
+  // Pointer is at top (–π/2). Segment centre = winIdx*arc + arc/2
+  // We need that centre to be at –π/2 (top)
+  const segCenter = winIdx * arc + arc/2;
+  const targetOffset = -Math.PI/2 - segCenter;
+  const fullRotations = (5 + Math.floor(Math.random()*4)) * Math.PI*2;
+  const targetAngle = _spinAngle + fullRotations + ((targetOffset - _spinAngle) % (Math.PI*2));
+
+  const startAngle = _spinAngle;
+  const delta = targetAngle - startAngle;
+  const duration = 4000 + Math.random()*1200; // 4-5.2s
+  const startTime = performance.now();
+
+  function easeOut(t){ return 1 - Math.pow(1-t, 4); }
+
+  function frame(now){
+    const t = Math.min((now-startTime)/duration, 1);
+    _spinAngle = startAngle + delta * easeOut(t);
+    drawSpinWheel(_spinAngle);
+
+    if(t<1){
+      _spinAnimId=requestAnimationFrame(frame);
+    } else {
+      _spinAngle = targetAngle;
+      drawSpinWheel(_spinAngle);
+      _spinning=false;
+
+      // Update spin count
+      d.count++;
+      saveSpinData(d);
+      updateSpinUI();
+
+      // Show prize
+      const pt=document.getElementById('spinPrizeTxt');
+      pt.textContent=seg.label;
+      pt.style.color=seg.glow;
+      pt.style.textShadow=`0 0 24px ${seg.glow}`;
+      pt.style.opacity='1';
+
+      // Vibrate
+      if(navigator.vibrate)navigator.vibrate([60,30,120]);
+
+      // Give reward after short delay
+      setTimeout(()=>{
+        giveSpinReward(seg);
+        document.getElementById('spinBtn').style.opacity='1';
+        document.getElementById('spinBtn').style.pointerEvents='all';
+      }, 600);
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+function giveSpinReward(seg){
+  if(seg.type==='coin')  { coins+=seg.val; saveAll(); rui(); }
+  else if(seg.type==='laser') { ammo.laser=(ammo.laser||0)+seg.val; localStorage.setItem('ds4_ammo',JSON.stringify(ammo)); rui(); }
+  else if(seg.type==='shield'){ ammo.shield=(ammo.shield||0)+seg.val; localStorage.setItem('ds4_ammo',JSON.stringify(ammo)); rui(); }
+  else if(seg.type==='bullet'){ ammo.bullet=(ammo.bullet||0)+seg.val; localStorage.setItem('ds4_ammo',JSON.stringify(ammo)); rui(); }
+  else if(seg.type==='rocket'){ ammo.rocket=(ammo.rocket||0)+seg.val; localStorage.setItem('ds4_ammo',JSON.stringify(ammo)); rui(); }
+  else if(seg.type==='bomb')  { ammo.bomb=(ammo.bomb||0)+seg.val; localStorage.setItem('ds4_ammo',JSON.stringify(ammo)); rui(); }
+  else if(seg.type==='life')  { lives=Math.min(5,(lives||0)+seg.val); saveAll(); rui(); if(typeof updateLives==='function')updateLives(); }
+  else if(seg.type==='mega')  { coins+=500; lives=Math.min(5,(lives||0)+2); saveAll(); rui(); if(typeof updateLives==='function')updateLives(); }
+  showAchieveToast(seg.label.split(' ')[0],'QAZANDIN!',seg.label);
+}
+
+// Legacy wrapper — keep backward compat (game-over trigger)
+function showLuckySpin(){ openSpinScreen(); }
 
 
 function spawnBall(){
