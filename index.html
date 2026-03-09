@@ -129,7 +129,9 @@ canvas{display:block;width:100%;height:100%;}
 
 /* ══ SCREENS ══ */
 .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;pointer-events:all;z-index:20;overflow-y:auto;}
+  justify-content:flex-start;pointer-events:all;z-index:20;overflow-y:auto;
+  padding-top:max(12px,env(safe-area-inset-top));}
+#startScreen{justify-content:flex-start;padding-top:max(14px,env(safe-area-inset-top));}
 
 /* START */
 #startScreen{
@@ -693,6 +695,7 @@ canvas{display:block;width:100%;height:100%;}
       <button id="sfxToggleBtn" class="smBtn" style="margin-top:0;font-size:13px;padding:10px 16px;color:#ffcc88;border-color:rgba(255,204,136,0.3);" onclick="toggleSFX()">🔔 SFX: AÇIQ</button>
     </div>
     <div class="hint" id="startHint">Barmağını sürüşdür · Silah seç · Tap et</div>
+    <div style="height:20px;flex-shrink:0;"></div>
   </div>
 
   <!-- COUNTDOWN -->
@@ -4093,7 +4096,9 @@ function playShieldActivateSound(){
 function loop(ts){
   if(state==='over')return;
   if(lastTime===0)lastTime=ts-16.67;
-  dt=Math.min((ts-lastTime)/16.67,1.5);lastTime=ts;frame++;bgHue=(bgHue+0.4*dt)%360;
+  const rawDt=(ts-lastTime)/16.67;lastTime=ts;
+  // Clamp dt: min 0.5 max 1.0 — prevents slow motion on Firefox/Chrome Android
+  dt=Math.max(0.5,Math.min(rawDt,1.0));frame++;bgHue=(bgHue+0.4*dt)%360;
 
   // clearRect translate-den once, tam canvas boyutunda
   ctx.setTransform(1,0,0,1,0,0);
