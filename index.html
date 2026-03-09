@@ -1508,25 +1508,81 @@ document.getElementById('closePrizeBtn').onclick=()=>{
 
 // ── GAME STATE ──
 let state='start',dead=false;
-let score,lives,combo,comboTimer,frame,level;
-let balls,parts,stars,drops,projs,exps;
-let player,rafId,lastTime;
-let inv,invT;
-let streak,streakMax;
-let shake,shakeT;
+let score=0,lives=3,combo=0,comboTimer=0,frame=0,level=1;
+let balls=[],parts=[],stars=[],drops=[],projs=[],exps=[];
+let player={x:180,y:520,r:17,tx:180,ty:520,trail:[]},rafId=null,lastTime=0;
+let inv=false,invT=0;
+let streak=0,streakMax=12;
+let shake=0,shakeT=0;
 let selWeapon=null;
 let frozenT=0;
+let dt=1; // current frame delta time — set by loop()
 let bgHue=0;
 let rocketAimX=W/2,rocketAimY=100;
 
 // Stars
 stars=[];
-// Tier 1: tiny distant stars (many, dim)
 for(let i=0;i<80;i++) stars.push({x:Math.random()*360,y:Math.random()*640,r:Math.random()*0.7+0.2,spd:Math.random()*0.15+0.04,a:Math.random()*0.4+0.1,tw:Math.random()*Math.PI*2});
-// Tier 2: medium stars
 for(let i=0;i<28;i++) stars.push({x:Math.random()*360,y:Math.random()*640,r:Math.random()*0.8+0.8,spd:Math.random()*0.25+0.08,a:Math.random()*0.55+0.25,tw:Math.random()*Math.PI*2});
-// Tier 3: large sparkle stars
 for(let i=0;i<8;i++) stars.push({x:Math.random()*360,y:Math.random()*640,r:Math.random()*0.7+1.5,spd:Math.random()*0.12+0.05,a:Math.random()*0.65+0.35,tw:Math.random()*Math.PI*2});
+
+// ── KOSMİK OBYEKTLƏR — hər level üçün unikal ──
+// Planetlər
+const PLANETS=[
+  // LVL 1 — mavi-bənövşəyi kiçik planet
+  {x:300,y:100,r:38,c1:'#1a2a6c',c2:'#2d4a8a',ring:false,ringC:'#4466cc',moons:[{a:0,d:58,r:5,c:'#8899cc'}],spots:[]},
+  // LVL 2 — qırmızı alov planeti
+  {x:60,y:150,r:44,c1:'#8b1a00',c2:'#cc3300',ring:false,ringC:null,moons:[],spots:[{a:0.8,d:0.35,r:0.18,c:'rgba(255,100,0,0.5)'}]},
+  // LVL 3 — buzlu mavi qaz nəhəngi + halqa
+  {x:310,y:80,r:50,c1:'#003355',c2:'#0066aa',ring:true,ringC:'rgba(100,200,255,0.35)',moons:[{a:0,d:78,r:6,c:'#aaddff'},{a:2.1,d:92,r:4,c:'#88bbdd'}],spots:[]},
+  // LVL 4 — yaşıl zəhərli planet
+  {x:50,y:200,r:36,c1:'#0a3a0a',c2:'#1a7a1a',ring:false,ringC:null,moons:[{a:0,d:55,r:4,c:'#44ff88'}],spots:[{a:1.2,d:0.3,r:0.2,c:'rgba(0,255,80,0.4)'}]},
+  // LVL 5 — qızılı nəhəng
+  {x:290,y:120,r:55,c1:'#7a4400',c2:'#cc8800',ring:true,ringC:'rgba(255,180,0,0.3)',moons:[{a:0,d:85,r:7,c:'#ffcc44'},{a:3.5,d:100,r:4,c:'#ffaa22'}],spots:[{a:0.5,d:0.25,r:0.22,c:'rgba(255,220,0,0.35)'}]},
+  // LVL 6 — bənövşəyi plazma
+  {x:55,y:130,r:42,c1:'#2a0044',c2:'#6600cc',ring:true,ringC:'rgba(180,0,255,0.4)',moons:[{a:0,d:68,r:5,c:'#cc44ff'}],spots:[]},
+  // LVL 7 — qara dəlik (orbit disk ilə)
+  {x:295,y:95,r:35,c1:'#050508',c2:'#0a0a15',ring:true,ringC:'rgba(100,0,255,0.5)',moons:[],spots:[],blackHole:true},
+  // LVL 8 — sarı nüvə ulduzu
+  {x:60,y:160,r:48,c1:'#554400',c2:'#aaaa00',ring:false,ringC:null,moons:[{a:0,d:72,r:6,c:'#ffff44'},{a:2.0,d:88,r:4,c:'#ffdd22'},{a:4.2,d:104,r:3,c:'#ffbb00'}],spots:[{a:0,d:0.2,r:0.3,c:'rgba(255,255,0,0.3)'}]},
+  // LVL 9 — ejdaha qırmızı nəhəng
+  {x:300,y:110,r:60,c1:'#550000',c2:'#aa1100',ring:true,ringC:'rgba(255,50,0,0.35)',moons:[{a:0,d:92,r:8,c:'#ff6644'}],spots:[{a:0.3,d:0.35,r:0.18,c:'rgba(255,0,0,0.45)'},{a:2.8,d:0.45,r:0.12,c:'rgba(200,0,0,0.35)'}]},
+  // LVL 10 — feniks turunc-ağ
+  {x:55,y:100,r:52,c1:'#552200',c2:'#ff6600',ring:true,ringC:'rgba(255,150,0,0.4)',moons:[{a:0,d:80,r:7,c:'#ffaa44'},{a:3.8,d:95,r:5,c:'#ff8822'}],spots:[]},
+  // LVL 11 — kristal cyan planet
+  {x:300,y:90,r:46,c1:'#002233',c2:'#006688',ring:true,ringC:'rgba(0,255,255,0.4)',moons:[{a:0,d:72,r:6,c:'#00ffff'},{a:2.3,d:88,r:4,c:'#44ddff'}],spots:[]},
+  // LVL 12 — günəş alov topu
+  {x:58,y:140,r:58,c1:'#664400',c2:'#ffaa00',ring:false,ringC:null,moons:[],spots:[{a:0,d:0.15,r:0.35,c:'rgba(255,255,100,0.4)'},{a:1.8,d:0.3,r:0.2,c:'rgba(255,200,0,0.3)'}],star:true},
+  // LVL 13 — tornado fırtına planeti
+  {x:295,y:115,r:50,c1:'#001133',c2:'#2244aa',ring:true,ringC:'rgba(100,180,255,0.35)',moons:[{a:0,d:78,r:5,c:'#6699ff'},{a:2.5,d:94,r:4,c:'#4477dd'},{a:4.8,d:110,r:3,c:'#2255bb'}],spots:[{a:0.6,d:0.4,r:0.15,c:'rgba(100,150,255,0.4)'}]},
+  // LVL 14 — kaos çox rəngli
+  {x:55,y:120,r:44,c1:'#2a0022',c2:'#880066',ring:true,ringC:'rgba(255,0,255,0.45)',moons:[{a:0,d:70,r:6,c:'#ff44ff'},{a:3.2,d:86,r:4,c:'#cc00cc'}],spots:[],chaos:true},
+  // LVL 15 — ilahi ağ nəhəng ulduz
+  {x:295,y:80,r:65,c1:'#333300',c2:'#ffffaa',ring:true,ringC:'rgba(255,255,200,0.5)',moons:[{a:0,d:98,r:8,c:'#ffffcc'},{a:2.1,d:115,r:5,c:'#ffeeaa'},{a:4.0,d:128,r:4,c:'#ffdd88'}],spots:[],star:true},
+  // LVL 16 — ulduz nəhəngi parlaq sarı
+  {x:55,y:100,r:70,c1:'#665500',c2:'#ffff44',ring:true,ringC:'rgba(255,255,100,0.45)',moons:[{a:0,d:108,r:9,c:'#ffff88'}],spots:[],star:true},
+  // LVL 17 — tanrı qırmızı-ağ neytrino ulduzu
+  {x:295,y:100,r:55,c1:'#220000',c2:'#ff0044',ring:true,ringC:'rgba(255,255,255,0.6)',moons:[{a:0,d:86,r:7,c:'#ffccdd'},{a:2.7,d:100,r:5,c:'#ff88aa'},{a:5.1,d:118,r:4,c:'#ff4466'}],spots:[{a:0,d:0.1,r:0.4,c:'rgba(255,255,255,0.5)'}]},
+  // LVL 18 — olimp göy+ağ qaz buludu
+  {x:50,y:130,r:62,c1:'#001133',c2:'#aabbff',ring:true,ringC:'rgba(200,210,255,0.5)',moons:[{a:0,d:96,r:8,c:'#ccddff'},{a:2.3,d:112,r:6,c:'#aabbee'},{a:4.5,d:128,r:5,c:'#8899cc'}],spots:[{a:0.4,d:0.3,r:0.18,c:'rgba(200,220,255,0.35)'}]},
+  // LVL 19 — sonsuz ağ sinqulyarlıq
+  {x:180,y:100,r:80,c1:'#111111',c2:'#ffffff',ring:true,ringC:'rgba(255,255,255,0.7)',moons:[{a:0,d:120,r:10,c:'#ffffff'},{a:1.57,d:140,r:7,c:'#eeeeff'},{a:3.14,d:155,r:5,c:'#ccccff'},{a:4.71,d:168,r:4,c:'#aaaadd'}],spots:[],singularity:true},
+];
+
+// Qalaktika spiralları (bəzi levellər üçün)
+const GALAXY_LEVELS=[1,5,8,12,16,19]; // bu levellər qalaktika göstərir
+
+// Asteroyd kəməri
+const ASTEROIDS=[];
+for(let i=0;i<22;i++) ASTEROIDS.push({
+  a:Math.random()*Math.PI*2, // açı
+  spd:(Math.random()*0.004+0.002)*(Math.random()<0.5?1:-1),
+  d:Math.random()*25+15, // mərkəzdən uzaqlıq (planet-relative)
+  r:Math.random()*2.5+0.8,
+  a2:Math.random()*0.6,
+  idx:Math.floor(Math.random()*19) // hansı levelin planeti
+});
+let _lastBgLevel=-1; // arxa planın son render edildiyi level (keş)
 
 // ── LEVEL CONFIGS ──
 // BG changes every level smoothly via hue shift
@@ -1873,24 +1929,25 @@ function initPlayer(){player={x:180,y:520,r:17,tx:180,ty:520,trail:[]};}
 // Zona 5 (19):   Praktiki mümkünsüz → heç kim çatmır
 function calcLevel(sc){
   if(sc<18)   return 1;
-  if(sc<50)   return 2;   // +32
-  if(sc<100)  return 3;   // +50
-  if(sc<165)  return 4;   // +65
-  if(sc<255)  return 5;   // +90
-  if(sc<380)  return 6;   // +125
-  if(sc<550)  return 7;   // +170
-  if(sc<760)  return 8;   // +210
-  if(sc<1020) return 9;   // +260
-  if(sc<1340) return 10;  // +320
-  if(sc<1730) return 11;  // +390
-  if(sc<2200) return 12;  // +470
-  if(sc<2780) return 13;  // +580
-  if(sc<3500) return 14;  // +720
-  if(sc<4400) return 15;  // +900
-  if(sc<5600) return 16;  // +1200
-  if(sc<7200) return 17;  // +1600
-  if(sc<9500) return 18;  // +2300 — demək olar mümkünsüz
-  return 19;              // 9500+ — $50 mükafat təhlükəsizdir
+  if(sc<50)   return 2;
+  if(sc<100)  return 3;
+  if(sc<165)  return 4;
+  if(sc<255)  return 5;
+  if(sc<380)  return 6;
+  if(sc<550)  return 7;
+  if(sc<760)  return 8;
+  if(sc<1020) return 9;
+  if(sc<1340) return 10;
+  if(sc<1730) return 11;
+  if(sc<2200) return 12;
+  if(sc<2780) return 13;
+  if(sc<3500) return 14;
+  if(sc<4400) return 15;
+  if(sc<5600) return 16;
+  if(sc<7200) return 17;
+  if(sc<9500) return 18;
+  if(sc<95000) return 18; // LVL 18-da qalır — 95000 xal lazımdır
+  return 19;              // 95000+ xal — $50 mükafat tamamilə təhlükəsizdir
 }
 
 // ── START GAME ──
@@ -2014,160 +2071,239 @@ function getAudioCtx(){
   return _audioCtx;
 }
 
-// ── FLAPPY BIRD ÜSLUBLU CHİPTUNE BGM ──
-// Şən, ritmik, 8-bit adventure — oyunçunu energetik saxlayır
+// ── HƏR LEVEL ÜÇÜN UNİKAL KOSMİK MUSİQİ ──
+// Level dəyişdikdə musiqi avtomatik uyğunlaşır
+
+// Hər levelin musiqi konfiqurasiyas
+const BGM_LEVELS = [
+  // LVL 1 — KOSMOZ: Super Mario / Tetris kimi tanış, şən 8-bit başlanğıc
+  // Psixologiya: oyunçunu "bu oyun əyləncəlidir" hissi ilə bağlayır
+  { bpm:120, key:[523,587,659,698,784,880], bass:[130,165,196,220], waveform:'square', bassType:'triangle', arpSpeed:0.18, arpPattern:[0,2,4,2,0,3,4,3], drumIntensity:0.5, filterFreq:1200, harmony:[1,1.5,2] },
+  // LVL 2 — ALOV: Space Invaders / Galaga — nostalgik arcade tension
+  // Psixologiya: "köhnə oyunlar" hissi, xatirə, istilik
+  { bpm:110, key:[440,494,523,587,659,784], bass:[110,123,147,165], waveform:'square', bassType:'square', arpSpeed:0.16, arpPattern:[0,1,3,1,0,2,3,2], drumIntensity:0.65, filterFreq:1000, harmony:[1,2] },
+  // LVL 3 — BUZLAR: Zelda dungeon — sirr, kəşf, gözləntə
+  // Psixologiya: "nə olacaq?" — maraq, oyuna bağlanma
+  { bpm:95,  key:[293,330,370,392,440,494], bass:[73,82,98,110], waveform:'triangle', bassType:'sine', arpSpeed:0.22, arpPattern:[0,4,2,4,0,5,3,4], drumIntensity:0.4, filterFreq:700, harmony:[1,1.33,2] },
+  // LVL 4 — ZƏHƏR: Castlevania — qaranlıq, gərgin, amma maraqlı
+  // Psixologiya: bir az qorxu + məğlub olmaq istəməmək
+  { bpm:108, key:[277,311,349,415,466,523], bass:[69,78,87,104], waveform:'sawtooth', bassType:'triangle', arpSpeed:0.17, arpPattern:[0,2,5,3,0,4,5,2], drumIntensity:0.7, filterFreq:900, harmony:[1,1.5] },
+  // LVL 5 — QIZIL: Super Mario World overworld — zəfər, xoşbəxtlik, enerji
+  // Psixologiya: "mən bacardım!" — dopamin, oyuna dönmək istəyi
+  { bpm:130, key:[523,659,784,880,1047,1175], bass:[130,165,196,220], waveform:'square', bassType:'triangle', arpSpeed:0.14, arpPattern:[0,2,4,5,4,2,4,0], drumIntensity:0.85, filterFreq:1500, harmony:[1,1.5,2,3] },
+  // LVL 6 — PLAZMA: Sonic the Hedgehog — sürət, hərəkət, azadlıq
+  // Psixologiya: "daha sürətli, daha güclü" — adrenalin
+  { bpm:138, key:[587,659,740,880,988,1047], bass:[147,165,185,220], waveform:'sawtooth', bassType:'sawtooth', arpSpeed:0.12, arpPattern:[0,3,5,3,1,4,5,4], drumIntensity:0.9, filterFreq:1800, harmony:[1,2,3] },
+  // LVL 7 — QARA DEŞİK: Final Fantasy boss — epik, qaranlıq, böyük
+  // Psixologiya: "bu çətin, amma bacarmaq istəyirəm"
+  { bpm:100, key:[233,261,277,311,349,415], bass:[58,65,69,78], waveform:'sawtooth', bassType:'sawtooth', arpSpeed:0.19, arpPattern:[0,0,2,1,4,3,2,0], drumIntensity:0.95, filterFreq:800, harmony:[1,1.25,1.5] },
+  // LVL 8 — NÜVƏSİ: Mega Man — ritmik, elektrik, mübarizə
+  // Psixologiya: Mega Man nostalji — "hər şeyi alt-üst edəcəm"
+  { bpm:140, key:[440,494,523,659,784,880], bass:[110,123,130,165], waveform:'square', bassType:'square', arpSpeed:0.11, arpPattern:[0,4,2,5,4,2,0,3], drumIntensity:1.0, filterFreq:2200, harmony:[1,2,4] },
+  // LVL 9 — EJDAHA: Doom / Quake — ağır metal ritm, intensiv
+  // Psixologiya: "böyük xətər var — amma mən qalib gələcəm"
+  { bpm:144, key:[220,247,261,311,370,415], bass:[55,62,65,78], waveform:'sawtooth', bassType:'sawtooth', arpSpeed:0.10, arpPattern:[0,2,4,5,4,2,1,0], drumIntensity:1.0, filterFreq:2500, harmony:[1,1.5,2] },
+  // LVL 10 — FENİKS: Street Fighter victory — "yarıya çatdım!" zəfər hissi
+  // Psixologiya: güclü nostalji + "daha irəli!" motivasiya
+  { bpm:125, key:[523,659,784,880,1047,1175], bass:[130,165,196,220], waveform:'square', bassType:'triangle', arpSpeed:0.13, arpPattern:[0,2,4,5,4,5,4,2], drumIntensity:0.95, filterFreq:2000, harmony:[1,1.5,2,3] },
+  // LVL 11 — KRİSTAL: Chrono Trigger / Secret of Mana — emosional, gözəl
+  // Psixologiya: hüzn + xoşbəxtlik qarışığı, oyunda qalmaq istəyi
+  { bpm:105, key:[659,740,784,880,988,1047], bass:[165,185,196,220], waveform:'triangle', bassType:'sine', arpSpeed:0.16, arpPattern:[0,3,5,4,2,4,5,0], drumIntensity:0.65, filterFreq:3500, harmony:[1,1.25,2] },
+  // LVL 12 — GÜNƏŞ: Donkey Kong Country — epik adventure, doğu hissi
+  // Psixologiya: "mən böyük bir macəradayam"
+  { bpm:118, key:[370,415,494,523,659,784], bass:[92,104,123,130], waveform:'sawtooth', bassType:'sawtooth', arpSpeed:0.13, arpPattern:[0,2,4,2,5,4,3,0], drumIntensity:1.0, filterFreq:2800, harmony:[1,2,3] },
+  // LVL 13 — TORNADO: Touhou / rhythm game — sürətli, mürəkkəb, çılğın
+  // Psixologiya: "flow state" — oyunçu ritm ilə birləşir
+  { bpm:155, key:[523,587,659,784,880,988], bass:[130,147,165,196], waveform:'sawtooth', bassType:'sawtooth', arpSpeed:0.09, arpPattern:[0,1,3,5,3,1,4,2], drumIntensity:1.0, filterFreq:3200, harmony:[1,2,4] },
+  // LVL 14 — KAOS: undertale / earthbound — qeyri-adi, psixedel, tanımaz
+  // Psixologiya: "nə baş verir?!" — maraq, narahatçılıq
+  { bpm:128, key:[415,466,523,587,659,740], bass:[104,116,130,147], waveform:'sawtooth', bassType:'square', arpSpeed:0.11, arpPattern:[5,0,3,1,4,2,5,3], drumIntensity:1.0, filterFreq:2000, harmony:[1,1.5,2.5] },
+  // LVL 15 — İLAHİ: Final Fantasy epic boss — "bu hər şeydən böyükdür"
+  // Psixologiya: epik böyüklük hissi, oyunda qalmağın vacibliyi
+  { bpm:112, key:[261,329,415,523,659,830], bass:[65,82,104,130], waveform:'square', bassType:'triangle', arpSpeed:0.14, arpPattern:[0,2,4,5,3,5,4,2], drumIntensity:1.0, filterFreq:2200, harmony:[1,1.5,2,3] },
+  // LVL 16 — ULDUZ: Star Wars / epic orchestra feel
+  // Psixologiya: "mən qəhrəmanam!" — ən yüksək özgüvən
+  { bpm:138, key:[293,370,440,523,659,784], bass:[73,92,110,130], waveform:'sawtooth', bassType:'sawtooth', arpSpeed:0.10, arpPattern:[0,3,5,3,4,5,4,0], drumIntensity:1.0, filterFreq:3500, harmony:[1,2,3,4] },
+  // LVL 17 — TANRI: Mortal Kombat / fighting game final — qaranlıq final
+  // Psixologiya: son döyüş siqnalı, "ya qalib, ya məğlub"
+  { bpm:148, key:[220,261,311,370,440,523], bass:[55,65,78,92], waveform:'sawtooth', bassType:'sawtooth', arpSpeed:0.095, arpPattern:[0,1,3,4,5,4,3,1], drumIntensity:1.0, filterFreq:4000, harmony:[1,1.5,2] },
+  // LVL 18 — OLİMP: God of War / epic cinematic — son sınaq
+  // Psixologiya: "bu hər şeyin sonu — $50 artıq görünür"
+  { bpm:155, key:[329,415,523,659,784,988], bass:[82,104,130,165], waveform:'sawtooth', bassType:'sawtooth', arpSpeed:0.088, arpPattern:[0,2,4,5,3,5,4,0], drumIntensity:1.0, filterFreq:5000, harmony:[1,2,3,4] },
+  // LVL 19 — SONSUZ: transcendent, ağ nəfəs, sona çatmaq
+  // Psixologiya: hər şeyin zəfəri — sakit + güclü, "mən bacardım"
+  { bpm:160, key:[659,784,880,1047,1175,1319], bass:[165,196,220,261], waveform:'square', bassType:'square', arpSpeed:0.082, arpPattern:[0,2,5,4,3,5,4,0], drumIntensity:1.0, filterFreq:8000, harmony:[1,1.5,2,3,4] },
+];
+
+let _bgmCurrentLevel = -1;
+
 function startBGM(){
-  const ctx=getAudioCtx();
-  if(!ctx||!_bgmEnabled||_bgmRunning)return;
+  const actx=getAudioCtx();
+  if(!actx||!_bgmEnabled||_bgmRunning)return;
   _bgmRunning=true;
+  _bgmCurrentLevel = -1; // force restart
+  _bgmScheduleNext(actx);
+}
 
-  // Master output with slight compression
-  const master=ctx.createGain();
-  master.gain.value=0.38;
-  const comp=ctx.createDynamicsCompressor();
-  comp.threshold.value=-18;comp.knee.value=8;comp.ratio.value=4;
-  master.connect(comp);comp.connect(ctx.destination);
+function _bgmScheduleNext(actx){
+  if(!_bgmRunning)return;
+  const lv = Math.max(1,Math.min(19, typeof level !== 'undefined' ? level : 1));
+  const cfg = BGM_LEVELS[lv-1] || BGM_LEVELS[0];
+  _bgmCurrentLevel = lv;
 
-  // ── MELODIYA — Flappy Bird adventure tune ──
-  // C major / G major alternating, upbeat 8-bit feel
-  // Notalar: Do Re Mi Sol La — şən pentatonik
-  const melody=[
-    523,659,784,659,523,392,523,659,
-    784,880,784,659,523,392,392,523,
-    659,784,880,1047,880,784,659,523,
-    659,784,659,523,392,523,659,523
-  ];
-  const melDur=0.18; // hər notun müddəti (sürətli, Flappy kimi)
+  const master=actx.createGain();
+  master.gain.value=0.32;
+  const comp=actx.createDynamicsCompressor();
+  comp.threshold.value=-16;comp.knee.value=6;comp.ratio.value=4;
+  // Level-specific filter color
+  const filt=actx.createBiquadFilter();
+  filt.type='lowpass';
+  filt.frequency.value=cfg.filterFreq;
+  filt.Q.value=1.2;
+  master.connect(filt);filt.connect(comp);comp.connect(actx.destination);
 
-  function schedMelody(startT){
+  const stepSec = 60/(cfg.bpm*2); // 8th note
+  const patLen = cfg.arpPattern.length;
+  const loopSec = patLen * cfg.arpSpeed;
+
+  const now=actx.currentTime+0.05;
+
+  // ── ARPEGGİO MELODİYA ──
+  cfg.arpPattern.forEach((deg,i)=>{
     if(!_bgmRunning)return;
-    melody.forEach((freq,i)=>{
-      if(!_bgmRunning)return;
-      // Square wave — klassik 8-bit səs
-      const real=new Float32Array(9);
-      const imag=new Float32Array(9);
-      // Square wave harmonics: 1, 1/3, 1/5, 1/7...
-      for(let h=1;h<9;h+=2){real[h]=1/h;}
-      const wave=ctx.createPeriodicWave(real,imag,{disableNormalization:false});
-      const osc=ctx.createOscillator();
-      osc.setPeriodicWave(wave);
-      osc.frequency.value=freq;
-      const g=ctx.createGain();
-      const noteT=startT+i*melDur;
-      g.gain.setValueAtTime(0,noteT);
-      g.gain.linearRampToValueAtTime(0.22,noteT+0.01);
-      g.gain.setValueAtTime(0.22,noteT+melDur*0.55);
-      g.gain.linearRampToValueAtTime(0,noteT+melDur*0.92);
-      osc.connect(g);g.connect(master);
-      osc.start(noteT);osc.stop(noteT+melDur);
-    });
-    if(_bgmRunning)setTimeout(()=>schedMelody(ctx.currentTime+0.05),melody.length*melDur*1000-100);
-  }
+    const freq = cfg.key[deg] || cfg.key[0];
+    const osc=actx.createOscillator();
+    const g=actx.createGain();
+    if(cfg.waveform==='square'){
+      // band-limited square
+      const real=new Float32Array(9);const imag=new Float32Array(9);
+      for(let h=1;h<9;h+=2)real[h]=1/h;
+      osc.setPeriodicWave(actx.createPeriodicWave(real,imag,{disableNormalization:false}));
+    } else if(cfg.waveform==='sawtooth'){
+      const real=new Float32Array(8);const imag=new Float32Array(8);
+      for(let h=1;h<8;h++)real[h]=1/h;
+      osc.setPeriodicWave(actx.createPeriodicWave(real,imag,{disableNormalization:false}));
+    } else {
+      osc.type=cfg.waveform;
+    }
+    osc.frequency.value=freq;
+    const nT=now+i*cfg.arpSpeed;
+    const dur=cfg.arpSpeed*0.75;
+    g.gain.setValueAtTime(0,nT);
+    g.gain.linearRampToValueAtTime(0.2,nT+0.01);
+    g.gain.setValueAtTime(0.2,nT+dur*0.6);
+    g.gain.linearRampToValueAtTime(0,nT+dur);
+    osc.connect(g);g.connect(master);
+    osc.start(nT);osc.stop(nT+dur+0.01);
+  });
 
-  // ── BAS XƏTTİ — ritmik altlıq ──
-  const bassLine=[
-    130.8,130.8,196,196,164.8,164.8,130.8,130.8,
-    110,110,164.8,164.8,130.8,130.8,98,98
-  ];
-  const bassDur=0.36;
-
-  function schedBass(startT){
+  // ── BAS XƏTTİ ──
+  const bassPattern=[0,0,2,1,0,0,3,2];
+  bassPattern.forEach((deg,i)=>{
     if(!_bgmRunning)return;
-    bassLine.forEach((freq,i)=>{
-      if(!_bgmRunning)return;
-      const osc=ctx.createOscillator();
-      osc.type='triangle';
-      osc.frequency.value=freq;
-      const g=ctx.createGain();
-      const noteT=startT+i*bassDur;
-      g.gain.setValueAtTime(0,noteT);
-      g.gain.linearRampToValueAtTime(0.18,noteT+0.02);
-      g.gain.setValueAtTime(0.18,noteT+bassDur*0.6);
-      g.gain.linearRampToValueAtTime(0,noteT+bassDur*0.9);
-      osc.connect(g);g.connect(master);
-      osc.start(noteT);osc.stop(noteT+bassDur);
-    });
-    if(_bgmRunning)setTimeout(()=>schedBass(ctx.currentTime+0.05),bassLine.length*bassDur*1000-100);
-  }
+    const freq=(cfg.bass[deg]||cfg.bass[0]);
+    const osc=actx.createOscillator();
+    const g=actx.createGain();
+    osc.type=cfg.bassType;
+    osc.frequency.value=freq;
+    const bStep=loopSec/bassPattern.length;
+    const nT=now+i*bStep;
+    const dur=bStep*0.8;
+    g.gain.setValueAtTime(0,nT);
+    g.gain.linearRampToValueAtTime(0.22,nT+0.015);
+    g.gain.setValueAtTime(0.22,nT+dur*0.65);
+    g.gain.linearRampToValueAtTime(0,nT+dur);
+    osc.connect(g);g.connect(master);
+    osc.start(nT);osc.stop(nT+dur+0.01);
+  });
 
-  // ── RİTM — 8-bit kick + snare ──
-  function schedDrum(startT){
-    if(!_bgmRunning)return;
-    // kick pattern: 1,0,0,1,0,0,1,0
-    const kicks=[1,0,0,1,0,0,1,0];
-    // snare pattern: 0,0,1,0,0,1,0,0
-    const snares=[0,0,1,0,0,1,0,0];
-    const step=0.18;
-    kicks.forEach((k,i)=>{
-      if(!_bgmRunning)return;
-      if(k){
-        // 8-bit kick — low sine sweep
-        const osc=ctx.createOscillator();
-        const g=ctx.createGain();
-        const kT=startT+i*step;
-        osc.type='sine';
-        osc.frequency.setValueAtTime(200,kT);
-        osc.frequency.exponentialRampToValueAtTime(40,kT+0.08);
-        g.gain.setValueAtTime(0.3,kT);
-        g.gain.exponentialRampToValueAtTime(0.001,kT+0.1);
-        osc.connect(g);g.connect(master);
-        osc.start(kT);osc.stop(kT+0.12);
-      }
-    });
-    snares.forEach((s,i)=>{
-      if(!_bgmRunning)return;
-      if(s){
-        // 8-bit snare — noise burst
-        const bufLen=Math.floor(ctx.sampleRate*0.06);
-        const buf=ctx.createBuffer(1,bufLen,ctx.sampleRate);
-        const d=buf.getChannelData(0);
-        for(let j=0;j<bufLen;j++)d[j]=(Math.random()*2-1)*Math.pow(1-j/bufLen,1.5);
-        const src=ctx.createBufferSource();
-        src.buffer=buf;
-        const g=ctx.createGain();
-        const f=ctx.createBiquadFilter();
-        f.type='bandpass';f.frequency.value=1200;f.Q.value=0.8;
-        const sT=startT+i*step;
-        g.gain.value=0.22;
-        src.connect(f);f.connect(g);g.connect(master);
-        src.start(sT);
-      }
-    });
-    if(_bgmRunning)setTimeout(()=>schedDrum(ctx.currentTime+0.05),kicks.length*step*1000-80);
-  }
+  // ── DAVUL — intensity levele görə ──
+  const di=cfg.drumIntensity;
+  const drumSteps=8;
+  const kickPat=[1,0,0,1,0,0,1,0];
+  const snarePat=[0,0,1,0,0,1,0,0];
+  const dStep=loopSec/drumSteps;
+  kickPat.forEach((k,i)=>{
+    if(!_bgmRunning||!k)return;
+    const osc=actx.createOscillator();
+    const g=actx.createGain();
+    const kT=now+i*dStep;
+    osc.type='sine';
+    osc.frequency.setValueAtTime(180+di*40,kT);
+    osc.frequency.exponentialRampToValueAtTime(35,kT+0.07);
+    g.gain.setValueAtTime(di*0.35,kT);
+    g.gain.exponentialRampToValueAtTime(0.001,kT+0.1);
+    osc.connect(g);g.connect(master);
+    osc.start(kT);osc.stop(kT+0.12);
+  });
+  snarePat.forEach((s,i)=>{
+    if(!_bgmRunning||!s)return;
+    const bufLen=Math.floor(actx.sampleRate*0.06);
+    const buf=actx.createBuffer(1,bufLen,actx.sampleRate);
+    const d=buf.getChannelData(0);
+    for(let j=0;j<bufLen;j++)d[j]=(Math.random()*2-1)*Math.pow(1-j/bufLen,1.5);
+    const src=actx.createBufferSource();
+    src.buffer=buf;
+    const g=actx.createGain();
+    const f=actx.createBiquadFilter();
+    f.type='bandpass';f.frequency.value=1200+di*600;f.Q.value=0.8;
+    const sT=now+i*dStep;
+    g.gain.value=di*0.18;
+    src.connect(f);f.connect(g);g.connect(master);
+    src.start(sT);
+  });
 
-  // ── HİGH-HAT — 8-bit tik-tak ──
-  function schedHiHat(startT){
-    if(!_bgmRunning)return;
-    for(let i=0;i<16;i++){
-      if(!_bgmRunning)return;
-      const bufLen=Math.floor(ctx.sampleRate*0.025);
-      const buf=ctx.createBuffer(1,bufLen,ctx.sampleRate);
+  // ── HİGH-HAT — yüksək leveldə daha sürətli ──
+  if(di>0.4){
+    const hhCount=lv>=10?16:8;
+    const hhStep=loopSec/hhCount;
+    for(let i=0;i<hhCount;i++){
+      if(!_bgmRunning)break;
+      const bufLen=Math.floor(actx.sampleRate*0.02);
+      const buf=actx.createBuffer(1,bufLen,actx.sampleRate);
       const d=buf.getChannelData(0);
-      for(let j=0;j<bufLen;j++)d[j]=(Math.random()*2-1)*Math.pow(1-j/bufLen,3);
-      const src=ctx.createBufferSource();
+      for(let j=0;j<bufLen;j++)d[j]=(Math.random()*2-1)*Math.pow(1-j/bufLen,4);
+      const src=actx.createBufferSource();
       src.buffer=buf;
-      const g=ctx.createGain();
-      const f=ctx.createBiquadFilter();
+      const g=actx.createGain();
+      const f=actx.createBiquadFilter();
       f.type='highpass';f.frequency.value=6000;
-      const hT=startT+i*(0.18/2);
-      g.gain.value=i%2===0?0.08:0.04;
+      const hT=now+i*hhStep;
+      g.gain.value=i%2===0?(di*0.07):(di*0.03);
       src.connect(f);f.connect(g);g.connect(master);
       src.start(hT);
     }
-    if(_bgmRunning)setTimeout(()=>schedHiHat(ctx.currentTime+0.05),16*(0.09)*1000-80);
   }
 
-  const now=ctx.currentTime+0.1;
-  schedMelody(now);
-  schedBass(now);
-  schedDrum(now);
-  setTimeout(()=>schedHiHat(ctx.currentTime+0.05),500);
+  // Növbəti dövrəni planlaşdır — level dəyişibsə yeni konfig istifadə et
+  const loopMs = loopSec * 1000;
+  if(_bgmRunning){
+    setTimeout(()=>{
+      if(!_bgmRunning)return;
+      _bgmScheduleNext(actx);
+    }, loopMs - 80);
+  }
 }
 
 function stopBGM(){
   _bgmRunning=false;
+  // AudioContext-i suspend etmə — sadəcə scheduling-i dayandır
+  // Artıq planlanmış notlar 1 dövrə sona kimi çalacaq (max ~1s)
+  // Yeni _bgmScheduleNext çağırışları _bgmRunning===false görüb dayanacaq
 }
+
+// Level dəyişdikdə köhnə musiqi dərhal dayanır, yeni başlayır
+function restartBGMForLevel(){
+  if(!_bgmEnabled||state!=='playing')return;
+  _bgmRunning=false; // cari scheduling chain dayandırılır
+  // Qısa fasilə — köhnə ses notları bitsin
+  setTimeout(()=>{
+    if(state!=='playing'||!_bgmEnabled)return;
+    startBGM();
+  }, 180);
+}
+
+
 
 // ── CAN İTİRMƏ SƏSİ ──
 function playLoseLifeSound(){
@@ -2534,26 +2670,22 @@ function updateSpinUI(){
     const h=Math.floor(ms/3600000),m=Math.floor((ms%3600000)/60000);
     if(cd) cd.textContent=`Sabah yenilənir: ${h}s ${m}d`;
     if(spinBtn){ spinBtn.style.opacity='0.35'; spinBtn.style.pointerEvents='none'; spinBtn.disabled=true; }
-    // Reklam düyməsini göstər — gündə max 1 reklam bonusu
-    if(adBtn){ adBtn.style.display=(d.adBonus>=1)?'none':'block'; }
+    // Limitsiz reklam bonusu — hər dəfə göstər
+    if(adBtn) adBtn.style.display='block';
   } else {
     if(cd) cd.textContent= left===1 ? '⚡ 1 spin qalır!' : `⚡ ${left} spin qalır`;
-    // Spin hazır — düyməni aktiv et
     if(spinBtn){ spinBtn.style.opacity='1'; spinBtn.style.pointerEvents='all'; spinBtn.disabled=false; }
     if(adBtn) adBtn.style.display='none';
   }
 }
 
-// Reklam izləyib +1 spin qazanmaq
+// Reklam izləyib +1 spin qazanmaq — limitsiz
 function spinWatchAd(){
-  const d=getSpinData();
-  if(d.adBonus>=1) return; // gündə 1 dəfə
   adSim(()=>{
     const d2=getSpinData();
-    d2.adBonus=1;
+    d2.adBonus=(d2.adBonus||0)+1;
     saveSpinData(d2);
-    updateSpinUI(); // bu spinBtn-i açacaq (left=1 olacaq)
-    // Toast spin ekranında göstər
+    updateSpinUI();
     const pt=document.getElementById('spinPrizeTxt');
     if(pt){
       pt.textContent='🎰 +1 SPIN QAZANDIN!';
@@ -2851,10 +2983,10 @@ function fire(tx,ty){
   }else if(sw==='freeze'){
     frozenT=185;float2(180,320,'❄️ DONDURULDU!','#88ddff',20);flash('#88ddff55');
   }else if(sw==='bomb'){
-    balls.forEach(b=>{spawnParts(b.x,b.y,b.c,8);score+=b.pts;});balls=[];
-    addExp(180,320,'#ff7700',240);updScore();float2(180,280,'💣 BOOM!','#ff7700',28);shake=18;shakeT=40;
+    balls.forEach(b=>{spawnParts(b.x,b.y,b.c,14);score+=b.pts;});balls=[];
+    bombBlast();updScore();
   }else if(sw==='shield'){
-    inv=true;invT=240;float2(180,300,'🛡️','#4499ff',32);
+    inv=true;invT=240;activateShieldEffect();
   }
 }
 
@@ -3295,6 +3427,8 @@ function showAchieveToast(icon,name,sub){
 function gameOver(){
   if(dead)return;dead=true;state='over';
   if(rafId){cancelAnimationFrame(rafId);rafId=null;}
+  try{ for(var _gi=0;_gi<20;_gi++) ctx.restore(); }catch(e){}
+  try{ ctx.setTransform(DPR,0,0,DPR,0,0); }catch(e){}
   stopBGM();
   // Ana menu musiqisini yenidən başlat — oyun bitti, menüyə qayıdır
   if(_bgmEnabled) setTimeout(startBGM, 1200);
@@ -3443,108 +3577,289 @@ function updateMotivPanel(){
   window._motivT=setInterval(show,4000);
 }
 
-// ── MAIN LOOP ──
-function loop(ts){
-  if(state==='over')return;
-  const dt=Math.min((ts-lastTime)/16.67,2);lastTime=ts;frame++;bgHue=(bgHue+0.4*dt)%360;
+function drawCosmicBackground(){
+  ctx.save();
+  try{
+// ══════════════════════════════════════════════════════
+// KOSMİK ARXA PLAN — hər level unikal animasiya
+// ══════════════════════════════════════════════════════
+const cfg=getLevelBG(level);
+const t=frame*0.012;
+const lv=Math.max(1,Math.min(19,level));
+const pi=lv-1; // PLANETS index
+const planet=PLANETS[pi]||PLANETS[0];
 
-  ctx.clearRect(0,0,360,640);
-  let sx=0,sy=0;
-  if(shakeT>0){shakeT-=dt;sx=(Math.random()-0.5)*shake;sy=(Math.random()-0.5)*shake;shake*=0.82;if(shake<0.4)shakeT=0;}
-  ctx.save();ctx.translate(sx,sy);
+// ── Layer 1: Dərin kosmik gradient (level-specific) ──
+{
+  const bg=ctx.createLinearGradient(0,0,0,640);
+  if(cfg.h1){
+    bg.addColorStop(0,cfg.h1);
+    bg.addColorStop(0.55,cfg.h2||cfg.h1);
+    bg.addColorStop(1,'#020208');
+  } else {
+    // Kaos/ilahi levelləri üçün rəngarəng
+    const hh=bgHue%360;
+    bg.addColorStop(0,`hsl(${hh},40%,4%)`);
+    bg.addColorStop(0.5,`hsl(${(hh+40)%360},30%,3%)`);
+    bg.addColorStop(1,`hsl(${(hh+80)%360},25%,2%)`);
+  }
+  ctx.fillStyle=bg;ctx.fillRect(0,0,360,640);
+}
 
-  // ══════════════════════════════════════
-  // HD BACKGROUND — Deep Cyberpunk Space
-  // ══════════════════════════════════════
-  const cfg=getLevelBG(level);
-  const t=frame*0.012;
+const acRgb=hexToRgb(cfg.h1?cfg.ac:'#8855ff');
+const acRgb2=hexToRgb(cfg.h1?(cfg.h1):'#ff2266');
 
-  // Layer 1 — Deep space void
-  const bgBase=ctx.createLinearGradient(0,0,0,640);
-  bgBase.addColorStop(0,'#020208');
-  bgBase.addColorStop(0.5,'#040410');
-  bgBase.addColorStop(1,'#060612');
-  ctx.fillStyle=bgBase;ctx.fillRect(0,0,360,640);
-
-  // Layer 2 — Animated nebula blobs (level-specific color)
-  const acRgb=hexToRgb(cfg.h1!==null?cfg.ac:'#5c6bff');
-  const acRgb2=hexToRgb(cfg.h1!==null?(cfg.h1||cfg.ac):'#ff2d78');
-
+// ── Layer 2: Nebula buludları (level-specific) ──
+{
   if(cfg.h1===null){
-    // XAOS — shifting chromatic nebula
-    const h=bgHue%360;
-    for(let ni=0;ni<4;ni++){
-      const nx=100+Math.sin(t*0.7+ni*1.6)*110,ny=120+Math.cos(t*0.5+ni*2.1)*90+ni*120;
-      const nrad=150+Math.sin(t+ni)*40;
-      const ng=ctx.createRadialGradient(nx,ny,0,nx,ny,nrad);
-      ng.addColorStop(0,`hsla(${(h+ni*90)%360},90%,55%,0.06)`);
-      ng.addColorStop(0.5,`hsla(${(h+ni*90+30)%360},80%,45%,0.02)`);
+    // Kaos levellər — rəngarəng chromatic nebula
+    for(let ni=0;ni<5;ni++){
+      const nx=80+Math.sin(t*0.6+ni*1.3)*130,ny=80+Math.cos(t*0.45+ni*1.8)*100+ni*110;
+      const nr=160+Math.sin(t*0.8+ni)*45;
+      const hv=(bgHue+ni*72)%360;
+      const ng=ctx.createRadialGradient(nx,ny,0,nx,ny,nr);
+      ng.addColorStop(0,`hsla(${hv},90%,55%,0.08)`);
+      ng.addColorStop(0.45,`hsla(${(hv+30)%360},80%,45%,0.025)`);
       ng.addColorStop(1,'transparent');
       ctx.fillStyle=ng;ctx.fillRect(0,0,360,640);
     }
   } else {
-    // Level-specific nebula — 3 overlapping radials
-    const positions=[[60,160],[300,80],[180,540],[80,400]];
-    positions.forEach(([nx,ny],i)=>{
-      const nrad=180+i*30;
-      const ng=ctx.createRadialGradient(nx+Math.sin(t+i)*18,ny+Math.cos(t*0.8+i)*14,0,nx,ny,nrad);
-      ng.addColorStop(0,`rgba(${i%2===0?acRgb:acRgb2},0.055)`);
-      ng.addColorStop(0.4,`rgba(${i%2===0?acRgb:acRgb2},0.018)`);
+    // Normal levellərdə 4 nebula lobu
+    const npos=[[55,155],[295,75],[175,480],[85,380],[250,310]];
+    for(let ni=0;ni<4;ni++){
+      const [nx0,ny0]=npos[ni];
+      const nx=nx0+Math.sin(t*0.5+ni)*20,ny=ny0+Math.cos(t*0.4+ni)*15;
+      const nr=165+ni*28;
+      const ng=ctx.createRadialGradient(nx,ny,0,nx,ny,nr);
+      ng.addColorStop(0,`rgba(${ni%2===0?acRgb:acRgb2},0.06)`);
+      ng.addColorStop(0.38,`rgba(${ni%2===0?acRgb:acRgb2},0.02)`);
       ng.addColorStop(1,'transparent');
       ctx.fillStyle=ng;ctx.fillRect(0,0,360,640);
-    });
+    }
   }
+}
 
-  // Layer 3 — HD Perspective Grid
+// ── Layer 3: Perspektiv grid (yalnız yer levelləri, silah) ──
+{
   ctx.save();
-  // Vertical lines — perspective fade
   for(let x=0;x<=360;x+=36){
     const gg2=ctx.createLinearGradient(0,0,0,640);
     gg2.addColorStop(0,'transparent');
-    gg2.addColorStop(0.3,`rgba(${acRgb},0.04)`);
-    gg2.addColorStop(0.85,`rgba(${acRgb},0.09)`);
+    gg2.addColorStop(0.35,`rgba(${acRgb},0.03)`);
+    gg2.addColorStop(0.88,`rgba(${acRgb},0.07)`);
     gg2.addColorStop(1,'transparent');
     ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,640);
-    ctx.strokeStyle=gg2;ctx.lineWidth=0.6;ctx.stroke();
+    ctx.strokeStyle=gg2;ctx.lineWidth=0.5;ctx.stroke();
   }
-  // Horizontal lines — stronger near bottom (cyberpunk floor)
   for(let y=0;y<=640;y+=36){
-    const alpha=0.02+0.07*(y/640)*(y/640);
+    const alpha=0.015+0.055*(y/640)*(y/640);
     ctx.strokeStyle=`rgba(${acRgb},${alpha})`;
-    ctx.lineWidth=y>500?0.9:0.5;
+    ctx.lineWidth=y>500?0.8:0.4;
     ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(360,y);ctx.stroke();
   }
-  // Scanline subtle overlay
-  for(let y=0;y<640;y+=4){
-    ctx.fillStyle='rgba(0,0,0,0.04)';
-    ctx.fillRect(0,y,360,2);
-  }
+  // Scanline
+  for(let y=0;y<640;y+=4){ ctx.fillStyle='rgba(0,0,0,0.03)';ctx.fillRect(0,y,360,2); }
   ctx.restore();
+}
 
-  // Layer 4 — Vignette (dark corners, bright center)
+// ── Layer 4: PLANET / KOSMİK OBYEKT ──
+ctx.save();
+try {
+  const px=planet.x, py=planet.y, pr=planet.r;
+
+  // Qara dəlik
+  if(planet.blackHole){
+    ctx.save();ctx.translate(px,py);
+    for(let ri=0;ri<3;ri++){
+      const diskR=pr*(1.8+ri*0.5);
+      const dg=ctx.createRadialGradient(0,0,pr*0.9,0,0,diskR);
+      dg.addColorStop(0,`hsla(${(bgHue+ri*30)%360},80%,55%,${0.12-ri*0.03})`);
+      dg.addColorStop(1,'transparent');
+      ctx.save();ctx.scale(1,0.28);ctx.rotate(t*0.08+ri*0.4);
+      ctx.beginPath();ctx.arc(0,0,diskR,0,Math.PI*2);ctx.fillStyle=dg;ctx.fill();
+      ctx.restore();
+    }
+    const bhg=ctx.createRadialGradient(0,0,0,0,0,pr);
+    bhg.addColorStop(0,'#000');bhg.addColorStop(0.6,'#050510');bhg.addColorStop(1,'transparent');
+    ctx.beginPath();ctx.arc(0,0,pr,0,Math.PI*2);ctx.fillStyle=bhg;ctx.fill();
+    ctx.beginPath();ctx.arc(0,0,pr*1.1,0,Math.PI*2);
+    ctx.strokeStyle='rgba(200,100,255,0.5)';ctx.lineWidth=1.5;
+    ctx.shadowBlur=12;ctx.shadowColor='#aa00ff';ctx.stroke();ctx.shadowBlur=0;
+    ctx.restore();
+  }
+  // Sinqulyarlıq (LVL 19)
+  else if(planet.singularity){
+    ctx.save();ctx.translate(px,py);
+    for(let ri=0;ri<8;ri++){
+      const rr=pr*(0.3+ri*0.22);
+      ctx.beginPath();ctx.arc(0,0,rr,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(255,255,255,${Math.max(0,0.5-ri*0.055)})`;
+      ctx.lineWidth=Math.max(0.1,1.5-ri*0.15);
+      ctx.shadowBlur=6;ctx.shadowColor='#fff';ctx.stroke();ctx.shadowBlur=0;
+    }
+    const sg=ctx.createRadialGradient(0,0,0,0,0,pr*0.7);
+    sg.addColorStop(0,'rgba(255,255,255,1)');sg.addColorStop(0.4,'rgba(180,200,255,0.6)');sg.addColorStop(1,'transparent');
+    ctx.beginPath();ctx.arc(0,0,pr*0.7,0,Math.PI*2);ctx.fillStyle=sg;ctx.fill();
+    ctx.restore();
+  }
+  // Ulduz
+  else if(planet.star){
+    ctx.save();ctx.translate(px,py);
+    for(let ri=0;ri<8;ri++){
+      const ra=t*0.3+ri*Math.PI*2/8;
+      const rl=pr*(1.4+0.4*Math.sin(t*2+ri));
+      const rg=ctx.createLinearGradient(0,0,Math.cos(ra)*rl,Math.sin(ra)*rl);
+      rg.addColorStop(0,`rgba(${acRgb},0.3)`);rg.addColorStop(1,'transparent');
+      ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(ra)*rl,Math.sin(ra)*rl);
+      ctx.strokeStyle=rg;ctx.lineWidth=2;ctx.stroke();
+    }
+    const sg=ctx.createRadialGradient(0,0,0,0,0,pr*1.5);
+    sg.addColorStop(0,`rgba(${acRgb},0.2)`);sg.addColorStop(1,'transparent');
+    ctx.beginPath();ctx.arc(0,0,pr*1.5,0,Math.PI*2);ctx.fillStyle=sg;ctx.fill();
+    const pg=ctx.createRadialGradient(-pr*0.28,-pr*0.28,pr*0.05,0,0,pr);
+    pg.addColorStop(0,'rgba(255,255,255,0.95)');pg.addColorStop(0.2,planet.c2);
+    pg.addColorStop(0.7,planet.c1);pg.addColorStop(1,'rgba(0,0,0,0.8)');
+    ctx.beginPath();ctx.arc(0,0,pr,0,Math.PI*2);
+    ctx.shadowBlur=30;ctx.shadowColor=cfg.ac;ctx.fillStyle=pg;ctx.fill();ctx.shadowBlur=0;
+    ctx.restore();
+  }
+  // Normal planet
+  else{
+    ctx.save();ctx.translate(px,py);
+    const halo=ctx.createRadialGradient(0,0,pr*0.8,0,0,pr*1.7);
+    halo.addColorStop(0,`rgba(${acRgb},0.1)`);halo.addColorStop(1,'transparent');
+    ctx.beginPath();ctx.arc(0,0,pr*1.7,0,Math.PI*2);ctx.fillStyle=halo;ctx.fill();
+    const pg=ctx.createRadialGradient(-pr*0.3,-pr*0.3,pr*0.05,0,0,pr);
+    pg.addColorStop(0,'rgba(255,255,255,0.55)');pg.addColorStop(0.18,planet.c2);
+    pg.addColorStop(0.65,planet.c1);pg.addColorStop(1,'rgba(0,0,0,0.7)');
+    ctx.beginPath();ctx.arc(0,0,pr,0,Math.PI*2);
+    ctx.shadowBlur=18;ctx.shadowColor=cfg.ac;ctx.fillStyle=pg;ctx.fill();ctx.shadowBlur=0;
+    // Atmosfer bantları
+    ctx.save();ctx.beginPath();ctx.arc(0,0,pr,0,Math.PI*2);ctx.clip();
+    for(let bi=0;bi<4;bi++){
+      const by=pr*(-0.7+bi*0.45)+Math.sin(t*0.2+bi)*2;
+      ctx.beginPath();ctx.ellipse(0,by,pr,pr*0.1,0,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,255,255,${0.04+bi*0.01})`;ctx.fill();
+    }
+    ctx.restore();
+    ctx.restore();
+  }
+
+  // Ləkələr
+  if(planet.spots&&planet.spots.length){
+    ctx.save();ctx.translate(px,py);
+    ctx.save();ctx.beginPath();ctx.arc(0,0,pr,0,Math.PI*2);ctx.clip();
+    planet.spots.forEach(sp=>{
+      const sx=Math.cos(sp.a+t*0.08)*pr*sp.d;
+      const sy=Math.sin(sp.a*0.7+t*0.06)*pr*sp.d*0.4;
+      const sr=pr*sp.r;
+      const spg=ctx.createRadialGradient(sx,sy,0,sx,sy,sr);
+      spg.addColorStop(0,sp.c);spg.addColorStop(1,'transparent');
+      ctx.beginPath();ctx.arc(sx,sy,sr,0,Math.PI*2);ctx.fillStyle=spg;ctx.fill();
+    });
+    ctx.restore();ctx.restore();
+  }
+
+  // Kaos rəng effekti
+  if(planet.chaos){
+    ctx.save();ctx.translate(px,py);
+    for(let ci=0;ci<5;ci++){
+      const ca=(bgHue+ci*72)%360;
+      const cg=ctx.createRadialGradient(Math.cos(t+ci)*pr*0.4,Math.sin(t*1.3+ci)*pr*0.4,0,0,0,pr*0.8);
+      cg.addColorStop(0,`hsla(${ca},90%,60%,0.07)`);cg.addColorStop(1,'transparent');
+      ctx.save();ctx.beginPath();ctx.arc(0,0,pr,0,Math.PI*2);ctx.clip();
+      ctx.fillStyle=cg;ctx.fillRect(-pr,-pr,pr*2,pr*2);ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  // Halqalar
+  if(planet.ring&&planet.ringC&&!planet.blackHole){
+    ctx.save();ctx.translate(px,py);ctx.scale(1,0.3);
+    const ringRad=pr*1.85;
+    ctx.beginPath();ctx.arc(0,0,ringRad,0,Math.PI*2);
+    ctx.strokeStyle=planet.ringC;ctx.lineWidth=pr*0.42;
+    ctx.shadowBlur=8;ctx.shadowColor=cfg.ac;ctx.stroke();ctx.shadowBlur=0;
+    ctx.restore();
+  }
+
+  // Aylar (peyklər)
+  if(planet.moons&&planet.moons.length){
+    planet.moons.forEach((m,mi)=>{
+      const ma=m.a+t*(0.35+mi*0.12);
+      const mx=px+Math.cos(ma)*m.d;
+      const my=py+Math.sin(ma)*m.d*0.5;
+      // Orbit trace
+      ctx.save();ctx.translate(px,py);
+      ctx.beginPath();ctx.ellipse(0,0,m.d,m.d*0.5,0,0,Math.PI*2);
+      ctx.strokeStyle='rgba(255,255,255,0.04)';ctx.lineWidth=0.5;ctx.stroke();
+      ctx.restore();
+      // Moon
+      const mg=ctx.createRadialGradient(mx-m.r*0.3,my-m.r*0.3,0,mx,my,m.r);
+      mg.addColorStop(0,'rgba(255,255,255,0.8)');mg.addColorStop(0.3,m.c);mg.addColorStop(1,'rgba(0,0,0,0.5)');
+      ctx.beginPath();ctx.arc(mx,my,m.r,0,Math.PI*2);ctx.fillStyle=mg;ctx.fill();
+    });
+  }
+} catch(e){ /* planet render xətası */ }
+finally { ctx.restore(); }
+
+// ── Layer 5: Qalaktika spiralı (seçilmiş levellər) ──
+if(GALAXY_LEVELS.includes(lv)){
+  ctx.save();
+  const gx=lv===1?90:lv===5?270:lv===8?290:lv===12?70:lv===16?285:180;
+  const gy=lv===1?420:lv===5?380:lv===8?320:lv===12?450:lv===16?350:320;
+  const gr=lv===19?110:65;
+  ctx.translate(gx,gy);
+  ctx.rotate(t*0.04);
+  for(let arm=0;arm<2;arm++){
+    for(let i=0;i<60;i++){
+      const aa=arm*Math.PI+i*0.22+t*0.02;
+      const rd=8+i*1.2;
+      if(rd>gr)break;
+      const gsx=Math.cos(aa)*rd;
+      const gsy=Math.sin(aa)*rd*0.42;
+      const ga=Math.max(0,(1-rd/gr)*0.22);
+      const hv=lv===19?0:((bgHue+arm*120)%360);
+      ctx.beginPath();ctx.arc(gsx,gsy,Math.max(0.3,1.5-rd/gr*1.2),0,Math.PI*2);
+      ctx.fillStyle=lv===19?`rgba(255,255,255,${ga})`:
+                             `hsla(${hv},80%,70%,${ga})`;
+      ctx.fill();
+    }
+  }
+  // Mərkəz parlaq nöqtə
+  const gcg=ctx.createRadialGradient(0,0,0,0,0,10);
+  gcg.addColorStop(0,'rgba(255,255,255,0.6)');
+  gcg.addColorStop(1,'transparent');
+  ctx.beginPath();ctx.arc(0,0,10,0,Math.PI*2);ctx.fillStyle=gcg;ctx.fill();
+  ctx.restore();
+}
+
+// ── Layer 6: Vignette ──
+{
   const vigG=ctx.createRadialGradient(180,320,80,180,320,400);
   vigG.addColorStop(0,'transparent');
-  vigG.addColorStop(0.6,'rgba(0,0,0,0.15)');
-  vigG.addColorStop(1,'rgba(0,0,0,0.65)');
+  vigG.addColorStop(0.55,'rgba(0,0,0,0.12)');
+  vigG.addColorStop(1,'rgba(0,0,0,0.6)');
   ctx.fillStyle=vigG;ctx.fillRect(0,0,360,640);
+}
 
-  // Layer 5 — Neon ground glow + floor
+// ── Layer 7: Neon yer xətti ──
+{
   const acRgbG=hexToRgb(cfg.ac);
-  // Ground beam
   ctx.beginPath();ctx.moveTo(-10,590);ctx.lineTo(370,590);
-  ctx.strokeStyle=`rgba(${acRgbG},0.7)`;ctx.lineWidth=1.5;
-  ctx.shadowBlur=28;ctx.shadowColor=cfg.ac;ctx.stroke();ctx.shadowBlur=0;
-  // Secondary ground line
+  ctx.strokeStyle=`rgba(${acRgbG},0.65)`;ctx.lineWidth=1.5;
+  ctx.shadowBlur=24;ctx.shadowColor=cfg.ac;ctx.stroke();ctx.shadowBlur=0;
   ctx.beginPath();ctx.moveTo(-10,592);ctx.lineTo(370,592);
-  ctx.strokeStyle=`rgba(${acRgbG},0.2)`;ctx.lineWidth=4;ctx.stroke();
-  // Ground gradient glow
+  ctx.strokeStyle=`rgba(${acRgbG},0.18)`;ctx.lineWidth=4;ctx.stroke();
   const gg=ctx.createLinearGradient(0,590,0,640);
-  gg.addColorStop(0,`rgba(${acRgbG},0.18)`);
-  gg.addColorStop(0.5,`rgba(${acRgbG},0.06)`);
+  gg.addColorStop(0,`rgba(${acRgbG},0.16)`);
+  gg.addColorStop(0.5,`rgba(${acRgbG},0.05)`);
   gg.addColorStop(1,'transparent');
   ctx.fillStyle=gg;ctx.fillRect(0,590,360,50);
+}
 
-  // Layer 6 — HD Stars — 3 sizes, parallax-like
+// ── Layer 8: Ulduzlar ──
+{
   ctx.save();
   stars.forEach(s=>{
     s.y+=s.spd*dt;s.tw+=0.05*dt;
@@ -3552,36 +3867,247 @@ function loop(ts){
     const tw=0.4+0.6*Math.sin(s.tw);
     const alpha=s.a*tw;
     if(s.r>1.2){
-      // Large star — cross sparkle (rare, so shadow ok)
-      ctx.save();
-      ctx.translate(s.x,s.y);
+      ctx.save();ctx.translate(s.x,s.y);
       ctx.shadowBlur=s.r*5;ctx.shadowColor='rgba(255,255,255,0.6)';
       ctx.fillStyle=`rgba(255,255,255,${alpha})`;
       ctx.fillRect(-s.r*0.25,-s.r,s.r*0.5,s.r*2);
       ctx.fillRect(-s.r,-s.r*0.25,s.r*2,s.r*0.5);
-      ctx.shadowBlur=0;
-      ctx.restore();
+      ctx.shadowBlur=0;ctx.restore();
     } else {
-      // Small/medium — no shadow for performance
       ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
       ctx.fillStyle=`rgba(255,255,255,${alpha})`;ctx.fill();
     }
   });
   ctx.restore();
+}
 
-  // Layer 7 — Level zone watermark
-  ctx.save();ctx.globalAlpha=0.022;
-  ctx.font=`bold 64px Bebas Neue,sans-serif`;ctx.fillStyle='#fff';ctx.textAlign='center';
-  ctx.fillText(cfg.name,180,340);ctx.restore();
+// ── Layer 9: Level watermark ──
+ctx.save();ctx.globalAlpha=0.02;
+ctx.font=`bold 64px Bebas Neue,sans-serif`;ctx.fillStyle='#fff';ctx.textAlign='center';
+ctx.fillText(cfg.name,180,340);ctx.restore();
 
-  // Layer 8 — Frozen tint
-  if(frozenT>0){
-    ctx.fillStyle='rgba(80,190,255,0.055)';ctx.fillRect(0,0,360,640);
-    // Ice crystal lines
-    ctx.strokeStyle='rgba(136,220,255,0.07)';ctx.lineWidth=1;
-    for(let x=0;x<=360;x+=45){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,640);ctx.stroke();}
-    for(let y=0;y<=640;y+=45){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(360,y);ctx.stroke();}
+// ── Layer 10: Donmuş tint ──
+if(frozenT>0){
+  ctx.fillStyle='rgba(80,190,255,0.055)';ctx.fillRect(0,0,360,640);
+  ctx.strokeStyle='rgba(136,220,255,0.07)';ctx.lineWidth=1;
+  for(let x=0;x<=360;x+=45){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,640);ctx.stroke();}
+  for(let y=0;y<=640;y+=45){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(360,y);ctx.stroke();}
+}
+
+  } catch(e){ console.warn('bg err',e); }
+  finally { ctx.restore(); }
+}
+
+// ══════════════════════════════════════════════════════
+// SİLAH EFFEKT FUNKSİYALARI
+// ══════════════════════════════════════════════════════
+
+// ── RAKET PARTLAYIŞI — böyük, heyəcanlı ──
+function bigRocketBlast(x, y, er, col){
+  // Böyük portlama dairəsi
+  addExp(x, y, '#ff5500', er);
+  addExp(x, y, '#ffaa00', er*0.65);
+  addExp(x, y, '#ffffff', er*0.35);
+  // Çoxlu rəngli hissəciklər — bütün istiqamətlərə
+  for(let i=0;i<55;i++){
+    const ang=Math.random()*Math.PI*2;
+    const spd=3+Math.random()*9;
+    const sz=2+Math.random()*5;
+    const colors=['#ff5500','#ff8800','#ffcc00','#ff2200','#ffffff','#ffdd44'];
+    parts.push({
+      x:x+Math.cos(ang)*er*0.3*Math.random(),
+      y:y+Math.sin(ang)*er*0.3*Math.random(),
+      vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd,
+      r:sz,c:colors[Math.floor(Math.random()*colors.length)],
+      life:1,dec:0.018+Math.random()*0.025
+    });
   }
+  // Uzun alov izləri
+  for(let i=0;i<18;i++){
+    const ang=Math.random()*Math.PI*2;
+    const spd=5+Math.random()*14;
+    parts.push({
+      x:x,y:y,vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd,
+      r:3+Math.random()*3,c:'#ff6600',life:1,dec:0.012
+    });
+  }
+  shake=22;shakeT=50;
+  playRocketBlastSound();
+  float2(x,y-40,'💥','#ff5500',36);
+}
+
+// ── BOMBA PARTLAYIŞI — şirinkəmə dalğası ──
+function bombBlast(){
+  const cx=180,cy=320;
+  // Büyük mərkəz partlayış
+  addExp(cx,cy,'#ff7700',260);
+  addExp(cx,cy,'#ffcc00',190);
+  addExp(cx,cy,'#ff3300',130);
+  // Şirinkəmə halqaları — 3 dalğa
+  for(let wave=0;wave<3;wave++){
+    setTimeout(()=>{
+      if(state!=='playing')return;
+      addExp(cx,cy,'#ff8800'+(wave===0?'':''),220-wave*40);
+    }, wave*120);
+  }
+  // Bütün istiqamətlərə 360° hissəcik yağışı
+  for(let i=0;i<80;i++){
+    const ang=(i/80)*Math.PI*2;
+    const spd=4+Math.random()*13;
+    const colors=['#ff7700','#ff4400','#ffaa00','#ffff00','#ff2200','#ffffff'];
+    parts.push({
+      x:cx+Math.cos(ang)*20,y:cy+Math.sin(ang)*20,
+      vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd,
+      r:3+Math.random()*6,
+      c:colors[Math.floor(Math.random()*colors.length)],
+      life:1,dec:0.014+Math.random()*0.02
+    });
+  }
+  // Screen flash + shake
+  flash('#ff770066');
+  shake=28;shakeT=55;
+  playBombBlastSound();
+  float2(180,260,'💣 BOOM!','#ff7700',32);
+}
+
+// ── QALXAN AKTİVLƏŞMƏSİ ──
+function activateShieldEffect(){
+  // Böyük mavi partıltı hissəcikləri
+  for(let i=0;i<30;i++){
+    const ang=Math.random()*Math.PI*2;
+    const spd=2+Math.random()*5;
+    parts.push({
+      x:player.x+Math.cos(ang)*20,y:player.y+Math.sin(ang)*20,
+      vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd,
+      r:2+Math.random()*4,c:'#44ddff',life:1,dec:0.02
+    });
+  }
+  flash('#0066ff44');
+  playShieldActivateSound();
+  float2(player.x,player.y-30,'🛡️ AKTİV','#00ccff',20);
+}
+
+// ══════════════════════════════════════════════════════
+// YENİ SES EFFEKTLƏRİ
+// ══════════════════════════════════════════════════════
+
+function playRocketBlastSound(){
+  const ac=getAudioCtx();if(!ac||!_sfxEnabled)return;
+  const t=ac.currentTime;
+  // Partlayış BOOM — bass sweep
+  const boom=ac.createOscillator();
+  const boomG=ac.createGain();
+  boom.type='sine';
+  boom.frequency.setValueAtTime(220,t);
+  boom.frequency.exponentialRampToValueAtTime(28,t+0.4);
+  boomG.gain.setValueAtTime(0.7,t);
+  boomG.gain.exponentialRampToValueAtTime(0.001,t+0.5);
+  boom.connect(boomG);boomG.connect(ac.destination);
+  boom.start(t);boom.stop(t+0.55);
+  // Partlayış crackle — noise burst
+  const bufLen=Math.floor(ac.sampleRate*0.3);
+  const buf=ac.createBuffer(1,bufLen,ac.sampleRate);
+  const d=buf.getChannelData(0);
+  for(let j=0;j<bufLen;j++)d[j]=(Math.random()*2-1)*Math.pow(1-j/bufLen,1.2);
+  const src=ac.createBufferSource();src.buffer=buf;
+  const g=ac.createGain();
+  const f=ac.createBiquadFilter();f.type='bandpass';f.frequency.value=900;f.Q.value=0.5;
+  g.gain.value=0.55;
+  src.connect(f);f.connect(g);g.connect(ac.destination);
+  src.start(t);
+  // High-freq whizz
+  const whizz=ac.createOscillator();
+  const wG=ac.createGain();
+  whizz.type='sawtooth';
+  whizz.frequency.setValueAtTime(1800,t);
+  whizz.frequency.exponentialRampToValueAtTime(200,t+0.25);
+  wG.gain.setValueAtTime(0.25,t);
+  wG.gain.exponentialRampToValueAtTime(0.001,t+0.28);
+  whizz.connect(wG);wG.connect(ac.destination);
+  whizz.start(t);whizz.stop(t+0.3);
+}
+
+function playBombBlastSound(){
+  const ac=getAudioCtx();if(!ac||!_sfxEnabled)return;
+  const t=ac.currentTime;
+  // Böyük bass BOOM
+  [0,0.06,0.14].forEach((delay,i)=>{
+    const boom=ac.createOscillator();
+    const boomG=ac.createGain();
+    boom.type='sine';
+    boom.frequency.setValueAtTime(160-i*35,t+delay);
+    boom.frequency.exponentialRampToValueAtTime(18,t+delay+0.5);
+    boomG.gain.setValueAtTime(0.6-i*0.1,t+delay);
+    boomG.gain.exponentialRampToValueAtTime(0.001,t+delay+0.55);
+    boom.connect(boomG);boomG.connect(ac.destination);
+    boom.start(t+delay);boom.stop(t+delay+0.6);
+  });
+  // Crackle noise
+  const bufLen=Math.floor(ac.sampleRate*0.4);
+  const buf=ac.createBuffer(1,bufLen,ac.sampleRate);
+  const dd=buf.getChannelData(0);
+  for(let j=0;j<bufLen;j++)dd[j]=(Math.random()*2-1)*Math.pow(1-j/bufLen,0.8);
+  const src=ac.createBufferSource();src.buffer=buf;
+  const g=ac.createGain();g.gain.value=0.6;
+  const f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=600;
+  src.connect(f);f.connect(g);g.connect(ac.destination);
+  src.start(t);
+  // Siren-like sweep
+  const sweep=ac.createOscillator();
+  const swG=ac.createGain();
+  sweep.type='sawtooth';
+  sweep.frequency.setValueAtTime(400,t+0.05);
+  sweep.frequency.exponentialRampToValueAtTime(80,t+0.4);
+  swG.gain.setValueAtTime(0.3,t+0.05);
+  swG.gain.exponentialRampToValueAtTime(0.001,t+0.45);
+  sweep.connect(swG);swG.connect(ac.destination);
+  sweep.start(t+0.05);sweep.stop(t+0.5);
+}
+
+function playShieldActivateSound(){
+  const ac=getAudioCtx();if(!ac||!_sfxEnabled)return;
+  const t=ac.currentTime;
+  // Elektrik "zvvvt" — qalxan aktivləşmə
+  [523,659,784,1047].forEach((freq,i)=>{
+    const osc=ac.createOscillator();
+    const g=ac.createGain();
+    osc.type='sine';
+    osc.frequency.value=freq;
+    const nT=t+i*0.045;
+    g.gain.setValueAtTime(0,nT);
+    g.gain.linearRampToValueAtTime(0.25,nT+0.01);
+    g.gain.exponentialRampToValueAtTime(0.001,nT+0.12);
+    osc.connect(g);g.connect(ac.destination);
+    osc.start(nT);osc.stop(nT+0.14);
+  });
+  // Elektrik hum
+  const hum=ac.createOscillator();
+  const hG=ac.createGain();
+  hum.type='sawtooth';
+  hum.frequency.setValueAtTime(120,t+0.15);
+  hum.frequency.linearRampToValueAtTime(240,t+0.45);
+  hG.gain.setValueAtTime(0,t+0.15);
+  hG.gain.linearRampToValueAtTime(0.15,t+0.2);
+  hG.gain.exponentialRampToValueAtTime(0.001,t+0.5);
+  hum.connect(hG);hG.connect(ac.destination);
+  hum.start(t+0.15);hum.stop(t+0.55);
+}
+
+// ── MAIN LOOP ──
+function loop(ts){
+  if(state==='over')return;
+  dt=Math.min((ts-lastTime)/16.67,2);lastTime=ts;frame++;bgHue=(bgHue+0.4*dt)%360;
+
+  // clearRect translate-den once, tam canvas boyutunda
+  ctx.setTransform(1,0,0,1,0,0);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  let sx=0,sy=0;
+  if(shakeT>0){shakeT-=dt;sx=(Math.random()-0.5)*shake;sy=(Math.random()-0.5)*shake;shake*=0.82;if(shake<0.4)shakeT=0;}
+  ctx.save();ctx.translate(sx,sy);
+
+  // Kosmos arxa plan
+  drawCosmicBackground();
 
   if(state!=='playing'){ctx.restore();rafId=requestAnimationFrame(loop);return;}
 
@@ -3590,6 +4116,8 @@ function loop(ts){
   if(newLevel!==level&&newLevel<=19){
     level=newLevel;
     setText('levelBadge','LVL '+level);
+    // Level musiqisini yenilə
+    restartBGMForLevel();
     const _fb=document.getElementById('formBadge');
     if(_fb){const _f=getPlayerForm();_fb.innerHTML=_f.emoji+' '+_f.name.toUpperCase();_fb.style.color=_f.glow;_fb.style.textShadow='0 0 10px '+_f.glow+'88';}
     const nc=getLevelBG(level);
@@ -3737,16 +4265,41 @@ function loop(ts){
       }
     }
 
-    // Invincibility shield ring
-    if(inv){
-      const shieldR=pr+12+Math.sin(frame*0.2)*2;
-      for(let ri=0;ri<2;ri++){
-        const ang2=frame*0.09*(ri?-1:1);
-        const [r2,g2,b2]=pf.trailC;
-        ctx.beginPath();ctx.arc(player.x,player.y,shieldR,ang2,ang2+Math.PI*(ri?0.6:0.7));
-        ctx.strokeStyle=ri?`rgba(${r2},${g2},${b2},0.8)`:`rgba(${r2},${g2},${b2},0.45)`;
-        ctx.lineWidth=2;ctx.shadowBlur=16;ctx.shadowColor=pf.glow;ctx.stroke();ctx.shadowBlur=0;
+    // Invincibility shield — TAM GÖRÜNƏN, animasiyalı
+    if(inv&&invT>80){
+      // Qalxan aktiv ikən — parlaq tam dairə
+      const shP=1-Math.max(0,(invT-80)/160); // 0=tam qalxan, 1=bitməkdə
+      const shR=pr+14+Math.sin(frame*0.25)*4;
+      // Outer glow
+      ctx.beginPath();ctx.arc(player.x,player.y,shR+8,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(68,180,255,${0.15+0.1*Math.sin(frame*0.3)})`;ctx.lineWidth=10;
+      ctx.shadowBlur=0;ctx.stroke();
+      // Main shield ring
+      ctx.beginPath();ctx.arc(player.x,player.y,shR,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(68,220,255,${0.85-shP*0.3})`;ctx.lineWidth=3;
+      ctx.shadowBlur=24;ctx.shadowColor='#00ccff';ctx.stroke();ctx.shadowBlur=0;
+      // Inner shimmer ring
+      ctx.beginPath();ctx.arc(player.x,player.y,shR-5,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(200,240,255,${0.35-shP*0.2})`;ctx.lineWidth=1;ctx.stroke();
+      // Rotating arc pair
+      for(let ri=0;ri<3;ri++){
+        const ang2=frame*0.12*(ri%2===0?1:-1)+ri*Math.PI*2/3;
+        ctx.beginPath();ctx.arc(player.x,player.y,shR+2,ang2,ang2+Math.PI*0.55);
+        ctx.strokeStyle=`rgba(120,230,255,0.9)`;ctx.lineWidth=2.5;
+        ctx.shadowBlur=16;ctx.shadowColor='#00eeff';ctx.stroke();ctx.shadowBlur=0;
       }
+      // Shield time bar — üstündə qalan vaxt göstəricisi
+      const pct=Math.max(0,(invT-80)/160);
+      ctx.save();
+      ctx.strokeStyle='rgba(68,200,255,0.25)';ctx.lineWidth=4;
+      ctx.beginPath();ctx.arc(player.x,player.y,shR+14,- Math.PI/2,Math.PI*2*pct - Math.PI/2);
+      ctx.shadowBlur=8;ctx.shadowColor='#00aaff';ctx.stroke();ctx.shadowBlur=0;
+      ctx.restore();
+    } else if(inv){
+      // Zərbədən sonra qısa invincibility — sadəcə yanıp-sönür
+      const shR=pr+10;
+      ctx.beginPath();ctx.arc(player.x,player.y,shR,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(255,150,0,${0.4*Math.sin(frame*0.4)+0.4})`;ctx.lineWidth=2;ctx.stroke();
     }
 
     // Outer pulse halo — dual layer
@@ -3879,8 +4432,8 @@ function loop(ts){
       let hit=false;
       balls=balls.filter(b=>{const dx=b.x-p.x,dy=b.y-p.y;if(Math.sqrt(dx*dx+dy*dy)<b.r+p.er*0.3){spawnParts(b.x,b.y,b.c,8);score+=b.pts;updScore();hit=true;return false;}return true;});
       if(hit||p.life<=0||p.y<-30||p.y>660||p.x<-20||p.x>380){
-        addExp(p.x,p.y,'#ff5500',p.er);spawnParts(p.x,p.y,'#ff5500',22);
-        balls=balls.filter(b=>{const dx=b.x-p.x,dy=b.y-p.y;if(Math.sqrt(dx*dx+dy*dy)<p.er){spawnParts(b.x,b.y,b.c,6);score+=b.pts;updScore();return false;}return true;});
+        bigRocketBlast(p.x,p.y,p.er,p.c);
+        balls=balls.filter(b=>{const dx=b.x-p.x,dy=b.y-p.y;if(Math.sqrt(dx*dx+dy*dy)<p.er){spawnParts(b.x,b.y,b.c,12);score+=b.pts;updScore();return false;}return true;});
         return false;}return true;}
     // ── DÜŞMƏN ATƏŞ PROYEKTİLLƏRİ (oyunçuya vurur) ──
     if(p.tp==='elaser'){p.life-=dt;
@@ -3894,7 +4447,7 @@ function loop(ts){
         inv=true;invT=80;shake=10;shakeT=25;
         if(navigator.vibrate)navigator.vibrate([60,30,60]);
         const h=document.getElementById('h'+(lives+1));if(h){h.classList.add('pop');setTimeout(()=>h.classList.remove('pop'),400);}
-        if(lives<=0){gameOver();ctx.restore();return;}
+        if(lives<=0){gameOver();return;}
       }
       return p.life>0;}
     if(p.tp==='ebullet'){p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;
@@ -3906,7 +4459,7 @@ function loop(ts){
           inv=true;invT=80;shake=8;shakeT=20;
           if(navigator.vibrate)navigator.vibrate([50,25,50]);
           const h=document.getElementById('h'+(lives+1));if(h){h.classList.add('pop');setTimeout(()=>h.classList.remove('pop'),400);}
-          if(lives<=0){gameOver();ctx.restore();return;}
+          if(lives<=0){gameOver();return;}
           return false;}}
       return p.life>0&&p.y<700&&p.y>-20&&p.x>-20&&p.x<380;}
     if(p.tp==='erocket'){p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;
@@ -3918,7 +4471,7 @@ function loop(ts){
           inv=true;invT=90;shake=14;shakeT=30;
           if(navigator.vibrate)navigator.vibrate([80,40,80]);
           const h=document.getElementById('h'+(lives+1));if(h){h.classList.add('pop');setTimeout(()=>h.classList.remove('pop'),400);}
-          if(lives<=0){gameOver();ctx.restore();return;}
+          if(lives<=0){gameOver();return;}
           return false;}}
       return p.life>0&&p.y<700&&p.y>-30&&p.x>-30&&p.x<390;}
     return false;
@@ -4043,7 +4596,7 @@ function loop(ts){
         inv=true;invT=100;combo=0;updCombo();shake=13;shakeT=30;
         if(navigator.vibrate)navigator.vibrate([85,40,85]);
         const h=document.getElementById('h'+(lives+1));if(h){h.classList.add('pop');setTimeout(()=>h.classList.remove('pop'),400);}
-        if(lives<=0){gameOver();ctx.restore();return;}
+        if(lives<=0){gameOver();return;}
         continue;
       }
     }
