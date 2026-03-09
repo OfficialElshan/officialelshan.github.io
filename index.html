@@ -634,8 +634,28 @@ canvas{display:block;width:100%;height:100%;}
     <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;letter-spacing:8px;color:rgba(255,255,255,0.2);font-weight:700;text-align:center;margin-top:3px;">SÜRÜNMƏ · YAYIN · DAYAN</div>
     <div class="gsubt" id="startSubt">-</div>
 
+    <!-- 19. LEVEL CHALLENGE BANNER -->
+    <div onclick="document.getElementById('prizeBtnS').click()" style="
+      cursor:pointer;
+      width:88%;max-width:320px;
+      margin:4px 0 6px;
+      background:linear-gradient(135deg,rgba(255,180,0,0.12),rgba(255,80,0,0.10));
+      border:1px solid rgba(255,180,0,0.45);
+      border-radius:14px;padding:9px 16px;
+      display:flex;align-items:center;justify-content:space-between;
+      box-shadow:0 0 18px rgba(255,160,0,0.15);
+      animation:prizePulse 2.8s ease-in-out infinite;
+    ">
+      <div style="text-align:left;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ffd060;letter-spacing:2px;line-height:1.1;">🏆 19-CU LEVELE ÇAT</div>
+        <div style="font-size:10px;color:rgba(255,220,100,0.65);letter-spacing:1px;margin-top:1px;">Cəmi 19 level · Kimə çatar?</div>
+      </div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:30px;color:#00ff88;letter-spacing:1px;text-shadow:0 0 16px rgba(0,255,136,0.7);line-height:1;">$50</div>
+    </div>
+    <style>@keyframes prizePulse{0%,100%{box-shadow:0 0 14px rgba(255,160,0,0.12);}50%{box-shadow:0 0 28px rgba(255,160,0,0.30),0 0 8px rgba(0,255,136,0.15);}}</style>
+
     <!-- Motivasiya paneli — dinamik məzmun -->
-    <div id="motivPanel" style="width:88%;max-width:300px;margin:6px 0 10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:10px 14px;text-align:center;">
+    <div id="motivPanel" style="width:88%;max-width:300px;margin:4px 0 8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:9px 14px;text-align:center;">
       <div id="motivLine" style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#ffcc00;letter-spacing:1px;line-height:1.3;"></div>
       <div id="motivSub" style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:3px;letter-spacing:1px;"></div>
     </div>
@@ -840,19 +860,17 @@ canvas{display:block;width:100%;height:100%;}
     <div style="font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:4px;font-weight:700;margin-bottom:6px;">FIRL · QAZAN · ZƏFƏRİ ƏL</div>
 
     <!-- Cooldown info -->
-    <div id="spinCooldownInfo" style="font-size:10px;color:rgba(255,208,96,0.5);letter-spacing:2px;font-weight:700;margin-bottom:8px;"></div>
+    <div id="spinCooldownInfo" style="font-size:10px;color:rgba(255,208,96,0.5);letter-spacing:2px;font-weight:700;margin-bottom:8px;min-height:16px;"></div>
 
     <!-- Wheel wrapper -->
     <div style="position:relative;width:300px;height:300px;flex-shrink:0;">
-      <!-- Pointer -->
       <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);z-index:10;font-size:28px;filter:drop-shadow(0 2px 8px rgba(255,208,96,0.9));">▼</div>
       <canvas id="spinCanvas" width="300" height="300" style="border-radius:50%;box-shadow:0 0 40px rgba(255,208,96,0.25),0 0 80px rgba(92,107,255,0.15);"></canvas>
-      <!-- Center cap -->
       <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;background:radial-gradient(circle,#fff 0%,#ccc 100%);border:3px solid rgba(255,255,255,0.3);box-shadow:0 0 20px rgba(255,255,255,0.4);display:flex;align-items:center;justify-content:center;font-size:20px;z-index:5;">⭐</div>
     </div>
 
     <!-- Prize display -->
-    <div id="spinPrizeBox" style="margin-top:10px;min-height:44px;display:flex;align-items:center;justify-content:center;">
+    <div id="spinPrizeBox" style="margin-top:8px;min-height:40px;display:flex;align-items:center;justify-content:center;">
       <div id="spinPrizeTxt" style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#fff;letter-spacing:2px;opacity:0;transition:all 0.4s;text-shadow:0 0 20px rgba(255,208,96,0.8);"></div>
     </div>
 
@@ -865,9 +883,18 @@ canvas{display:block;width:100%;height:100%;}
       transition:all 0.15s;margin-top:4px;
     ">🎰 FIRLA!</button>
 
+    <!-- Ad extra spin button — görünməz başlayır -->
+    <button id="spinAdBtn" onclick="spinWatchAd()" style="
+      display:none;
+      background:rgba(255,255,255,0.06);border:1px solid rgba(255,208,96,0.35);
+      color:#ffd060;font-family:'Bebas Neue',sans-serif;
+      font-size:16px;letter-spacing:2px;padding:10px 28px;border-radius:40px;
+      cursor:pointer;margin-top:8px;transition:all 0.15s;
+    ">📺 REKLAM İZLƏ → +1 SPIN</button>
+
     <!-- Spin count -->
     <div style="font-size:10px;color:rgba(255,255,255,0.2);letter-spacing:2px;margin-top:8px;font-weight:700;">
-      Gündəlik spin: <span id="spinCountDisp" style="color:rgba(255,208,96,0.6);">3</span> qalır
+      Gündəlik spin: <span id="spinCountDisp" style="color:rgba(255,208,96,0.6);">2</span> qalır
     </div>
 
     <button class="closeBtn" style="margin-top:8px;" onclick="closeSpinScreen()">← Geri</button>
@@ -1831,27 +1858,39 @@ function resumeGame(){
 // ── INIT PLAYER ──
 function initPlayer(){player={x:180,y:520,r:17,tx:180,ty:520,trail:[]};}
 
-// ── LEVEL CALCULATION — global, not redefined each frame ──
+// ── LEVEL CALCULATION — Psixoloji çətinlik əyrisi ──
+// Məqsəd: Oyunçu 19-a çatana qədər mümkün olduğuna inansın.
+// LVL 1-6  → asan, sürətli keçid → "bu oyun əladır!" hissi
+// LVL 7-12 → orta, addım-addım → "bir az da" effekti
+// LVL 13-16 → çətin, amma görünür → "demək olar ki, bacardım"
+// LVL 17-18 → çox çətin, oyunçu nadir hallarda çatır
+// LVL 19    → praktiki mümkünsüz (ortalama oyunçu heç vaxt görmür)
+// ── LEVEL CURVE — Psixoloji dizayn ──
+// Zona 1 (1-6):  Tez-tez level atlama → dopamin, "əladır!" hissi
+// Zona 2 (7-12): Sabit artım → "flow", hər level hiss olunur
+// Zona 3 (13-16): Çətin amma görünür → nadir oyunçular çatır
+// Zona 4 (17-18): Çox çətin → çox az adam görür
+// Zona 5 (19):   Praktiki mümkünsüz → heç kim çatmır
 function calcLevel(sc){
-  if(sc<15)  return 1;
-  if(sc<40)  return 2;
-  if(sc<75)  return 3;
-  if(sc<120) return 4;
-  if(sc<180) return 5;
-  if(sc<250) return 6;
-  if(sc<330) return 7;
-  if(sc<420) return 8;
-  if(sc<510) return 9;
-  if(sc<600) return 10;
-  if(sc<700) return 11;
-  if(sc<775) return 12;
-  if(sc<840) return 13;
-  if(sc<900) return 14;
-  if(sc<950) return 15;
-  if(sc<1500) return 16;
-  if(sc<1800) return 17;
-  if(sc<50000) return 18;
-  return 19;
+  if(sc<18)   return 1;
+  if(sc<50)   return 2;   // +32
+  if(sc<100)  return 3;   // +50
+  if(sc<165)  return 4;   // +65
+  if(sc<255)  return 5;   // +90
+  if(sc<380)  return 6;   // +125
+  if(sc<550)  return 7;   // +170
+  if(sc<760)  return 8;   // +210
+  if(sc<1020) return 9;   // +260
+  if(sc<1340) return 10;  // +320
+  if(sc<1730) return 11;  // +390
+  if(sc<2200) return 12;  // +470
+  if(sc<2780) return 13;  // +580
+  if(sc<3500) return 14;  // +720
+  if(sc<4400) return 15;  // +900
+  if(sc<5600) return 16;  // +1200
+  if(sc<7200) return 17;  // +1600
+  if(sc<9500) return 18;  // +2300 — demək olar mümkünsüz
+  return 19;              // 9500+ — $50 mükafat təhlükəsizdir
 }
 
 // ── START GAME ──
@@ -2446,21 +2485,22 @@ const SPIN_SEGMENTS = [
 const SPIN_POOL = [];
 SPIN_SEGMENTS.forEach((seg,i)=>{ for(let w=0;w<seg.weight;w++) SPIN_POOL.push(i); });
 
-const SPIN_DAILY_MAX = 3;
+const SPIN_DAILY_MAX = 2;
 const SPIN_COOLDOWN_KEY = 'ds4_spin_data';
 
 function getSpinData(){
   try{
     const d=JSON.parse(localStorage.getItem(SPIN_COOLDOWN_KEY)||'{}');
     const today=new Date().toDateString();
-    if(d.date!==today){ d.date=today; d.count=0; }
+    if(d.date!==today){ d.date=today; d.count=0; d.adBonus=0; }
+    if(!d.adBonus)d.adBonus=0;
     return d;
-  }catch(e){ return {date:new Date().toDateString(),count:0}; }
+  }catch(e){ return {date:new Date().toDateString(),count:0,adBonus:0}; }
 }
 function saveSpinData(d){ localStorage.setItem(SPIN_COOLDOWN_KEY,JSON.stringify(d)); }
 
-let _spinAngle = 0;        // current wheel rotation
-let _spinAnimId = null;    // rAF handle
+let _spinAngle = 0;
+let _spinAnimId = null;
 let _spinning = false;
 
 function openSpinScreen(){
@@ -2478,23 +2518,51 @@ function closeSpinScreen(){
 
 function updateSpinUI(){
   const d=getSpinData();
-  const left=Math.max(0, SPIN_DAILY_MAX - d.count);
-  document.getElementById('spinCountDisp').textContent=left;
+  const totalAllowed=SPIN_DAILY_MAX + (d.adBonus||0);
+  const left=Math.max(0, totalAllowed - d.count);
+  const countEl=document.getElementById('spinCountDisp');
+  if(countEl) countEl.textContent=left;
+
   const cd=document.getElementById('spinCooldownInfo');
+  const spinBtn=document.getElementById('spinBtn');
+  const adBtn=document.getElementById('spinAdBtn');
+
   if(left<=0){
-    // Sabah reset olacaq
     const now=new Date();
     const midnight=new Date(); midnight.setHours(24,0,0,0);
     const ms=midnight-now;
     const h=Math.floor(ms/3600000),m=Math.floor((ms%3600000)/60000);
-    cd.textContent=`Sabah yenilənir: ${h}s ${m}d`;
-    document.getElementById('spinBtn').style.opacity='0.4';
-    document.getElementById('spinBtn').style.pointerEvents='none';
+    if(cd) cd.textContent=`Sabah yenilənir: ${h}s ${m}d`;
+    if(spinBtn){ spinBtn.style.opacity='0.35'; spinBtn.style.pointerEvents='none'; spinBtn.disabled=true; }
+    // Reklam düyməsini göstər — gündə max 1 reklam bonusu
+    if(adBtn){ adBtn.style.display=(d.adBonus>=1)?'none':'block'; }
   } else {
-    cd.textContent='';
-    document.getElementById('spinBtn').style.opacity='1';
-    document.getElementById('spinBtn').style.pointerEvents='all';
+    if(cd) cd.textContent= left===1 ? '⚡ 1 spin qalır!' : `⚡ ${left} spin qalır`;
+    // Spin hazır — düyməni aktiv et
+    if(spinBtn){ spinBtn.style.opacity='1'; spinBtn.style.pointerEvents='all'; spinBtn.disabled=false; }
+    if(adBtn) adBtn.style.display='none';
   }
+}
+
+// Reklam izləyib +1 spin qazanmaq
+function spinWatchAd(){
+  const d=getSpinData();
+  if(d.adBonus>=1) return; // gündə 1 dəfə
+  adSim(()=>{
+    const d2=getSpinData();
+    d2.adBonus=1;
+    saveSpinData(d2);
+    updateSpinUI(); // bu spinBtn-i açacaq (left=1 olacaq)
+    // Toast spin ekranında göstər
+    const pt=document.getElementById('spinPrizeTxt');
+    if(pt){
+      pt.textContent='🎰 +1 SPIN QAZANDIN!';
+      pt.style.color='#ffd060';
+      pt.style.textShadow='0 0 20px rgba(255,208,96,0.9)';
+      pt.style.opacity='1';
+      setTimeout(()=>{pt.style.opacity='0';},2500);
+    }
+  });
 }
 
 function drawSpinWheel(angle){
@@ -2507,7 +2575,6 @@ function drawSpinWheel(angle){
 
   ctx.clearRect(0,0,300,300);
 
-  // Outer glow ring
   const grad=ctx.createRadialGradient(cx,cy,r-8,cx,cy,r+2);
   grad.addColorStop(0,'rgba(255,208,96,0.25)');
   grad.addColorStop(1,'transparent');
@@ -2516,119 +2583,71 @@ function drawSpinWheel(angle){
   SPIN_SEGMENTS.forEach((seg,i)=>{
     const startA = angle + i*arc;
     const endA   = startA + arc;
-
-    // Segment fill
-    ctx.beginPath();
-    ctx.moveTo(cx,cy);
-    ctx.arc(cx,cy,r,startA,endA);
-    ctx.closePath();
-    ctx.fillStyle=seg.color;
-    ctx.fill();
-
-    // Glow border
-    ctx.beginPath();
-    ctx.moveTo(cx,cy);
-    ctx.arc(cx,cy,r,startA,endA);
-    ctx.closePath();
-    ctx.strokeStyle=seg.glow+'66';
-    ctx.lineWidth=1.5;
-    ctx.stroke();
-
-    // Inner arc highlight
-    ctx.beginPath();
-    ctx.arc(cx,cy,r-4,startA+0.04,endA-0.04);
-    ctx.strokeStyle=seg.glow+'44';
-    ctx.lineWidth=3;
-    ctx.stroke();
-
-    // Label text
-    ctx.save();
-    ctx.translate(cx,cy);
-    ctx.rotate(startA + arc/2);
-    ctx.textAlign='right';
-    ctx.font='bold 11px Space Grotesk, sans-serif';
-    ctx.fillStyle='#fff';
-    ctx.shadowColor=seg.glow;
-    ctx.shadowBlur=8;
-    ctx.fillText(seg.label, r-8, 4);
-    ctx.restore();
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,startA,endA);ctx.closePath();
+    ctx.fillStyle=seg.color;ctx.fill();
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,startA,endA);ctx.closePath();
+    ctx.strokeStyle=seg.glow+'66';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.beginPath();ctx.arc(cx,cy,r-4,startA+0.04,endA-0.04);
+    ctx.strokeStyle=seg.glow+'44';ctx.lineWidth=3;ctx.stroke();
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(startA + arc/2);
+    ctx.textAlign='right';ctx.font='bold 11px Space Grotesk, sans-serif';
+    ctx.fillStyle='#fff';ctx.shadowColor=seg.glow;ctx.shadowBlur=8;
+    ctx.fillText(seg.label, r-8, 4);ctx.restore();
   });
 
-  // Inner dark circle
-  ctx.beginPath();ctx.arc(cx,cy,28,0,Math.PI*2);
-  ctx.fillStyle='#04040a';ctx.fill();
-  ctx.beginPath();ctx.arc(cx,cy,28,0,Math.PI*2);
-  ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=2;ctx.stroke();
+  ctx.beginPath();ctx.arc(cx,cy,28,0,Math.PI*2);ctx.fillStyle='#04040a';ctx.fill();
+  ctx.beginPath();ctx.arc(cx,cy,28,0,Math.PI*2);ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=2;ctx.stroke();
 }
 
 function doSpin(){
   if(_spinning)return;
   const d=getSpinData();
-  if(d.count>=SPIN_DAILY_MAX){ updateSpinUI(); return; }
+  const totalAllowed=SPIN_DAILY_MAX+(d.adBonus||0);
+  if(d.count>=totalAllowed){ updateSpinUI(); return; }
 
-  // Pick winning segment BEFORE animation
   const winIdx = SPIN_POOL[Math.floor(Math.random()*SPIN_POOL.length)];
   const seg = SPIN_SEGMENTS[winIdx];
 
   _spinning=true;
-  document.getElementById('spinBtn').style.opacity='0.4';
-  document.getElementById('spinBtn').style.pointerEvents='none';
+  const spinBtn=document.getElementById('spinBtn');
+  const adBtn=document.getElementById('spinAdBtn');
+  if(spinBtn){ spinBtn.style.opacity='0.4'; spinBtn.style.pointerEvents='none'; spinBtn.disabled=true; }
+  if(adBtn) adBtn.style.display='none';
   document.getElementById('spinPrizeTxt').style.opacity='0';
 
-  const n=SPIN_SEGMENTS.length;
-  const arc=Math.PI*2/n;
-
-  // Target angle: spin at least 5 full rotations, land on winIdx
-  // Pointer is at top (–π/2). Segment centre = winIdx*arc + arc/2
-  // We need that centre to be at –π/2 (top)
+  const arc=Math.PI*2/SPIN_SEGMENTS.length;
   const segCenter = winIdx * arc + arc/2;
   const targetOffset = -Math.PI/2 - segCenter;
   const fullRotations = (5 + Math.floor(Math.random()*4)) * Math.PI*2;
   const targetAngle = _spinAngle + fullRotations + ((targetOffset - _spinAngle) % (Math.PI*2));
-
   const startAngle = _spinAngle;
   const delta = targetAngle - startAngle;
-  const duration = 4000 + Math.random()*1200; // 4-5.2s
+  const duration = 4000 + Math.random()*1200;
   const startTime = performance.now();
 
   function easeOut(t){ return 1 - Math.pow(1-t, 4); }
 
-  function frame(now){
+  function spinFrame(now){
     const t = Math.min((now-startTime)/duration, 1);
     _spinAngle = startAngle + delta * easeOut(t);
     drawSpinWheel(_spinAngle);
-
     if(t<1){
-      _spinAnimId=requestAnimationFrame(frame);
+      _spinAnimId=requestAnimationFrame(spinFrame);
     } else {
       _spinAngle = targetAngle;
       drawSpinWheel(_spinAngle);
       _spinning=false;
-
-      // Update spin count
       d.count++;
       saveSpinData(d);
       updateSpinUI();
-
-      // Show prize
       const pt=document.getElementById('spinPrizeTxt');
-      pt.textContent=seg.label;
-      pt.style.color=seg.glow;
-      pt.style.textShadow=`0 0 24px ${seg.glow}`;
-      pt.style.opacity='1';
-
-      // Vibrate
+      pt.textContent=seg.label;pt.style.color=seg.glow;
+      pt.style.textShadow=`0 0 24px ${seg.glow}`;pt.style.opacity='1';
       if(navigator.vibrate)navigator.vibrate([60,30,120]);
-
-      // Give reward after short delay
-      setTimeout(()=>{
-        giveSpinReward(seg);
-        document.getElementById('spinBtn').style.opacity='1';
-        document.getElementById('spinBtn').style.pointerEvents='all';
-      }, 600);
+      setTimeout(()=>{ giveSpinReward(seg); }, 600);
     }
   }
-  requestAnimationFrame(frame);
+  requestAnimationFrame(spinFrame);
 }
 
 function giveSpinReward(seg){
@@ -2643,7 +2662,6 @@ function giveSpinReward(seg){
   showAchieveToast(seg.label.split(' ')[0],'QAZANDIN!',seg.label);
 }
 
-// Legacy wrapper — keep backward compat (game-over trigger)
 function showLuckySpin(){ openSpinScreen(); }
 
 
@@ -2659,59 +2677,74 @@ function spawnBall(){
   // Sürəti level-ə görə hesabla — ilk levellərdə YAVAŞ, sonra sürətlənir
   // Flappy Bird: ilk pipe çox yavaşdır, sonrakılar sürətlənir
   // Sürəti level-ə görə hesabla — 100+ levellərdə plateau
-  const baseSpd = level<=1  ? 1.6+Math.random()*0.3
-                : level<=2  ? 2.0+Math.random()*0.4
-                : level<=4  ? 2.4+level*0.3+Math.random()*0.5
-                : level<=7  ? 3.0+level*0.4+Math.random()*0.7
-                : level<=12 ? 4.5+level*0.5+Math.random()*0.9
-                : level<=16 ? 7.0+level*0.55+Math.random()*1.2
-                : level<=17 ? 11+Math.random()*1.5
-                : level<=18 ? 14+Math.random()*2    // LVL 18: çox sürətli
-                : 18+Math.random()*3;                // LVL 19: mümkünsüz sürət
+  // Sürət əyrisi — level əyrisinə uyğun
+  // LVL 1-6: yavaş-orta (öyrəniş+flow)
+  // LVL 7-12: orta-sürətli (challenge)
+  // LVL 13-17: sürətli (expert)
+  // LVL 18-19: ekstremal
+  const baseSpd = level<=1  ? 1.5+Math.random()*0.3
+                : level<=2  ? 1.85+Math.random()*0.3
+                : level<=3  ? 2.2+Math.random()*0.35
+                : level<=4  ? 2.6+Math.random()*0.4
+                : level<=5  ? 3.0+Math.random()*0.45
+                : level<=6  ? 3.5+Math.random()*0.5
+                : level<=7  ? 4.0+Math.random()*0.6
+                : level<=8  ? 4.7+Math.random()*0.7
+                : level<=9  ? 5.4+Math.random()*0.8
+                : level<=10 ? 6.2+Math.random()*0.9
+                : level<=11 ? 7.0+Math.random()*1.0
+                : level<=12 ? 7.9+Math.random()*1.1
+                : level<=13 ? 8.8+Math.random()*1.2
+                : level<=14 ? 9.8+Math.random()*1.3
+                : level<=15 ? 10.9+Math.random()*1.4
+                : level<=16 ? 12.0+Math.random()*1.5
+                : level<=17 ? 13.2+Math.random()*1.8
+                : level<=18 ? 15.0+Math.random()*2.2
+                : 18.0+Math.random()*3.0; // LVL 19: insan refleksi üçün mümkünsüz
 
   // ── ZVOOM: Temiz, okunakli zorluk sistemi ──
   // Hər leveldə SADECE 1 xüsusi mechanic aktiv olur — hamısı eyni anda deyil
 
-  // Level 4+ aimed — oyuncu addımını öyrənir
-  if(level>=4&&Math.random()<0.20){
-    balls.push({x:player.x+(Math.random()-0.5)*100,y:-16,r:13,spd:baseSpd*0.90,c:cfg.ac,pts:2,age:0,done:false,wb:0,wa:0,shape:'circle'});return;
+  // Level 5+ aimed — oyunçu hərəkəti öyrənir
+  if(level>=5&&Math.random()<0.18){
+    balls.push({x:player.x+(Math.random()-0.5)*120,y:-16,r:13,spd:baseSpd*0.88,c:cfg.ac,pts:2,age:0,done:false,wb:0,wa:0,shape:'circle'});return;
   }
-  // Level 5-7: ikili dalğa — amma sadəcə 2 top, boşluq var
-  if(level>=5&&level<=7&&Math.random()<0.14){
+  // Level 6-9: ikili dalğa — boşluq var, keçmək olar
+  if(level>=6&&level<=9&&Math.random()<0.14){
     const gap=180+Math.random()*40;
-    balls.push({x:gap-55,y:-14,r:11,spd:baseSpd,c:cfg.ac,pts:2,age:0,done:false,wb:0,wa:0,shape:'circle'});
-    balls.push({x:gap+55,y:-14,r:11,spd:baseSpd,c:cfg.ac,pts:2,age:0,done:false,wb:0,wa:0,shape:'circle'});
+    balls.push({x:gap-58,y:-14,r:11,spd:baseSpd,c:cfg.ac,pts:2,age:0,done:false,wb:0,wa:0,shape:'circle'});
+    balls.push({x:gap+58,y:-14,r:11,spd:baseSpd,c:cfg.ac,pts:2,age:0,done:false,wb:0,wa:0,shape:'circle'});
     return;
   }
-  // Level 6+ zigzag — bir anda SADECE 1, yavaş
-  if(level>=6&&Math.random()<0.10){
-    balls.push({x:180,y:-22,r:18,spd:baseSpd*0.55,c:'#ff00ff',pts:4,zz:true,zzd:1,zzs:2.5+level*0.15,age:0,done:false,shape:'diamond'});return;
+  // Level 7+ zigzag — yavaş, proqnozlaşdırıla bilən
+  if(level>=7&&Math.random()<0.10){
+    balls.push({x:180,y:-22,r:17,spd:baseSpd*0.52,c:'#ff00ff',pts:4,zz:true,zzd:1,zzs:2.2+level*0.12,age:0,done:false,shape:'diamond'});return;
   }
-  // Level 8+ split — böyük top ikiyə bölünür (hər dəfə max 1)
-  if(level>=8&&Math.random()<0.10){
-    balls.push({x:Math.random()*260+50,y:-18,r:15,spd:baseSpd*0.70,c:'#ff9900',pts:2,split:true,age:0,done:false,wb:0,wa:0,shape:'square'});return;
+  // Level 9+ split
+  if(level>=9&&Math.random()<0.10){
+    balls.push({x:Math.random()*260+50,y:-18,r:15,spd:baseSpd*0.68,c:'#ff9900',pts:2,split:true,age:0,done:false,wb:0,wa:0,shape:'square'});return;
   }
-  // Level 9+ homing — YAVAŞ, bir dəfəlik, oyunçu qaça bilər
-  if(level>=9&&Math.random()<0.07){
-    balls.push({x:Math.random()*280+40,y:-18,r:11,spd:baseSpd*0.45,c:'#ff44ff',pts:3,homing:true,vx:0,age:0,done:false,wb:0,wa:0,shape:'triangle'});return;
-  }
-  // Level 10+ giant — böyük amma yavaş, yan keçmək olar
+  // Level 10+ homing — YAVAŞ, oyunçu qaça bilər
   if(level>=10&&Math.random()<0.07){
-    balls.push({x:Math.random()*220+70,y:-36,r:28,spd:baseSpd*0.30,c:'#ff0000',pts:6,giant:true,age:0,done:false,wb:0,wa:0,shape:'circle'});return;
+    balls.push({x:Math.random()*280+40,y:-18,r:11,spd:baseSpd*0.42,c:'#ff44ff',pts:3,homing:true,vx:0,age:0,done:false,wb:0,wa:0,shape:'triangle'});return;
   }
-  // Level 8+ DÜŞMƏN SİLAH — az, aydın xəbərdarlıqlı, SADECE 1 növ aktiv
-  if(level>=8&&level<=9&&Math.random()<0.08){
-    balls.push({x:Math.random()*260+50,y:-18,r:13,spd:baseSpd*0.30,c:'#ff2222',pts:4,
+  // Level 11+ giant — böyük amma yavaş
+  if(level>=11&&Math.random()<0.07){
+    balls.push({x:Math.random()*220+70,y:-36,r:28,spd:baseSpd*0.28,c:'#ff0000',pts:6,giant:true,age:0,done:false,wb:0,wa:0,shape:'circle'});return;
+  }
+  // Level 9-10 — düşmən lazer
+  if(level>=9&&level<=10&&Math.random()<0.07){
+    balls.push({x:Math.random()*260+50,y:-18,r:13,spd:baseSpd*0.28,c:'#ff2222',pts:4,
       enemyWeapon:'laser',ewTimer:90,ewCooldown:30,
       age:0,done:false,wb:0,wa:0,shape:'hexagon'});return;
   }
-  if(level>=10&&Math.random()<0.07){
-    balls.push({x:Math.random()*260+50,y:-18,r:12,spd:baseSpd*0.28,c:'#ffaa00',pts:5,
+  if(level>=11&&Math.random()<0.07){
+    balls.push({x:Math.random()*260+50,y:-18,r:12,spd:baseSpd*0.26,c:'#ffaa00',pts:5,
       enemyWeapon:'bullet',ewTimer:100,ewCooldown:40,
       age:0,done:false,wb:0,wa:0,shape:'star'});return;
   }
-  if(level>=12&&Math.random()<0.05){
-    balls.push({x:Math.random()*240+60,y:-20,r:14,spd:baseSpd*0.25,c:'#ff6600',pts:6,
+  if(level>=13&&Math.random()<0.05){
+    balls.push({x:Math.random()*240+60,y:-20,r:14,spd:baseSpd*0.22,c:'#ff6600',pts:6,
       enemyWeapon:'rocket',ewTimer:120,ewCooldown:60,
       age:0,done:false,wb:0,wa:0,shape:'hexagon'});return;
   }
@@ -2727,7 +2760,7 @@ function spawnBall(){
     {emoji:'☠️',c:'#9900cc',r:20,s:baseSpd*0.65,p:4,label:'Ölüm Topu!'},
     {emoji:'🧨',c:'#ff6600',r:13,s:baseSpd*1.25,p:2,label:'Partlayış!'},
   ];
-  if(level>=3&&Math.random()<0.22){
+  if(level>=4&&Math.random()<0.22){
     const st=STICKER_BALLS[Math.floor(Math.random()*STICKER_BALLS.length)];
     balls.push({x:Math.random()*280+40,y:-st.r,r:st.r,spd:st.s,c:st.c,pts:st.p,emoji:st.emoji,label:st.label,wb:Math.random()*1.2-0.6,wa:Math.random()*1.8,age:0,done:false});
     return;
@@ -2749,21 +2782,25 @@ function spawnBall(){
 // Level 5: hər 28 frame
 // Level 10+: hər 10 frame (intensiv)
 function getSpawnRate(){
-  if(level<=1)  return 60;  // LVL 1: çox yavaş — öyrəniş
-  if(level<=2)  return 48;
-  if(level<=3)  return 38;
-  if(level<=4)  return 30;
-  if(level<=5)  return 24;
-  if(level<=6)  return 20;
-  if(level<=7)  return 17;
-  if(level<=8)  return 15;
+  if(level<=1)  return 68;
+  if(level<=2)  return 55;
+  if(level<=3)  return 44;
+  if(level<=4)  return 36;
+  if(level<=5)  return 30;
+  if(level<=6)  return 25;
+  if(level<=7)  return 21;
+  if(level<=8)  return 18;
+  if(level<=9)  return 15;
   if(level<=10) return 13;
-  if(level<=12) return 12;
-  if(level<=14) return 11;
-  if(level<=16) return 10;
-  if(level<=17) return 9;
-  if(level<=18) return 8;   // LVL 18: çox sürətli
-  return 7;                  // LVL 19: demək olar mümkünsüz
+  if(level<=11) return 11;
+  if(level<=12) return 10;
+  if(level<=13) return 9;
+  if(level<=14) return 8;
+  if(level<=15) return 7;
+  if(level<=16) return 6;
+  if(level<=17) return 5;
+  if(level<=18) return 4;
+  return 4;
 }
 
 // ── DROPS — very rare ──
@@ -3019,7 +3056,10 @@ function openInvite(){
 function closeInvite(){hide('inviteScreen');show('startScreen');}
 
 function buildInviteUrl(){
-  return `https://zvoom.app?ref=${getInviteCode()}`;
+  // Oyunun real URL-ini istifadə et
+  const path = window.location.pathname.replace(/\/index\.html$/, '/');
+  const base = window.location.origin + path;
+  return `${base}?ref=${getInviteCode()}`;
 }
 
 function getInviteMsg(){
@@ -3037,7 +3077,7 @@ function inviteIG(){
   recordInvite('Instagram');
 }
 function inviteFB(){
-  window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent('https://zvoom.app?ref='+getInviteCode()),'_blank');
+  window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(buildInviteUrl()),'_blank');
   recordInvite('Facebook');
 }
 function inviteTT(){
@@ -3087,25 +3127,28 @@ function openSocialShare(){
 }
 function closeSocialShare(){document.getElementById('socialShareOverlay').style.display='none';}
 
+function getGameUrl(){
+  const path = window.location.pathname.replace(/\/index\.html$/, '/');
+  return window.location.origin + path;
+}
+
 function getShareMsg(){
   const sc=state==='over'?score:bestScore;
-  return `🎮 ZVOOM — ${sc} xal qazandım!\nSən döyə bilərsən? 🔥\nhttps://zvoom.app`;
+  return `🎮 ZVOOM — ${sc} xal qazandım!\nSən döyə bilərsən? 🔥\n${getGameUrl()}`;
 }
 
 function doSocialShare(type){
   const msg=getShareMsg();
-  const url=encodeURIComponent('https://zvoom.app');
+  const url=encodeURIComponent(getGameUrl());
   const txt=encodeURIComponent(msg);
   if(type==='wa'){window.open('https://wa.me/?text='+txt,'_blank');}
   else if(type==='ig'){
-    // Instagram: copy text + open app
     try{navigator.clipboard.writeText(msg);}catch(e){}
     window.open('instagram://camera','_blank');
     setTimeout(()=>{showAchieveToast('📸','Instagram','Mətn kopyalandı — story-yə yapışdır!');},400);
   }
   else if(type==='fb'){window.open('https://www.facebook.com/sharer/sharer.php?u='+url+'&quote='+txt,'_blank');}
   else if(type==='tt'){
-    // TikTok: copy text + open app
     try{navigator.clipboard.writeText(msg);}catch(e){}
     window.open('tiktok://','_blank');
     setTimeout(()=>{showAchieveToast('🎵','TikTok','Mətn kopyalandı — bio-ya yapışdır!');},400);
@@ -3115,7 +3158,7 @@ function doSocialShare(type){
     catch(e){prompt('Kopyala:',msg);}
   }
   else if(type==='native'){
-    if(navigator.share){navigator.share({title:'ZVOOM',text:msg,url:'https://zvoom.app'}).catch(()=>{});}
+    if(navigator.share){navigator.share({title:'ZVOOM',text:msg,url:getGameUrl()}).catch(()=>{});}
     else{try{navigator.clipboard.writeText(msg);}catch(e){}showAchieveToast('📋','Kopyalandı!','');}
   }
   totalShared++;saveMissions();
@@ -3555,13 +3598,36 @@ function loop(ts){
     const newForm=getPlayerForm(level);
     const oldForm=getPlayerForm(level-1);
     if(newForm.emoji!==oldForm.emoji||newForm.name!==oldForm.name){
-      // Yalnız particle burst + səs — yazı yoxdur, arxa plan görünsün
       shake=18;shakeT=40;
       spawnTransformBurst(newForm);
       playSkinUnlockSound();
       if(level===10||level===15||level===17){_pendingAdOnNextDeath=true;}
     }
     lastFormLevel=level;
+
+    // Motivasiya mesajları — oyunçunu həvəsləndirir, $50 mükafatını xatırladır
+    const _lvlMsgs={
+      2:'🔥 LVL 2! Yaxşı gedirsən!',
+      3:'⚡ LVL 3! Davam et!',
+      4:'💪 LVL 4! Gedişat yaxşıdır!',
+      5:'🌟 LVL 5! Yarıya yaxınlaşırsın!',
+      6:'🚀 LVL 6! Sürətlənir...',
+      7:'💎 LVL 7! Yaxşı oyunçusan!',
+      8:'🔥 LVL 8! Top oyunçular buradadır!',
+      9:'⭐ LVL 9! Az qaldı 10-a!',
+      10:'🏆 LVL 10! Yarıya çatdın! $50-yə yaxınlaşırsın!',
+      11:'💥 LVL 11! Mükəmməl!',
+      12:'🌪️ LVL 12! Ustasan!',
+      13:'☄️ LVL 13! Rekord üstündəsən!',
+      14:'🐉 LVL 14! Az qaldı — 5 level daha!',
+      15:'👑 LVL 15! İnananlar üçün! $50 görünür!',
+      16:'⚡ LVL 16! Demək olar yetdim deməyə!',
+      17:'🌟 LVL 17! Nə oyunçusan sən!',
+      18:'♾️ LVL 18! Son addım!',
+    };
+    if(_lvlMsgs[level]){
+      setTimeout(()=>float2(180,200,_lvlMsgs[level],getLevelBG(level).ac,13),400);
+    }
   }
 
   // Timers
