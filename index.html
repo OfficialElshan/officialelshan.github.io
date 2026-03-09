@@ -5,7 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>ZVOOM</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Bebas+Neue&display=swap');
+/* Offline fonts — no Google Fonts needed */
+@font-face {
+  font-family: Impact,'Arial Narrow',Arial;
+  font-style: normal;
+  font-weight: 400;
+  src: local('Impact'), local('Anton'), local('Arial Narrow');
+}
 
 /* ══ 2025 TREND: Dark Glass + Chromatic Neon ══ */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -24,7 +30,7 @@
 }
 html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);touch-action:none;}
 body{display:flex;flex-direction:column;justify-content:flex-start;align-items:center;
-  font-family:'Space Grotesk',sans-serif;}
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;}
 
 
 
@@ -52,7 +58,7 @@ canvas{display:block;width:100%;height:100%;}
 /* Score */
 #scoreWrap{text-align:left;flex:none;}
 #score{
-  font-family:'Bebas Neue',sans-serif;
+  font-family:Impact,'Arial Narrow',Arial,sans-serif;
   font-size:clamp(44px,9vw,60px);
   color:#fff;line-height:1;letter-spacing:2px;
   text-shadow:0 0 30px rgba(0,245,212,0.25),0 0 60px rgba(92,107,255,0.15);
@@ -75,7 +81,7 @@ canvas{display:block;width:100%;height:100%;}
 /* Combo */
 #comboDisp{
   padding-left:14px;
-  font-family:'Bebas Neue',sans-serif;font-size:22px;
+  font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:22px;
   color:var(--neon);opacity:0;
   transition:opacity 0.2s;
   text-shadow:0 0 18px var(--neon),0 0 36px rgba(0,245,212,0.3);
@@ -123,7 +129,7 @@ canvas{display:block;width:100%;height:100%;}
 #vignette{position:absolute;inset:0;pointer-events:none;z-index:4;
   background:radial-gradient(ellipse at center,transparent 42%,rgba(0,0,0,0.75) 100%);}
 #weapTip{position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);
-  font-family:'Bebas Neue',sans-serif;font-size:14px;color:#fff;
+  font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:14px;color:#fff;
   pointer-events:none;opacity:0;transition:opacity 0.2s;
   text-align:center;width:200px;line-height:1.3;z-index:15;letter-spacing:1px;}
 
@@ -153,7 +159,7 @@ canvas{display:block;width:100%;height:100%;}
 /* COUNTDOWN */
 #cdScreen{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
   pointer-events:none;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);z-index:25;}
-#cdNum{font-family:'Bebas Neue',sans-serif;font-size:clamp(90px,22vw,130px);color:#fff;
+#cdNum{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:clamp(90px,22vw,130px);color:#fff;
   text-shadow:0 0 60px rgba(0,245,212,0.9),0 0 120px rgba(0,245,212,0.4);
   animation:cdPop 0.75s ease-out;}
 @keyframes cdPop{0%{transform:scale(3.5);opacity:0}100%{transform:scale(1);opacity:1}}
@@ -167,7 +173,7 @@ canvas{display:block;width:100%;height:100%;}
 
 /* ══ START SCREEN ══ */
 .gtitle{
-  font-family:'Bebas Neue',sans-serif;
+  font-family:Impact,'Arial Narrow',Arial,sans-serif;
   font-size:clamp(68px,18vw,96px);
   color:var(--theme-main,#00f5d4);line-height:0.85;text-align:center;letter-spacing:8px;
   animation:gtp 2.8s ease-in-out infinite;margin-top:4px;
@@ -182,18 +188,18 @@ canvas{display:block;width:100%;height:100%;}
 /* Motiv panel */
 #motivPanel{background:rgba(255,255,255,0.025);border:1px solid var(--glass-border);
   border-radius:14px;padding:10px 18px;margin:8px 0 6px;text-align:center;min-width:240px;}
-#motivLine{font-family:'Bebas Neue',sans-serif;font-size:17px;color:#fff;letter-spacing:2px;line-height:1.2;}
+#motivLine{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:17px;color:#fff;letter-spacing:2px;line-height:1.2;}
 #motivSub{font-size:10px;color:rgba(255,255,255,0.25);letter-spacing:1px;margin-top:3px;font-weight:600;}
 
 /* Stats */
 .statsRow{display:flex;gap:8px;margin:8px 0;}
 .sbox{background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:9px 16px;text-align:center;
   backdrop-filter:blur(6px);}
-.sval{font-family:'Bebas Neue',sans-serif;font-size:28px;color:#fff;}
+.sval{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:28px;color:#fff;}
 .slbl{font-size:9px;letter-spacing:3px;color:rgba(255,255,255,0.22);text-transform:uppercase;margin-top:2px;font-weight:700;}
 
 /* Play button */
-.bigBtn{color:#fff;font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:5px;
+.bigBtn{color:#fff;font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:32px;letter-spacing:5px;
   border:none;padding:15px 58px;border-radius:60px;cursor:pointer;
   animation:bbp 2s ease-in-out infinite;position:relative;overflow:hidden;}
 .bigBtn::before{content:'';position:absolute;inset:0;
@@ -214,7 +220,7 @@ canvas{display:block;width:100%;height:100%;}
 
 /* Small buttons */
 .smBtn{background:var(--glass);border:1px solid var(--glass-border-lit);
-  color:rgba(255,255,255,0.55);font-family:'Space Grotesk',sans-serif;
+  color:rgba(255,255,255,0.55);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;
   font-size:15px;font-weight:700;letter-spacing:2px;
   border-radius:32px;padding:13px 28px;cursor:pointer;margin-top:8px;
   transition:all 0.15s;backdrop-filter:blur(8px);}
@@ -223,7 +229,7 @@ canvas{display:block;width:100%;height:100%;}
   text-align:center;padding:0 20px;line-height:1.7;font-weight:600;}
 
 /* ══ GAME OVER ══ */
-.goTitle{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,14vw,72px);
+.goTitle{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:clamp(52px,14vw,72px);
   color:var(--hot);letter-spacing:3px;
   text-shadow:0 0 40px rgba(255,45,120,0.9),0 0 80px rgba(255,45,120,0.3);
   animation:goshk 0.5s ease;}
@@ -233,7 +239,7 @@ canvas{display:block;width:100%;height:100%;}
   border-radius:18px;padding:14px 36px;margin:8px 0;text-align:center;min-width:210px;
   backdrop-filter:blur(8px);}
 .scLbl{font-size:9px;letter-spacing:5px;color:rgba(255,255,255,0.2);text-transform:uppercase;font-weight:700;}
-.scVal{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,12vw,64px);color:#fff;line-height:1.05;}
+.scVal{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:clamp(48px,12vw,64px);color:#fff;line-height:1.05;}
 .scBest{font-size:12px;color:var(--gold);letter-spacing:3px;font-weight:700;}
 .scBest.newRec{font-size:20px;color:var(--neon);
   animation:recPop 0.6s cubic-bezier(0.175,0.885,0.32,1.275);
@@ -250,11 +256,11 @@ canvas{display:block;width:100%;height:100%;}
   100%{transform:translateY(700px) rotate(760deg);opacity:0}}
 
 /* ══ SHOP ══ */
-.shopTitle{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--gold);
+.shopTitle{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:36px;color:var(--gold);
   text-shadow:0 0 22px rgba(255,208,96,0.55);margin-bottom:2px;}
 .shopCoinLbl{font-size:11px;color:rgba(255,208,96,0.55);margin-bottom:8px;display:flex;align-items:center;gap:8px;font-weight:700;}
 .addCoinBtn{background:rgba(255,208,96,0.08);border:1px solid rgba(255,208,96,0.28);
-  color:var(--gold);font-size:10px;font-family:'Space Grotesk',sans-serif;font-weight:700;
+  color:var(--gold);font-size:10px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;font-weight:700;
   border-radius:18px;padding:3px 10px;cursor:pointer;}
 .shopGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 10px;
   width:100%;max-width:330px;max-height:50vh;overflow-y:auto;}
@@ -264,9 +270,9 @@ canvas{display:block;width:100%;height:100%;}
   padding:10px 6px;text-align:center;cursor:pointer;transition:all 0.12s;}
 .sItem:active{background:rgba(255,255,255,0.08);transform:scale(0.97);}
 .sItem .ie{font-size:26px;display:block;margin-bottom:3px;}
-.sItem .inm{font-family:'Bebas Neue',sans-serif;font-size:14px;color:#fff;letter-spacing:1px;}
+.sItem .inm{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:14px;color:#fff;letter-spacing:1px;}
 .sItem .idc{font-size:10px;color:rgba(255,255,255,0.25);margin:2px 0;font-weight:600;}
-.sItem .ipr{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);}
+.sItem .ipr{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:16px;color:var(--gold);}
 .sItem .ist{font-size:10px;color:rgba(255,208,96,0.4);font-weight:700;}
 
 .shopCoinCTA{position:relative;overflow:hidden;
@@ -278,29 +284,29 @@ canvas{display:block;width:100%;height:100%;}
   background:rgba(255,255,255,0.09);border-radius:50%;}
 .shopCoinCTA:active{transform:scale(0.97);}
 .shopCoinCTA .sccLeft{display:flex;flex-direction:column;}
-.shopCoinCTA .sccTitle{font-family:'Bebas Neue',sans-serif;font-size:21px;color:#2a1000;letter-spacing:2px;line-height:1;}
+.shopCoinCTA .sccTitle{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:21px;color:#2a1000;letter-spacing:2px;line-height:1;}
 .shopCoinCTA .sccSub{font-size:11px;color:rgba(0,0,0,0.5);font-weight:700;margin-top:2px;}
 .shopCoinCTA .sccRight{font-size:34px;line-height:1;}
 .closeBtn{background:var(--glass);border:1px solid var(--glass-border-lit);
-  color:rgba(255,255,255,0.45);font-family:'Space Grotesk',sans-serif;font-size:15px;
+  color:rgba(255,255,255,0.45);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;font-size:15px;
   font-weight:700;letter-spacing:2px;border-radius:32px;padding:13px 30px;cursor:pointer;margin-top:10px;
   flex-shrink:0;transition:all 0.15s;backdrop-filter:blur(8px);}
 .closeBtn:active{background:rgba(255,255,255,0.09);}
 
 /* ══ LIVES ══ */
-.lvTitle{font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--hot);
+.lvTitle{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:34px;color:var(--hot);
   text-shadow:0 0 20px rgba(255,45,120,0.6);margin-bottom:4px;}
 .lvOpt{background:var(--glass);border:1px solid var(--glass-border);
   border-radius:14px;padding:12px 14px;margin:4px 0;
   cursor:pointer;display:flex;align-items:center;gap:10px;width:255px;transition:all 0.12s;}
 .lvOpt:active{background:rgba(255,255,255,0.09);}
 .lvOpt .le{font-size:26px;}
-.lvOpt .ln{font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fff;letter-spacing:1px;}
+.lvOpt .ln{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:16px;color:#fff;letter-spacing:1px;}
 .lvOpt .ld{font-size:10px;color:rgba(255,255,255,0.25);font-weight:600;}
-.lvOpt .lp{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);margin-left:auto;}
+.lvOpt .lp{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:16px;color:var(--gold);margin-left:auto;}
 
 /* ══ LANG ══ */
-.langTitle{font-family:'Bebas Neue',sans-serif;font-size:36px;color:#fff;
+.langTitle{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:36px;color:#fff;
   text-shadow:0 0 28px rgba(0,245,212,0.5);margin-bottom:4px;}
 .langSubt{font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:4px;margin-bottom:14px;font-weight:700;}
 .langOpt{background:var(--glass);border:1px solid var(--glass-border);
@@ -308,7 +314,7 @@ canvas{display:block;width:100%;height:100%;}
   cursor:pointer;display:flex;align-items:center;gap:12px;width:240px;transition:all 0.12s;}
 .langOpt.sel,.langOpt:active{background:rgba(0,245,212,0.08);border-color:rgba(0,245,212,0.3);}
 .langOpt .lf{font-size:24px;}
-.langOpt .ltxt .lname{font-family:'Bebas Neue',sans-serif;font-size:19px;color:#fff;letter-spacing:1px;}
+.langOpt .ltxt .lname{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:19px;color:#fff;letter-spacing:1px;}
 .langOpt .ltxt .lnat{font-size:10px;color:rgba(255,255,255,0.28);font-weight:600;}
 
 /* ══ COIN SHOP ══ */
@@ -316,7 +322,7 @@ canvas{display:block;width:100%;height:100%;}
   radial-gradient(ellipse at 30% 20%,rgba(0,245,212,0.06) 0%,transparent 50%),
   radial-gradient(ellipse at 70% 80%,rgba(255,208,96,0.05) 0%,transparent 50%),
   var(--bg));padding-top:8px;}
-.coinShopTitle{font-family:'Bebas Neue',sans-serif;font-size:44px;color:var(--gold);
+.coinShopTitle{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:44px;color:var(--gold);
   text-shadow:0 0 36px rgba(255,208,96,1),0 0 72px rgba(255,130,0,0.4);margin-bottom:0;letter-spacing:4px;}
 .coinShopSubt{font-size:9px;color:rgba(255,200,100,0.4);margin-bottom:10px;letter-spacing:3px;font-weight:700;}
 .coinOptFree{position:relative;overflow:hidden;
@@ -327,11 +333,11 @@ canvas{display:block;width:100%;height:100%;}
 .coinOptFree:active{transform:scale(0.96);}
 .coinOptFree::after{content:'';position:absolute;top:-30px;right:-20px;width:80px;height:80px;background:rgba(255,255,255,0.08);border-radius:50%;}
 .coinOptFree .co{font-size:28px;flex-shrink:0;}
-.coinOptFree .cn{font-family:'Bebas Neue',sans-serif;font-size:17px;color:#2a1000;letter-spacing:1px;}
+.coinOptFree .cn{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:17px;color:#2a1000;letter-spacing:1px;}
 .coinOptFree .cd{font-size:11px;color:rgba(0,0,0,0.5);font-weight:700;}
-.coinOptFree .cp{font-family:'Bebas Neue',sans-serif;font-size:15px;color:#2a1000;margin-left:auto;
+.coinOptFree .cp{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:15px;color:#2a1000;margin-left:auto;
   background:rgba(255,255,255,0.3);border-radius:20px;padding:3px 10px;}
-.coinOptFree .camt{font-family:'Bebas Neue',sans-serif;font-size:26px;color:#2a1000;line-height:1;letter-spacing:1px;}
+.coinOptFree .camt{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:26px;color:#2a1000;line-height:1;letter-spacing:1px;}
 .packGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:290px;}
 .packCard{background:var(--glass);border:1px solid var(--glass-border);
   border-radius:16px;padding:12px 10px;cursor:pointer;
@@ -343,17 +349,17 @@ canvas{display:block;width:100%;height:100%;}
 .packCard.best{background:rgba(255,208,96,0.08);border-color:rgba(255,208,96,0.3);
   box-shadow:0 4px 20px rgba(255,208,96,0.15);}
 .packCard .pico{font-size:22px;margin-bottom:3px;}
-.packCard .pcoins{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);line-height:1;
+.packCard .pcoins{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:28px;color:var(--gold);line-height:1;
   text-shadow:0 0 12px rgba(255,208,96,0.5);}
 .packCard .pcoins span{font-size:13px;color:rgba(255,208,96,0.55);}
-.packCard .pname{font-family:'Bebas Neue',sans-serif;font-size:12px;color:rgba(255,255,255,0.55);letter-spacing:1px;margin-top:2px;}
-.packCard .pprice{font-family:'Bebas Neue',sans-serif;font-size:17px;color:#fff;margin-top:4px;
+.packCard .pname{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.55);letter-spacing:1px;margin-top:2px;}
+.packCard .pprice{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:17px;color:#fff;margin-top:4px;
   background:rgba(255,255,255,0.07);border-radius:20px;padding:2px 12px;width:100%;}
 .packCard.featured .pprice{background:rgba(92,107,255,0.22);color:#aabbff;}
 .packCard.best .pprice{background:rgba(255,208,96,0.18);color:var(--gold);}
 .packBonusTag{position:absolute;top:6px;right:6px;font-size:9px;
   background:rgba(255,60,0,0.82);color:#fff;border-radius:6px;padding:2px 5px;
-  font-family:'Bebas Neue',sans-serif;letter-spacing:1px;}
+  font-family:Impact,'Arial Narrow',Arial,sans-serif;letter-spacing:1px;}
 .packCard.featured .packBonusTag{background:rgba(92,107,255,0.9);}
 .coinDivider{width:290px;display:flex;align-items:center;gap:8px;margin:5px 0 7px;}
 .coinDivider span{font-size:9px;color:rgba(255,255,255,0.15);letter-spacing:3px;white-space:nowrap;font-weight:700;}
@@ -361,12 +367,12 @@ canvas{display:block;width:100%;height:100%;}
 .coinOpt,.coinBadgeAmt,.bonusTag{display:none;}
 
 /* ── FLOAT TEXT ── */
-.ft{position:absolute;font-family:'Bebas Neue',sans-serif;font-size:16px;
+.ft{position:absolute;font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:16px;
   pointer-events:none;animation:ftup 0.85s ease-out forwards;z-index:99;white-space:nowrap;}
 @keyframes ftup{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-54px) scale(0.9);opacity:0}}
 
 /* ══ WEAPONS GUIDE ══ */
-.wgTitle{font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--neon);
+.wgTitle{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:34px;color:var(--neon);
   text-shadow:0 0 22px rgba(0,245,212,0.55);margin-bottom:3px;}
 .wgSubt{font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:4px;margin-bottom:12px;font-weight:700;}
 .wgList{width:100%;max-width:320px;padding:0 12px;max-height:58vh;overflow-y:auto;}
@@ -378,10 +384,10 @@ canvas{display:block;width:100%;height:100%;}
 .wgCard.locked{opacity:0.35;}
 .wgEmoji{font-size:26px;flex-shrink:0;line-height:1;}
 .wgInfo{flex:1;}
-.wgName{font-family:'Bebas Neue',sans-serif;font-size:17px;color:#fff;letter-spacing:1px;line-height:1;}
+.wgName{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:17px;color:#fff;letter-spacing:1px;line-height:1;}
 .wgDesc{font-size:12px;color:rgba(200,210,255,0.65);margin-top:2px;line-height:1.35;}
 .wgHow{font-size:11px;color:rgba(255,208,96,0.5);margin-top:3px;font-style:italic;}
-.wgStock{font-family:'Bebas Neue',sans-serif;font-size:14px;flex-shrink:0;margin-left:auto;padding-left:8px;}
+.wgStock{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:14px;flex-shrink:0;margin-left:auto;padding-left:8px;}
 .wgStock.has{color:var(--neon);}
 .wgStock.none{color:rgba(255,255,255,0.14);}
 
@@ -389,13 +395,13 @@ canvas{display:block;width:100%;height:100%;}
 .prizeHeader{text-align:center;padding:0 16px;}
 .prizeCrown{font-size:48px;margin-bottom:4px;animation:crownBob 2.5s ease-in-out infinite;}
 @keyframes crownBob{0%,100%{transform:scale(1) rotate(-3deg)}50%{transform:scale(1.1) rotate(3deg)}}
-.prizeMainTitle{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--gold);
+.prizeMainTitle{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:42px;color:var(--gold);
   text-shadow:0 0 28px rgba(255,208,96,0.85);line-height:1;}
 .prizeSubt{font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:3px;margin-bottom:10px;font-weight:700;}
 .prizeCard{background:rgba(255,208,96,0.06);border:1px solid rgba(255,208,96,0.25);
   border-radius:16px;padding:14px 18px;margin:4px 0;width:285px;text-align:center;}
-.prizeCardTitle{font-family:'Bebas Neue',sans-serif;font-size:13px;color:rgba(255,208,96,0.55);letter-spacing:4px;margin-bottom:4px;}
-.prizeAmt{font-family:'Bebas Neue',sans-serif;font-size:50px;color:var(--gold);line-height:1;
+.prizeCardTitle{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:13px;color:rgba(255,208,96,0.55);letter-spacing:4px;margin-bottom:4px;}
+.prizeAmt{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:50px;color:var(--gold);line-height:1;
   text-shadow:0 0 22px rgba(255,208,96,0.7);}
 .prizeAmt span{font-size:20px;color:rgba(255,208,96,0.55);}
 .prizeNote{font-size:12px;color:rgba(255,255,255,0.4);margin-top:5px;line-height:1.5;}
@@ -403,33 +409,33 @@ canvas{display:block;width:100%;height:100%;}
 .prizeRules{width:285px;margin:8px 0;}
 .prizeRule{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;
   background:var(--glass);border-radius:12px;margin-bottom:5px;}
-.pruleNum{font-family:'Bebas Neue',sans-serif;font-size:20px;color:rgba(255,208,96,0.5);flex-shrink:0;line-height:1;}
+.pruleNum{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:20px;color:rgba(255,208,96,0.5);flex-shrink:0;line-height:1;}
 .pruleTxt{font-size:12px;color:rgba(255,255,255,0.45);line-height:1.5;}
 .pruleTxt b{color:rgba(255,225,100,0.8);}
 .pruleTxt .warn{color:#ff6644;font-weight:700;}
 .prizeTimer{background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;
   padding:9px 16px;text-align:center;margin-top:6px;width:285px;}
 .ptLabel{font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:4px;margin-bottom:3px;font-weight:700;}
-.ptTime{font-family:'Bebas Neue',sans-serif;font-size:26px;color:#fff;letter-spacing:4px;}
+.ptTime{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:26px;color:#fff;letter-spacing:4px;}
 .prizeMyScore{background:rgba(255,208,96,0.05);border:1px solid rgba(255,208,96,0.15);
   border-radius:12px;padding:8px 16px;text-align:center;margin-top:6px;width:285px;}
 .pmsLabel{font-size:9px;color:rgba(255,208,96,0.5);letter-spacing:3px;font-weight:700;}
-.pmsVal{font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--gold);}
+.pmsVal{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:30px;color:var(--gold);}
 
 /* ══ LEADERBOARD ══ */
-.lbTitle{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--gold);
+.lbTitle{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:32px;color:var(--gold);
   text-shadow:0 0 22px rgba(255,208,96,0.55);margin-bottom:4px;}
 .lbTabs{display:flex;gap:5px;margin-bottom:8px;}
 .lbTab{background:var(--glass);border:1px solid var(--glass-border);
-  color:rgba(255,255,255,0.3);font-family:'Bebas Neue',sans-serif;
+  color:rgba(255,255,255,0.3);font-family:Impact,'Arial Narrow',Arial,sans-serif;
   font-size:12px;letter-spacing:2px;border-radius:20px;padding:5px 12px;cursor:pointer;transition:all 0.15s;}
 .lbTab.active{background:rgba(255,208,96,0.1);border-color:rgba(255,208,96,0.35);color:var(--gold);}
 .lbMyRow{background:rgba(255,208,96,0.05);border:1px solid rgba(255,208,96,0.18);
   border-radius:12px;padding:7px 12px;margin-bottom:7px;
   display:flex;align-items:center;gap:9px;width:280px;}
-.lbMyRank{font-family:'Bebas Neue',sans-serif;font-size:19px;color:var(--gold);min-width:32px;}
-.lbMyName{font-size:13px;color:#fff;flex:1;font-family:'Space Grotesk',sans-serif;font-weight:600;}
-.lbMyScore{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--gold);}
+.lbMyRank{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:19px;color:var(--gold);min-width:32px;}
+.lbMyName{font-size:13px;color:#fff;flex:1;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;font-weight:600;}
+.lbMyScore{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:16px;color:var(--gold);}
 .lbList{width:100%;max-width:300px;max-height:44vh;overflow-y:auto;padding:0 8px;}
 .lbList::-webkit-scrollbar{width:2px;}
 .lbList::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px;}
@@ -439,21 +445,21 @@ canvas{display:block;width:100%;height:100%;}
 .lbRow.top2{background:rgba(192,192,192,0.05);border:1px solid rgba(192,192,192,0.1);}
 .lbRow.top3{background:rgba(205,127,50,0.05);border:1px solid rgba(205,127,50,0.1);}
 .lbRow.me{background:rgba(0,245,212,0.04);border:1px solid rgba(0,245,212,0.12);}
-.lbRank{font-family:'Bebas Neue',sans-serif;font-size:14px;min-width:26px;text-align:center;}
-.lbName{font-size:12px;color:rgba(255,255,255,0.6);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:'Space Grotesk',sans-serif;font-weight:600;}
-.lbScore{font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--gold);}
+.lbRank{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:14px;min-width:26px;text-align:center;}
+.lbName{font-size:12px;color:rgba(255,255,255,0.6);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;font-weight:600;}
+.lbScore{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:14px;color:var(--gold);}
 .lbLoading{text-align:center;color:rgba(255,255,255,0.2);font-size:11px;letter-spacing:3px;padding:18px;font-weight:700;}
 .lbNameWrap{display:flex;flex-direction:column;align-items:center;margin-bottom:6px;}
 .lbNameInput{background:rgba(255,255,255,0.05);border:1px solid var(--glass-border-lit);
-  border-radius:12px;padding:9px 14px;font-family:'Space Grotesk',sans-serif;font-weight:600;
+  border-radius:12px;padding:9px 14px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;font-weight:600;
   font-size:15px;color:#fff;width:215px;text-align:center;outline:none;margin-bottom:6px;}
 .lbNameInput::placeholder{color:rgba(255,255,255,0.18);}
 .lbSaveBtn{background:linear-gradient(135deg,var(--neon),#00c4ff);color:#001a14;
-  font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;
+  font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:14px;letter-spacing:2px;
   border:none;padding:9px 24px;border-radius:24px;cursor:pointer;}
 
 /* ══ ACHIEVEMENTS ══ */
-.achTitle{font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--gold);
+.achTitle{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:34px;color:var(--gold);
   text-shadow:0 0 22px rgba(255,208,96,0.55);margin-bottom:2px;}
 .achSubt{font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:4px;margin-bottom:10px;font-weight:700;}
 .achGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px;
@@ -463,7 +469,7 @@ canvas{display:block;width:100%;height:100%;}
 .achCard{background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:12px 10px;text-align:center;transition:all 0.2s;}
 .achCard.done{background:rgba(0,245,212,0.05);border-color:rgba(0,245,212,0.22);}
 .achCard .ace{font-size:28px;margin-bottom:4px;display:block;}
-.achCard .acn{font-family:'Bebas Neue',sans-serif;font-size:14px;color:#fff;letter-spacing:1px;line-height:1.1;}
+.achCard .acn{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:14px;color:#fff;letter-spacing:1px;line-height:1.1;}
 .achCard .acd{font-size:10px;color:rgba(255,255,255,0.25);margin-top:2px;font-weight:600;}
 .achCard.done .acn{color:var(--neon);}
 .achCard.locked{opacity:0.25;filter:grayscale(0.8);}
@@ -480,25 +486,25 @@ canvas{display:block;width:100%;height:100%;}
   animation:achievePop 0.5s cubic-bezier(0.175,0.885,0.32,1.275);}
 @keyframes achievePop{0%{transform:translateX(-50%) translateY(-30px) scale(0.7);opacity:0}100%{transform:translateX(-50%) translateY(0) scale(1);opacity:1}}
 #achieveToast .at-icon{font-size:28px;flex-shrink:0;}
-#achieveToast .at-txt .at-title{font-family:'Bebas Neue',sans-serif;font-size:10px;color:rgba(0,245,212,0.6);letter-spacing:4px;}
-#achieveToast .at-txt .at-name{font-family:'Bebas Neue',sans-serif;font-size:16px;color:#fff;letter-spacing:1px;line-height:1;}
+#achieveToast .at-txt .at-title{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:10px;color:rgba(0,245,212,0.6);letter-spacing:4px;}
+#achieveToast .at-txt .at-name{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:16px;color:#fff;letter-spacing:1px;line-height:1;}
 #achieveToast .at-txt .at-sub{font-size:10px;color:rgba(255,255,255,0.28);font-weight:600;}
 
 /* REFERRAL */
-.refTitle{font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--neon);
+.refTitle{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:34px;color:var(--neon);
   text-shadow:0 0 22px rgba(0,245,212,0.5);margin-bottom:2px;}
 .refCard{background:rgba(0,245,212,0.04);border:1px solid rgba(0,245,212,0.18);
   border-radius:18px;padding:14px 18px;margin:6px 0;width:290px;text-align:center;}
-.refCode{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--neon);letter-spacing:6px;
+.refCode{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:36px;color:var(--neon);letter-spacing:6px;
   text-shadow:0 0 16px rgba(0,245,212,0.6);}
 .refCodeSub{font-size:9px;color:rgba(0,245,212,0.4);letter-spacing:3px;font-weight:700;}
 .refBonusRow{display:flex;gap:8px;width:290px;margin-top:6px;}
 .refBonus{flex:1;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:8px;text-align:center;}
 .refBonus .rb-e{font-size:22px;}
-.refBonus .rb-n{font-family:'Bebas Neue',sans-serif;font-size:14px;color:#fff;letter-spacing:1px;}
+.refBonus .rb-n{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:14px;color:#fff;letter-spacing:1px;}
 .refBonus .rb-d{font-size:10px;color:rgba(255,255,255,0.24);font-weight:600;}
 .refShareBtn{background:linear-gradient(135deg,var(--neon),#00c4ff);border:none;
-  color:#001a14;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;
+  color:#001a14;font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:20px;letter-spacing:3px;
   padding:12px 36px;border-radius:50px;cursor:pointer;
   box-shadow:0 6px 22px rgba(0,245,212,0.35);margin-top:8px;}
 
@@ -510,9 +516,9 @@ canvas{display:block;width:100%;height:100%;}
   0%{transform:translate(-50%,-50%) scale(0.1);opacity:0}
   38%{transform:translate(-50%,-50%) scale(1.2);opacity:1}
   100%{transform:translate(-50%,-50%) scale(0.85);opacity:0}}
-#comboBurst .cb-num{font-family:'Bebas Neue',sans-serif;font-size:70px;color:var(--neon);
+#comboBurst .cb-num{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:70px;color:var(--neon);
   text-shadow:0 0 40px var(--neon),0 0 80px rgba(0,245,212,0.4);line-height:1;}
-#comboBurst .cb-lbl{font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;letter-spacing:6px;}
+#comboBurst .cb-lbl{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:18px;color:#fff;letter-spacing:6px;}
 
 /* LOW LIFE */
 @keyframes lowLifePulse{0%,100%{background:rgba(255,45,120,0)}50%{background:rgba(255,45,120,0.05)}}
@@ -532,21 +538,21 @@ canvas{display:block;width:100%;height:100%;}
   background:radial-gradient(ellipse at 25% 20%,rgba(0,245,212,0.08) 0%,transparent 50%),
              radial-gradient(ellipse at 75% 80%,rgba(255,45,120,0.07) 0%,transparent 50%);pointer-events:none;}
 #shareCard .sc-inner{padding:22px 20px 18px;position:relative;}
-#shareCard .sc-logo{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:6px;
+#shareCard .sc-logo{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:6px;
   color:rgba(255,255,255,0.18);text-align:center;margin-bottom:14px;}
 #shareCard .sc-score-lbl{font-size:9px;letter-spacing:5px;color:rgba(255,255,255,0.2);text-align:center;font-weight:700;}
-#shareCard .sc-score{font-family:'Bebas Neue',sans-serif;font-size:74px;color:#fff;line-height:1;
+#shareCard .sc-score{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:74px;color:#fff;line-height:1;
   text-align:center;text-shadow:0 0 40px rgba(0,245,212,0.5);}
 #shareCard .sc-row{display:flex;justify-content:center;gap:12px;margin-top:12px;}
 #shareCard .sc-stat{text-align:center;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:7px 12px;}
 #shareCard .sc-sl{font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:3px;font-weight:700;}
-#shareCard .sc-sv{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;}
-#shareCard .sc-rank{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;
+#shareCard .sc-sv{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:20px;color:#fff;}
+#shareCard .sc-rank{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:3px;
   text-align:center;margin-top:10px;padding:5px 0;
   background:linear-gradient(90deg,transparent,rgba(0,245,212,0.08),transparent);color:var(--neon);}
 #shareCard .sc-cta{font-size:9px;color:rgba(255,255,255,0.15);text-align:center;margin-top:7px;letter-spacing:2px;font-weight:700;}
 .shareBtn2{background:linear-gradient(135deg,#1da1f2,#0d8ecf);border:none;color:#fff;
-  font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;
+  font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:18px;letter-spacing:3px;
   padding:12px 30px;border-radius:50px;cursor:pointer;min-width:200px;transition:opacity 0.15s;}
 .shareBtn2.copy{background:linear-gradient(135deg,var(--neon),#00c4ff);color:#001a14;}
 .shareBtn2.wa{background:linear-gradient(135deg,#25d366,#128c7e);}
@@ -558,7 +564,7 @@ canvas{display:block;width:100%;height:100%;}
 #tickerInner{display:flex;align-items:center;padding:2px 8px;white-space:nowrap;animation:tickerScroll 20s linear infinite;}
 @keyframes tickerScroll{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
 .tickItem{font-size:9px;color:rgba(255,255,255,0.14);margin-right:30px;letter-spacing:2px;font-weight:700;}
-.tickItem span{color:rgba(0,245,212,0.4);font-family:'Bebas Neue',sans-serif;}
+.tickItem span{color:rgba(0,245,212,0.4);font-family:Impact,'Arial Narrow',Arial,sans-serif;}
 
 /* XP ROW */
 #xpRow{display:flex;align-items:center;gap:7px;padding:0 14px 4px;}
@@ -573,7 +579,7 @@ canvas{display:block;width:100%;height:100%;}
   background:linear-gradient(90deg,rgba(0,245,212,0.06),rgba(0,196,255,0.04));
   border-bottom:1px solid rgba(0,245,212,0.08);}
 #challengeIcon{font-size:13px;}
-#challengeTxt{font-family:'Bebas Neue',sans-serif;font-size:12px;color:var(--neon);letter-spacing:2px;flex:1;}
+#challengeTxt{font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:12px;color:var(--neon);letter-spacing:2px;flex:1;}
 #challengeProg{font-size:10px;color:rgba(0,245,212,0.4);font-weight:700;}
 
 /* NAME OVERLAY */
@@ -594,7 +600,7 @@ canvas{display:block;width:100%;height:100%;}
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
         <div id="coinBadge" onclick="openCoinShop()">💰 <span id="coinVal">0</span></div>
         <div id="levelBadge">LVL 1</div>
-        <div id="formBadge" style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(0,245,212,0.7);text-shadow:0 0 8px rgba(0,245,212,0.5);display:flex;align-items:center;gap:3px;">🔵 NEON</div>
+        <div id="formBadge" style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:12px;letter-spacing:2px;color:rgba(0,245,212,0.7);text-shadow:0 0 8px rgba(0,245,212,0.5);display:flex;align-items:center;gap:3px;">🔵 NEON</div>
       </div>
     </div>
     <div id="comboDisp">🔥 x<span id="cv">0</span></div>
@@ -633,7 +639,7 @@ canvas{display:block;width:100%;height:100%;}
   <!-- START -->
   <div id="startScreen" class="screen">
     <div class="gtitle" style="letter-spacing:14px;">ZVOOM</div>
-    <div style="font-family:'Space Grotesk',sans-serif;font-size:9px;letter-spacing:8px;color:rgba(255,255,255,0.2);font-weight:700;text-align:center;margin-top:3px;">SÜRÜNMƏ · YAYIN · DAYAN</div>
+    <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:8px;color:rgba(255,255,255,0.2);font-weight:700;text-align:center;margin-top:3px;">SÜRÜNMƏ · YAYIN · DAYAN</div>
     <div class="gsubt" id="startSubt">-</div>
 
     <!-- 19. LEVEL CHALLENGE BANNER -->
@@ -649,16 +655,16 @@ canvas{display:block;width:100%;height:100%;}
       animation:prizePulse 2.8s ease-in-out infinite;
     ">
       <div style="text-align:left;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:#ffd060;letter-spacing:2px;line-height:1.1;">🏆 19-CU LEVELE ÇAT</div>
+        <div style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:18px;color:#ffd060;letter-spacing:2px;line-height:1.1;">🏆 19-CU LEVELE ÇAT</div>
         <div style="font-size:10px;color:rgba(255,220,100,0.65);letter-spacing:1px;margin-top:1px;">Cəmi 19 level · Kimə çatar?</div>
       </div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:30px;color:#00ff88;letter-spacing:1px;text-shadow:0 0 16px rgba(0,255,136,0.7);line-height:1;">$50</div>
+      <div style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:30px;color:#00ff88;letter-spacing:1px;text-shadow:0 0 16px rgba(0,255,136,0.7);line-height:1;">$50</div>
     </div>
     <style>@keyframes prizePulse{0%,100%{box-shadow:0 0 14px rgba(255,160,0,0.12);}50%{box-shadow:0 0 28px rgba(255,160,0,0.30),0 0 8px rgba(0,255,136,0.15);}}</style>
 
     <!-- Motivasiya paneli — dinamik məzmun -->
     <div id="motivPanel" style="width:88%;max-width:300px;margin:4px 0 8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:9px 14px;text-align:center;">
-      <div id="motivLine" style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:#ffcc00;letter-spacing:1px;line-height:1.3;"></div>
+      <div id="motivLine" style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:16px;color:#ffcc00;letter-spacing:1px;line-height:1.3;"></div>
       <div id="motivSub" style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:3px;letter-spacing:1px;"></div>
     </div>
 
@@ -718,7 +724,7 @@ canvas{display:block;width:100%;height:100%;}
       <div id="bestProgressLbl" style="font-size:9px;color:rgba(255,255,255,0.25);margin-top:3px;letter-spacing:1px;"></div>
     </div>
     <button class="bigBtn retry" id="retryBtn">🔄 YENİDƏN</button>
-    <button onclick="openSocialShare()" style="background:linear-gradient(135deg,var(--neon),#00c4ff);border:none;color:#001a14;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;padding:11px 40px;border-radius:50px;cursor:pointer;margin-top:6px;box-shadow:0 6px 20px rgba(0,245,212,0.3);">📤 PAYLAŞ & MÜQAYISƏ ET</button>
+    <button onclick="openSocialShare()" style="background:linear-gradient(135deg,var(--neon),#00c4ff);border:none;color:#001a14;font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:18px;letter-spacing:3px;padding:11px 40px;border-radius:50px;cursor:pointer;margin-top:6px;box-shadow:0 6px 20px rgba(0,245,212,0.3);">📤 PAYLAŞ & MÜQAYISƏ ET</button>
     <div class="btnRow">
       <button class="smBtn" id="shopBtnG">🛒 Mağaza</button>
       <button class="smBtn" id="livesBtnG">❤️ Can Al</button>
@@ -840,8 +846,8 @@ canvas{display:block;width:100%;height:100%;}
       <div class="prizeCardTitle" id="prizeCardLbl">1-Cİ YER MÜKAFATİ</div>
       <div class="prizeAmt">5 <span>USDT</span></div>
       <div style="display:flex;gap:6px;justify-content:center;margin-top:5px;">
-        <span style="background:rgba(255,204,0,0.2);border:1px solid rgba(255,204,0,0.4);color:#ffcc00;font-family:'Bebas Neue',sans-serif;font-size:13px;border-radius:8px;padding:2px 9px;letter-spacing:1px;">BEP20</span>
-        <span style="background:rgba(255,100,0,0.2);border:1px solid rgba(255,100,0,0.4);color:#ff8844;font-family:'Bebas Neue',sans-serif;font-size:13px;border-radius:8px;padding:2px 9px;letter-spacing:1px;">TRC20</span>
+        <span style="background:rgba(255,204,0,0.2);border:1px solid rgba(255,204,0,0.4);color:#ffcc00;font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:13px;border-radius:8px;padding:2px 9px;letter-spacing:1px;">BEP20</span>
+        <span style="background:rgba(255,100,0,0.2);border:1px solid rgba(255,100,0,0.4);color:#ff8844;font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:13px;border-radius:8px;padding:2px 9px;letter-spacing:1px;">TRC20</span>
       </div>
       <div class="prizeNote" id="prizeNoteTxt">Telegram: @ZvoomGame · Mükafat hər bazar ertəsi verilir</div>
     </div>
@@ -859,7 +865,7 @@ canvas{display:block;width:100%;height:100%;}
 
   <!-- ═══ LUCKY SPIN SCREEN ═══ -->
   <div id="spinScreen" class="screen" style="display:none;background:rgba(3,3,12,0.98);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);">
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:#ffd060;letter-spacing:4px;text-shadow:0 0 30px rgba(255,208,96,0.7);margin-bottom:2px;">🎰 ŞANSLİ SPIN</div>
+    <div style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:36px;color:#ffd060;letter-spacing:4px;text-shadow:0 0 30px rgba(255,208,96,0.7);margin-bottom:2px;">🎰 ŞANSLİ SPIN</div>
     <div style="font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:4px;font-weight:700;margin-bottom:6px;">FIRL · QAZAN · ZƏFƏRİ ƏL</div>
 
     <!-- Cooldown info -->
@@ -874,13 +880,13 @@ canvas{display:block;width:100%;height:100%;}
 
     <!-- Prize display -->
     <div id="spinPrizeBox" style="margin-top:8px;min-height:40px;display:flex;align-items:center;justify-content:center;">
-      <div id="spinPrizeTxt" style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#fff;letter-spacing:2px;opacity:0;transition:all 0.4s;text-shadow:0 0 20px rgba(255,208,96,0.8);"></div>
+      <div id="spinPrizeTxt" style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:26px;color:#fff;letter-spacing:2px;opacity:0;transition:all 0.4s;text-shadow:0 0 20px rgba(255,208,96,0.8);"></div>
     </div>
 
     <!-- Spin button -->
     <button id="spinBtn" onclick="doSpin()" style="
       background:linear-gradient(135deg,#ffd060,#ff8800);
-      border:none;color:#1a0800;font-family:'Bebas Neue',sans-serif;
+      border:none;color:#1a0800;font-family:Impact,'Arial Narrow',Arial,sans-serif;
       font-size:26px;letter-spacing:4px;padding:14px 52px;border-radius:60px;
       cursor:pointer;box-shadow:0 8px 30px rgba(255,180,0,0.5);
       transition:all 0.15s;margin-top:4px;
@@ -890,7 +896,7 @@ canvas{display:block;width:100%;height:100%;}
     <button id="spinAdBtn" onclick="spinWatchAd()" style="
       display:none;
       background:rgba(255,255,255,0.06);border:1px solid rgba(255,208,96,0.35);
-      color:#ffd060;font-family:'Bebas Neue',sans-serif;
+      color:#ffd060;font-family:Impact,'Arial Narrow',Arial,sans-serif;
       font-size:16px;letter-spacing:2px;padding:10px 28px;border-radius:40px;
       cursor:pointer;margin-top:8px;transition:all 0.15s;
     ">📺 REKLAM İZLƏ → +1 SPIN</button>
@@ -922,7 +928,7 @@ canvas{display:block;width:100%;height:100%;}
 
   <!-- NAME INPUT OVERLAY -->
   <div id="nameOverlay" style="position:absolute;inset:0;background:rgba(0,0,0,0.92);z-index:50;display:none;flex-direction:column;align-items:center;justify-content:center;">
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#fff;margin-bottom:6px;">👤 ADINI DAXİL ET</div>
+    <div style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:28px;color:#fff;margin-bottom:6px;">👤 ADINI DAXİL ET</div>
     <div style="font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:2px;margin-bottom:14px;" id="nameOverlaySubt">Liderboarda görünmək üçün</div>
     <input class="lbNameInput" id="playerNameInput" maxlength="16" placeholder="Adın...">
     <button class="lbSaveBtn" id="saveNameBtn">✅ TƏSDİQLƏ</button>
@@ -930,7 +936,7 @@ canvas{display:block;width:100%;height:100%;}
 
   <!-- ═══ MİSSİYALAR SCREEN ═══ -->
   <div id="missScreen" class="screen" style="display:none;">
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--neon);text-shadow:0 0 22px rgba(0,245,212,0.6);margin-bottom:2px;">🎯 MİSSİYALAR</div>
+    <div style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:36px;color:var(--neon);text-shadow:0 0 22px rgba(0,245,212,0.6);margin-bottom:2px;">🎯 MİSSİYALAR</div>
     <div style="font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:4px;margin-bottom:10px;font-weight:700;">TAMAMLA · QAZAН · BÖYÜ</div>
     <div id="missList" style="width:100%;max-width:340px;padding:0 12px;max-height:62vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px;"></div>
     <button class="closeBtn" style="margin-top:10px;" onclick="closeMiss()">← Geri</button>
@@ -939,28 +945,28 @@ canvas{display:block;width:100%;height:100%;}
   <!-- ═══ DOSTLARA DƏVƏT SCREEN ═══ -->
   <div id="inviteScreen" class="screen" style="display:none;">
     <div style="font-size:52px;margin-bottom:4px;animation:crownBob 2s ease-in-out infinite;">🤝</div>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--neon);text-shadow:0 0 22px rgba(0,245,212,0.6);margin-bottom:4px;">DOST DƏVƏT ET</div>
+    <div style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:36px;color:var(--neon);text-shadow:0 0 22px rgba(0,245,212,0.6);margin-bottom:4px;">DOST DƏVƏT ET</div>
     <div style="font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:2px;margin-bottom:12px;font-weight:700;">HƏRƏ İKİNİZƏ BONUS</div>
 
     <!-- Referral code -->
     <div style="background:rgba(0,245,212,0.05);border:1px solid rgba(0,245,212,0.2);border-radius:18px;padding:14px 22px;margin-bottom:10px;text-align:center;min-width:260px;">
       <div style="font-size:9px;color:rgba(0,245,212,0.45);letter-spacing:4px;font-weight:700;margin-bottom:4px;">SƏNİN KODUN</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:38px;color:var(--neon);letter-spacing:6px;text-shadow:0 0 16px rgba(0,245,212,0.6);" id="inviteCodeDisp">DS-0000</div>
-      <button onclick="copyInviteCode()" style="margin-top:6px;background:rgba(0,245,212,0.1);border:1px solid rgba(0,245,212,0.25);color:var(--neon);font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;border-radius:20px;padding:5px 16px;cursor:pointer;">📋 KODU KOPYALA</button>
+      <div style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:38px;color:var(--neon);letter-spacing:6px;text-shadow:0 0 16px rgba(0,245,212,0.6);" id="inviteCodeDisp">DS-0000</div>
+      <button onclick="copyInviteCode()" style="margin-top:6px;background:rgba(0,245,212,0.1);border:1px solid rgba(0,245,212,0.25);color:var(--neon);font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:13px;letter-spacing:2px;border-radius:20px;padding:5px 16px;cursor:pointer;">📋 KODU KOPYALA</button>
     </div>
 
     <!-- Bonus cards -->
     <div style="display:flex;gap:8px;width:280px;margin-bottom:12px;">
       <div style="flex:1;background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:10px;text-align:center;">
         <div style="font-size:24px;">👤</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#fff;letter-spacing:1px;">SƏN ALDIRSAN</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);">+200💰</div>
+        <div style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:13px;color:#fff;letter-spacing:1px;">SƏN ALDIRSAN</div>
+        <div style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:22px;color:var(--gold);">+200💰</div>
         <div style="font-size:9px;color:rgba(255,255,255,0.28);font-weight:700;">hər dəvət üçün</div>
       </div>
       <div style="flex:1;background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:10px;text-align:center;">
         <div style="font-size:24px;">🆕</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:#fff;letter-spacing:1px;">DOST ALIR</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold);">+100💰</div>
+        <div style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:13px;color:#fff;letter-spacing:1px;">DOST ALIR</div>
+        <div style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:22px;color:var(--gold);">+100💰</div>
         <div style="font-size:9px;color:rgba(255,255,255,0.28);font-weight:700;">qoşulduqda</div>
       </div>
     </div>
@@ -968,12 +974,12 @@ canvas{display:block;width:100%;height:100%;}
     <!-- Share buttons -->
     <div style="display:flex;flex-direction:column;gap:8px;width:280px;">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;width:290px;">
-        <button onclick="inviteWA()" style="background:linear-gradient(135deg,#25d366,#128c7e);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;padding:14px 8px;border-radius:18px;cursor:pointer;box-shadow:0 4px 16px rgba(37,211,102,0.3);">📲 WHATSAPP</button>
-        <button onclick="inviteIG()" style="background:linear-gradient(135deg,#e1306c,#833ab4,#fd1d1d);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;padding:14px 8px;border-radius:18px;cursor:pointer;box-shadow:0 4px 16px rgba(225,48,108,0.3);">📸 INSTAGRAM</button>
-        <button onclick="inviteFB()" style="background:linear-gradient(135deg,#1877f2,#0d5bba);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;padding:14px 8px;border-radius:18px;cursor:pointer;box-shadow:0 4px 16px rgba(24,119,242,0.3);">👍 FACEBOOK</button>
-        <button onclick="inviteTT()" style="background:linear-gradient(135deg,#010101,#69c9d0);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;padding:14px 8px;border-radius:18px;cursor:pointer;box-shadow:0 4px 16px rgba(105,201,208,0.3);">🎵 TIKTOK</button>
+        <button onclick="inviteWA()" style="background:linear-gradient(135deg,#25d366,#128c7e);border:none;color:#fff;font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:16px;letter-spacing:2px;padding:14px 8px;border-radius:18px;cursor:pointer;box-shadow:0 4px 16px rgba(37,211,102,0.3);">📲 WHATSAPP</button>
+        <button onclick="inviteIG()" style="background:linear-gradient(135deg,#e1306c,#833ab4,#fd1d1d);border:none;color:#fff;font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:16px;letter-spacing:2px;padding:14px 8px;border-radius:18px;cursor:pointer;box-shadow:0 4px 16px rgba(225,48,108,0.3);">📸 INSTAGRAM</button>
+        <button onclick="inviteFB()" style="background:linear-gradient(135deg,#1877f2,#0d5bba);border:none;color:#fff;font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:16px;letter-spacing:2px;padding:14px 8px;border-radius:18px;cursor:pointer;box-shadow:0 4px 16px rgba(24,119,242,0.3);">👍 FACEBOOK</button>
+        <button onclick="inviteTT()" style="background:linear-gradient(135deg,#010101,#69c9d0);border:none;color:#fff;font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:16px;letter-spacing:2px;padding:14px 8px;border-radius:18px;cursor:pointer;box-shadow:0 4px 16px rgba(105,201,208,0.3);">🎵 TIKTOK</button>
       </div>
-      <button onclick="inviteCopyLink()" style="background:linear-gradient(135deg,var(--neon),#00c4ff);border:none;color:#001a14;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;padding:13px 28px;border-radius:50px;cursor:pointer;width:290px;margin-top:2px;">🔗 LİNKİ KOPYALA</button>
+      <button onclick="inviteCopyLink()" style="background:linear-gradient(135deg,var(--neon),#00c4ff);border:none;color:#001a14;font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:17px;letter-spacing:2px;padding:13px 28px;border-radius:50px;cursor:pointer;width:290px;margin-top:2px;">🔗 LİNKİ KOPYALA</button>
     </div>
 
     <!-- Invited count -->
@@ -987,37 +993,37 @@ canvas{display:block;width:100%;height:100%;}
     <div id="socialCard" style="width:300px;background:linear-gradient(145deg,#03030d,#080415,#030a07);border:1px solid rgba(0,245,212,0.15);border-radius:20px;overflow:hidden;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.7);">
       <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 25% 20%,rgba(0,245,212,0.1) 0%,transparent 50%),radial-gradient(ellipse at 75% 80%,rgba(255,45,120,0.08) 0%,transparent 50%);pointer-events:none;"></div>
       <div style="padding:20px 18px 16px;position:relative;text-align:center;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:6px;color:rgba(255,255,255,0.2);margin-bottom:12px;">ZVOOM</div>
+        <div style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:6px;color:rgba(255,255,255,0.2);margin-bottom:12px;">ZVOOM</div>
         <div style="font-size:9px;letter-spacing:5px;color:rgba(255,255,255,0.18);font-weight:700;">XAL</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:76px;color:#fff;line-height:1;text-shadow:0 0 40px rgba(0,245,212,0.5);" id="socialCardScore">0</div>
+        <div style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:76px;color:#fff;line-height:1;text-shadow:0 0 40px rgba(0,245,212,0.5);" id="socialCardScore">0</div>
         <div style="display:flex;justify-content:center;gap:10px;margin-top:10px;">
           <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:6px 12px;text-align:center;">
             <div style="font-size:8px;color:rgba(255,255,255,0.2);letter-spacing:3px;font-weight:700;">LEVEL</div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;" id="socialCardLevel">1</div>
+            <div style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:20px;color:#fff;" id="socialCardLevel">1</div>
           </div>
           <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:6px 12px;text-align:center;">
             <div style="font-size:8px;color:rgba(255,255,255,0.2);letter-spacing:3px;font-weight:700;">COMBO</div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;" id="socialCardCombo">0</div>
+            <div style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:20px;color:#fff;" id="socialCardCombo">0</div>
           </div>
           <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:6px 12px;text-align:center;">
             <div style="font-size:8px;color:rgba(255,255,255,0.2);letter-spacing:3px;font-weight:700;">REKORD</div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:#fff;" id="socialCardBest">0</div>
+            <div style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:20px;color:#fff;" id="socialCardBest">0</div>
           </div>
         </div>
-        <div style="margin-top:10px;font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:rgba(0,245,212,0.6);padding:4px 0;background:linear-gradient(90deg,transparent,rgba(0,245,212,0.06),transparent);" id="socialCardRank">OYUNÇu</div>
+        <div style="margin-top:10px;font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:3px;color:rgba(0,245,212,0.6);padding:4px 0;background:linear-gradient(90deg,transparent,rgba(0,245,212,0.06),transparent);" id="socialCardRank">OYUNÇu</div>
         <div style="font-size:9px;color:rgba(255,255,255,0.12);margin-top:5px;letter-spacing:2px;font-weight:700;">zvoom.app · Üstünlüyünü sübut et</div>
       </div>
     </div>
     <!-- Share buttons grid -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:300px;">
-      <button onclick="doSocialShare('wa')" style="background:linear-gradient(135deg,#25d366,#128c7e);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;padding:12px 8px;border-radius:16px;cursor:pointer;box-shadow:0 4px 16px rgba(37,211,102,0.3);">📲 WHATSAPP</button>
-      <button onclick="doSocialShare('ig')" style="background:linear-gradient(135deg,#e1306c,#833ab4,#fd1d1d);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;padding:12px 8px;border-radius:16px;cursor:pointer;box-shadow:0 4px 16px rgba(225,48,108,0.3);">📸 INSTAGRAM</button>
-      <button onclick="doSocialShare('fb')" style="background:linear-gradient(135deg,#1877f2,#0d5bba);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;padding:12px 8px;border-radius:16px;cursor:pointer;box-shadow:0 4px 16px rgba(24,119,242,0.3);">👍 FACEBOOK</button>
-      <button onclick="doSocialShare('tt')" style="background:linear-gradient(135deg,#010101,#69c9d0);border:none;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;padding:12px 8px;border-radius:16px;cursor:pointer;box-shadow:0 4px 16px rgba(105,201,208,0.3);">🎵 TIKTOK</button>
+      <button onclick="doSocialShare('wa')" style="background:linear-gradient(135deg,#25d366,#128c7e);border:none;color:#fff;font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:15px;letter-spacing:2px;padding:12px 8px;border-radius:16px;cursor:pointer;box-shadow:0 4px 16px rgba(37,211,102,0.3);">📲 WHATSAPP</button>
+      <button onclick="doSocialShare('ig')" style="background:linear-gradient(135deg,#e1306c,#833ab4,#fd1d1d);border:none;color:#fff;font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:15px;letter-spacing:2px;padding:12px 8px;border-radius:16px;cursor:pointer;box-shadow:0 4px 16px rgba(225,48,108,0.3);">📸 INSTAGRAM</button>
+      <button onclick="doSocialShare('fb')" style="background:linear-gradient(135deg,#1877f2,#0d5bba);border:none;color:#fff;font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:15px;letter-spacing:2px;padding:12px 8px;border-radius:16px;cursor:pointer;box-shadow:0 4px 16px rgba(24,119,242,0.3);">👍 FACEBOOK</button>
+      <button onclick="doSocialShare('tt')" style="background:linear-gradient(135deg,#010101,#69c9d0);border:none;color:#fff;font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:15px;letter-spacing:2px;padding:12px 8px;border-radius:16px;cursor:pointer;box-shadow:0 4px 16px rgba(105,201,208,0.3);">🎵 TIKTOK</button>
     </div>
     <div style="display:flex;gap:8px;width:300px;">
-      <button onclick="doSocialShare('copy')" style="flex:1;background:linear-gradient(135deg,var(--neon),#00c4ff);border:none;color:#001a14;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;padding:11px;border-radius:16px;cursor:pointer;">📋 KOPYALA</button>
-      <button onclick="doSocialShare('native')" style="flex:1;background:var(--glass);border:1px solid var(--glass-border-lit);color:rgba(255,255,255,0.55);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;padding:11px;border-radius:16px;cursor:pointer;">📤 DİGƏR</button>
+      <button onclick="doSocialShare('copy')" style="flex:1;background:linear-gradient(135deg,var(--neon),#00c4ff);border:none;color:#001a14;font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:15px;letter-spacing:2px;padding:11px;border-radius:16px;cursor:pointer;">📋 KOPYALA</button>
+      <button onclick="doSocialShare('native')" style="flex:1;background:var(--glass);border:1px solid var(--glass-border-lit);color:rgba(255,255,255,0.55);font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:14px;letter-spacing:1px;padding:11px;border-radius:16px;cursor:pointer;">📤 DİGƏR</button>
     </div>
     <button onclick="closeSocialShare()" style="background:none;border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.22);font-size:11px;letter-spacing:3px;padding:7px 18px;border-radius:20px;cursor:pointer;font-weight:700;">BAĞLA</button>
   </div>
@@ -1035,8 +1041,8 @@ canvas{display:block;width:100%;height:100%;}
     padding:18px 28px;min-width:260px;text-align:center;
     box-shadow:0 20px 60px rgba(0,0,0,0.8);">
     <div id="tpEmoji" style="font-size:52px;line-height:1;">🔵</div>
-    <div id="tpTitle" style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;color:#fff;">TRANSFORM!</div>
-    <div id="tpForm" style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;"></div>
+    <div id="tpTitle" style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:28px;letter-spacing:4px;color:#fff;">TRANSFORM!</div>
+    <div id="tpForm" style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:20px;letter-spacing:3px;"></div>
     <div id="tpPassive" style="font-size:11px;font-weight:700;letter-spacing:1px;opacity:0.7;margin-top:2px;"></div>
   </div>
 
@@ -1749,7 +1755,7 @@ function adSim(cb){
   const d=document.createElement('div');
   d.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.97);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;';
   d.innerHTML=`
-    <div style="font-family:Bebas Neue,sans-serif;font-size:14px;color:rgba(255,255,255,0.3);letter-spacing:3px;margin-bottom:10px;">REKLAM</div>
+    <div style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:14px;color:rgba(255,255,255,0.3);letter-spacing:3px;margin-bottom:10px;">REKLAM</div>
 
     <!-- ── AdSense Rewarded / Banner ── -->
     <!-- AdSense aktiv olduqda aşağıdakı komment xəttini açın: -->
@@ -1766,7 +1772,7 @@ function adSim(cb){
     <div style="width:320px;height:200px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;display:flex;align-items:center;justify-content:center;">
       <div style="text-align:center;">
         <div style="font-size:36px;margin-bottom:8px;">📺</div>
-        <div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:#fff;letter-spacing:2px;">${L('lvAdName')}</div>
+        <div style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:22px;color:#fff;letter-spacing:2px;">${L('lvAdName')}</div>
         <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px;letter-spacing:1px;">AD PLACEHOLDER</div>
       </div>
     </div>
@@ -1775,7 +1781,7 @@ function adSim(cb){
       <div style="width:120px;height:3px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;">
         <div id="adF" style="height:100%;width:0%;background:#ffcc00;transition:width 5s linear;"></div>
       </div>
-      <div id="adT" style="font-family:Bebas Neue,sans-serif;font-size:22px;color:#ffcc00;min-width:24px;text-align:center;">5</div>
+      <div id="adT" style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:22px;color:#ffcc00;min-width:24px;text-align:center;">5</div>
     </div>
     <div style="font-size:10px;color:rgba(255,255,255,0.2);margin-top:6px;letter-spacing:2px;">REKLAMI İZLƏ, MÜKAFAT AL</div>`;
   document.body.appendChild(d);
@@ -2587,7 +2593,7 @@ function showFomoBanner(msg){
   b.id='fomoBanner';
   b.style.cssText=`position:fixed;top:60px;left:50%;transform:translateX(-50%);
     background:linear-gradient(135deg,#ff0080,#ff8800);
-    color:#fff;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;
+    color:#fff;font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:14px;letter-spacing:2px;
     padding:10px 20px;border-radius:25px;z-index:999;
     box-shadow:0 4px 20px rgba(255,0,128,0.5);
     animation:fomoSlide 0.4s ease-out;cursor:pointer;`;
@@ -2721,7 +2727,7 @@ function drawSpinWheel(angle){
     ctx.beginPath();ctx.arc(cx,cy,r-4,startA+0.04,endA-0.04);
     ctx.strokeStyle=seg.glow+'44';ctx.lineWidth=3;ctx.stroke();
     ctx.save();ctx.translate(cx,cy);ctx.rotate(startA + arc/2);
-    ctx.textAlign='right';ctx.font='bold 11px Space Grotesk, sans-serif';
+    ctx.textAlign='right';ctx.font='bold 11px -apple-system,BlinkMacSystemFont,Arial,sans-serif';
     ctx.fillStyle='#fff';ctx.shadowColor=seg.glow;ctx.shadowBlur=8;
     ctx.fillText(seg.label, r-8, 4);ctx.restore();
   });
@@ -3144,7 +3150,7 @@ function renderMissions(){
     card.innerHTML=`
       <div style="font-size:28px;flex-shrink:0;">${m.icon}</div>
       <div style="flex:1;min-width:0;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;color:${claimed?'rgba(0,245,212,0.6)':'#fff'};letter-spacing:1px;line-height:1;">${m.name} ${claimed?'✓':''}</div>
+        <div style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:16px;color:${claimed?'rgba(0,245,212,0.6)':'#fff'};letter-spacing:1px;line-height:1;">${m.name} ${claimed?'✓':''}</div>
         <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:2px;font-weight:600;">${m.desc}</div>
         <div style="margin-top:6px;background:rgba(255,255,255,0.05);border-radius:3px;height:3px;overflow:hidden;">
           <div style="height:100%;width:${pct}%;background:${done?'linear-gradient(90deg,var(--neon),#00c4ff)':'linear-gradient(90deg,#5c6bff,var(--neon))'};border-radius:3px;transition:width 0.5s;"></div>
@@ -3155,8 +3161,8 @@ function renderMissions(){
         ${claimed
           ? '<div style="font-size:9px;color:rgba(0,245,212,0.4);font-weight:700;letter-spacing:2px;">ALINDI</div>'
           : done
-            ? `<button onclick="claimMission('${m.id}')" style="background:linear-gradient(135deg,var(--gold),#ff8800);border:none;color:#1a0a00;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;padding:7px 12px;border-radius:12px;cursor:pointer;box-shadow:0 4px 14px rgba(255,180,0,0.35);">+${m.reward}💰<br>AL</button>`
-            : `<div style="text-align:center;"><div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);">+${m.reward}</div><div style="font-size:9px;color:rgba(255,208,96,0.4);font-weight:700;">💰</div></div>`
+            ? `<button onclick="claimMission('${m.id}')" style="background:linear-gradient(135deg,var(--gold),#ff8800);border:none;color:#1a0a00;font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:13px;letter-spacing:2px;padding:7px 12px;border-radius:12px;cursor:pointer;box-shadow:0 4px 14px rgba(255,180,0,0.35);">+${m.reward}💰<br>AL</button>`
+            : `<div style="text-align:center;"><div style="font-family:Impact,'Arial Narrow',Arial,sans-serif;font-size:18px;color:var(--gold);">+${m.reward}</div><div style="font-size:9px;color:rgba(255,208,96,0.4);font-weight:700;">💰</div></div>`
         }
       </div>`;
     list.appendChild(card);
@@ -3882,7 +3888,7 @@ if(GALAXY_LEVELS.includes(lv)){
 
 // ── Layer 9: Level watermark ──
 ctx.save();ctx.globalAlpha=0.02;
-ctx.font=`bold 64px Bebas Neue,sans-serif`;ctx.fillStyle='#fff';ctx.textAlign='center';
+ctx.font=`bold 64px Impact,'Arial Narrow',Arial,sans-serif`;ctx.fillStyle='#fff';ctx.textAlign='center';
 ctx.fillText(cfg.name,180,340);ctx.restore();
 
 // ── Layer 10: Donmuş tint ──
@@ -4387,7 +4393,7 @@ function loop(ts){
     ctx.fillText(d.e,0,0);
 
     // TYPE LABEL below box
-    ctx.font='bold '+(d.r*0.72)+'px Space Grotesk,sans-serif';
+    ctx.font='bold '+(d.r*0.72)+'px -apple-system,BlinkMacSystemFont,Arial,sans-serif';
     ctx.textAlign='center';ctx.textBaseline='top';
     ctx.fillStyle=d.c;ctx.shadowBlur=8;ctx.shadowColor=d.c;
     ctx.fillText(d.lbl||d.e,0,hs*0.85);
@@ -4777,6 +4783,17 @@ setTimeout(()=>{
     showFomoBanner('🔥 '+streak+' GÜNLÜK SERIYA! İtirmə — bu gün oyna!');
   }
 },8000);
+</script>
+
+<script>
+// ── SERVICE WORKER (Offline support) ──
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js')
+      .then(r=>console.log('SW registered'))
+      .catch(e=>console.log('SW error',e));
+  });
+}
 </script>
 </body>
 </html>
