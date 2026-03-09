@@ -1203,6 +1203,8 @@ document.getElementById('closeLbBtn').onclick=()=>{
   else document.getElementById('startScreen').style.display='flex';
 };
 document.getElementById('lbBtnS').onclick=()=>{window._lbFrom='start';openLb('startScreen');};
+const _lbBtnG=document.getElementById('lbBtnG');if(_lbBtnG)_lbBtnG.onclick=()=>{window._lbFrom='go';openLb('gameOverScreen');};
+window.openLb=openLb;
 
 // ── NAME INPUT ──
 function askName(cb){
@@ -1218,21 +1220,15 @@ function askName(cb){
 }
 
 // ── HOOK INTO GAME OVER ──
-// We listen for when bestScore changes and submit
+// Only fires when a NEW RECORD is achieved
 let lastSubmitted=-1;
-const _origSaveAll=window.saveAll;
-function trySubmitAfterGame(){
-  const bs=parseInt(localStorage.getItem('ds4_best')||'0');
-  if(bs>0&&bs!==lastSubmitted){
-    lastSubmitted=bs;
-    if(playerName){submitScore(bs);}
-    else{
-      // Ask name once, then submit
-      setTimeout(()=>askName(()=>submitScore(bs)),600);
-    }
-  }
+function trySubmitAfterGame(newBest){
+  const bs=newBest||parseInt(localStorage.getItem('ds4_best')||'0');
+  if(bs<=0||bs===lastSubmitted)return;
+  lastSubmitted=bs;
+  if(playerName){submitScore(bs);}
+  else{setTimeout(()=>askName(()=>submitScore(bs)),600);}
 }
-// Override gameOver hook — expose to global
 window._firebaseReady=true;
 window.onGameOverFB=trySubmitAfterGame;
 window.openLbFromGO=()=>{window._lbFrom='go';openLb('gameOverScreen');};
@@ -3491,7 +3487,7 @@ function gameOver(){
 
   setTimeout(()=>{
     show('gameOverScreen');
-    if(window._firebaseReady&&window.onGameOverFB)window.onGameOverFB();
+    if(window._firebaseReady&&window.onGameOverFB&&isNew)window.onGameOverFB(bestScore);
     // FOMO Banner: çox az xalla rekorddan ayrıldısa
     if(bestScore-score<=10&&bestScore>0&&!isNew){
       setTimeout(()=>showFomoBanner('⚡ '+( bestScore-score)+' XAL AZDIII — REKLAM İZLƏ → CAN AL!'),1000);
