@@ -26,16 +26,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);touch-acti
 body{display:flex;flex-direction:column;justify-content:flex-start;align-items:center;
   font-family:'Space Grotesk',sans-serif;}
 
-/* ── AD ── */
-#adWrapper{
-  width:100%;max-width:480px;
-  height:60px;          /* sabit hündürlük — artıq sıxmayacaq */
-  max-height:60px;
-  overflow:hidden;      /* AdSense-in artıq hissəsini kəs */
-  background:#000;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  border-top:1px solid rgba(255,255,255,0.04);position:relative;z-index:100;
-}
+
 
 /* ── GAME WRAPPER ── */
 #gw{position:relative;overflow:hidden;background:var(--bg);flex:1;width:100%;max-width:480px;}
@@ -591,7 +582,6 @@ canvas{display:block;width:100%;height:100%;}
 #bestProgressWrap{margin-top:8px;width:180px;background:rgba(255,255,255,0.05);border-radius:3px;height:3px;overflow:hidden;}
 #bestProgressBar{height:100%;width:0%;background:linear-gradient(90deg,var(--neon),var(--elec));border-radius:3px;transition:width 0.8s ease-out;}
 </style>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5834769255824912" crossorigin="anonymous"></script>
 </head>
 <body>
 <div id="gw">
@@ -998,22 +988,6 @@ canvas{display:block;width:100%;height:100%;}
 
 </div><!-- end #gw -->
 
-<!-- ═══════════════════════════════════════════════════
-     ADSENSE BANNER — daimi görünür, oyunu kəsmir
-     Öz AdSense Publisher ID-ni aşağıda yerləşdir:
-     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-     data-ad-slot="XXXXXXXXXX"
-     ═══════════════════════════════════════════════════ -->
-<div id="adWrapper">
-  <ins class="adsbygoogle"
-       style="display:block;width:100%;min-height:50px;"
-       data-ad-client="ca-pub-5834769255824912"
-       data-ad-slot="auto"
-       data-ad-format="auto"
-       data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-</div>
-
 <script type="module">
 // ── FIREBASE ──
 import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
@@ -1204,8 +1178,7 @@ const ctx=canvas.getContext('2d');
 const gw=document.getElementById('gw');
 let W,H;
 function resize(){
-  const adH=60; // sabit — adWrapper overflow:hidden ilə 60px-dir
-  const sw=window.innerWidth,sh=window.innerHeight-adH;
+  const sw=window.innerWidth,sh=window.innerHeight;
   const ar=360/640;
   let w=sw,h=sh;
   if(sw/sh>ar){w=sh*ar;}else{h=sw/ar;}
